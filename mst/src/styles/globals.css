@@ -1,0 +1,194 @@
+:root {
+  --default-back-color: #f9f4e7;
+  --default-caffein-color: #994d1c;
+  --default-sugar-color: #ffa451;
+  --default-water-color: #71dce8;
+  --default-black-color: #141414;
+  --default-white-color: #ffffff;
+  --default-red-color: #f59c8a;
+  --dafault-yellow-color: #ffc42b;
+
+  --gray-color-1: #333333;
+  --gray-color-2: #666666;
+  --gray-color-3: #999999;
+  --gray-color-4: #cccccc;
+
+  --font-size-h1: 2.5rem;
+  --font-size-h2: 1.6rem;
+  --font-size-h3: 1.3rem;
+  --font-size-h4: 1.1rem;
+  --font-size-h5: 0.95rem;
+  --font-size-h6: 0.75rem;
+
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+}
+
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+
+body {
+  background-color: var(--default-back-color);
+  line-height: 1;
+}
+
+ol,
+ul {
+  list-style: none;
+}
+
+blockquote,
+q {
+  quotes: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+button {
+  border: none;
+  cursor: pointer;
+}
+
+* {
+  font-family: "SUIT";
+  box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: initial;
+  border-radius: 10px;
+}
+
+#__next,
+html,
+body {
+  height: 100%;
+}
