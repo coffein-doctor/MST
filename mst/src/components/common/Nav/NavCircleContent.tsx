@@ -34,7 +34,7 @@ const NavCircleCSS = css`
   justify-content: center;
   align-items: center;
 
-  background-color: var(--dafault-yellow-color);
+  background-color: var(--default-yellow-color);
   border-radius: 32px;
 `;
 
