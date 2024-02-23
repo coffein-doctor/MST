@@ -42,6 +42,8 @@ const topBarWrapperCSS = css`
   height: 64px;
   background-color: var(--gray-color-2);
   position: fixed;
+  top: 0px;
+  left: 0px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -88,7 +90,7 @@ const emptyTopBarCSS = css`
 // FavBeverage
 
 const resultWrapperCSS = css`
-  padding: 20px;
+  padding: 20px 0px;
 `;
 
 const favBevSubTitleCSS = css`

@@ -13,11 +13,10 @@ export default function MainPageLayout({
   const pathname = usePathname();
 
   // layout이 필요없는 router주소는 여기에 넣어준다.
-  if (pathname === "/") {
+  if (pathname === "/" || pathname === "/beverage") {
     return (
       <div>
         <div css={contentWrapperCSS}>{children}</div>
-        <Nav />
       </div>
     );
   }
