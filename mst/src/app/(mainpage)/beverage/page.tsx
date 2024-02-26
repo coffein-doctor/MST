@@ -1,9 +1,41 @@
 "use client";
-import Form from "@/components/Form/Form";
+import Form from "@/components/common/Form/Form";
 import { css } from "@emotion/react";
 import { LEFTARROW, SEARCH, PENCIL } from "@/assets/icons";
+import BeverageForm from "@/components/Beverage/BeverageForm";
+
+interface FormData {
+  id: number;
+  registNum: number;
+  name: string;
+  company: string;
+  liked: boolean;
+}
 
 function Beverage() {
+  const testFormData: FormData[] = [
+    // {
+    //   id: 1,
+    //   name: "아메리카노",
+    //   company: "스타벅스",
+    //   registNum: 1000,
+    //   liked: true,
+    // },
+    // {
+    //   id: 2,
+    //   name: "카페라떼",
+    //   company: "스타벅스",
+    //   registNum: 10,
+    //   liked: true,
+    // },
+    // {
+    //   id: 3,
+    //   name: "자몽허니블랙티",
+    //   company: "스타벅스",
+    //   registNum: 105,
+    //   liked: true,
+    // },
+  ];
   return (
     <div>
       <div css={topBarWrapperCSS}>
@@ -18,15 +50,33 @@ function Beverage() {
             css={searchInputCSS}
             type="text"
             placeholder="검색어를 입력해주세요"
+            autoFocus
           />
         </div>
       </div>
       <div css={emptyTopBarCSS}></div>
       <div css={resultWrapperCSS}>
         <div css={favBevSubTitleCSS}>즐겨찾기</div>
-        {/* <Form css={favBeverageWrapperCSS}>
-          <div>dfsdsf</div>
-        </Form> */}
+        {testFormData.length === 0 ? (
+          <div css={emptyFavTextWrapperCSS}>
+            <div css={emptyFavTextCSS}>즐겨찾기한 음료가 없습니다</div>
+          </div>
+        ) : (
+          testFormData.map((item) => (
+            <Form
+              css={favBevWrapperCSS}
+              key={item?.id}
+              content={
+                <BeverageForm
+                  registNum={item.registNum}
+                  name={item.name}
+                  company={item.company}
+                  liked={item.liked}
+                />
+              }
+            />
+          ))
+        )}
       </div>
       <button css={registerBtnWrapperCSS}>
         <div>{PENCIL}</div>
@@ -96,12 +146,25 @@ const resultWrapperCSS = css`
 const favBevSubTitleCSS = css`
   margin-top: 15px;
   margin-left: 20px;
+  margin-bottom: 13px;
   font-size: var(--font-size-h5);
   font-weight: var(--font-weight-bold);
 `;
 
+const emptyFavTextWrapperCSS = css`
+  margin-top: 30vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const emptyFavTextCSS = css`
+  color: var(--gray-color-3);
+  font-size: var(--font-size-h6);
+`;
+
 const favBevWrapperCSS = css`
-  margin-top: 13px;
+  margin-bottom: 13px;
 `;
 
 // Register Btn
