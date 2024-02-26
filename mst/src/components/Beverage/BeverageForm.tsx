@@ -1,11 +1,13 @@
 import { EMPTYHEART, FULLHEART } from "@/assets/icons";
 import { css } from "@emotion/react";
+import { useState } from "react";
 
 interface BeverageContentProps {
   registNum: number;
   name: string;
   company: string;
   liked: boolean;
+  toggleLiked: () => void;
 }
 
 function BeverageForm({
@@ -13,7 +15,18 @@ function BeverageForm({
   name,
   company,
   liked,
+  toggleLiked,
 }: BeverageContentProps) {
+  const [isLiked, setIsLiked] = useState(liked);
+
+  const handleToggleLiked = () => {
+    // 현재 상태만 변환(empty/full) -> 필요없는 기능
+    // setIsLiked(!isLiked);
+
+    // 상위에서 데이터 업데이트
+    toggleLiked();
+  };
+
   const calculateRegistInfo = (num: number) => {
     let pillColor, registNumText;
 
@@ -48,7 +61,9 @@ function BeverageForm({
         <div css={registNumPillWrapperCSS}>
           <div css={registNumPillContentCSS}>{registNumText}</div>
         </div>
-        <div>{liked ? FULLHEART : EMPTYHEART}</div>
+        <div onClick={handleToggleLiked}>
+          {isLiked ? FULLHEART : EMPTYHEART}
+        </div>
       </div>
       <div css={beverageNameCSS}>{name}</div>
       <div css={beverageCompanyCSS}>{company}</div>

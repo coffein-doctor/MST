@@ -4,6 +4,7 @@ import { css } from "@emotion/react";
 import { LEFTARROW, SEARCH, PENCIL } from "@/assets/icons";
 import BeverageForm from "@/components/Beverage/BeverageForm";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 interface FormData {
   id: number;
@@ -18,7 +19,7 @@ const testFormData: FormData[] = [
     name: "아메리카노",
     company: "스타벅스",
     registNum: 1000,
-    liked: true,
+    liked: false,
   },
   {
     id: 2,
@@ -38,6 +39,25 @@ const testFormData: FormData[] = [
 function Beverage() {
   const router = useRouter();
 
+  const [data, setData] = useState(testFormData);
+
+  // 여기서 liked: true 인것만 주는지 BE와 소통필요
+  // const [data, setData] = useState(testFormData.filter((item) => item.liked));
+
+  const toggleLiked = (id: number) => {
+    const updatedData = data.map((item) => {
+      if (item.id === id) {
+        return { ...item, liked: !item.liked };
+      }
+      return item;
+    });
+
+    const filteredData = updatedData.filter((item) => item.liked === true);
+
+    setData(filteredData);
+  };
+
+  // 좋아요 배열 반환
   return (
     <div>
       {/* 상단바 */}
@@ -61,12 +81,12 @@ function Beverage() {
       {/* 결과 */}
       <div css={resultWrapperCSS}>
         <div css={favBevSubTitleCSS}>즐겨찾기</div>
-        {testFormData.length === 0 ? (
+        {data.length === 0 ? (
           <div css={emptyFavTextWrapperCSS}>
             <div css={emptyFavTextCSS}>즐겨찾기한 음료가 없습니다</div>
           </div>
         ) : (
-          testFormData.map((item) => (
+          data.map((item) => (
             <Form
               cssProps={favBevWrapperCSS}
               shadow={true}
@@ -77,6 +97,7 @@ function Beverage() {
                   name={item.name}
                   company={item.company}
                   liked={item.liked}
+                  toggleLiked={() => toggleLiked(item.id)}
                 />
               }
             />
@@ -158,7 +179,7 @@ const favBevSubTitleCSS = css`
 `;
 
 const emptyFavTextWrapperCSS = css`
-  margin-top: 30vh;
+  margin-top: 35vh;
   display: flex;
   justify-content: center;
   align-items: center;
