@@ -3,6 +3,7 @@ import Form from "@/components/common/Form/Form";
 import { css } from "@emotion/react";
 import { LEFTARROW, SEARCH, PENCIL } from "@/assets/icons";
 import BeverageForm from "@/components/Beverage/BeverageForm";
+import { useRouter } from "next/navigation";
 
 interface FormData {
   id: number;
@@ -11,36 +12,38 @@ interface FormData {
   company: string;
   liked: boolean;
 }
-
+const testFormData: FormData[] = [
+  {
+    id: 1,
+    name: "아메리카노",
+    company: "스타벅스",
+    registNum: 1000,
+    liked: true,
+  },
+  {
+    id: 2,
+    name: "카페라떼",
+    company: "스타벅스",
+    registNum: 10,
+    liked: true,
+  },
+  {
+    id: 3,
+    name: "자몽허니블랙티",
+    company: "스타벅스",
+    registNum: 105,
+    liked: true,
+  },
+];
 function Beverage() {
-  const testFormData: FormData[] = [
-    // {
-    //   id: 1,
-    //   name: "아메리카노",
-    //   company: "스타벅스",
-    //   registNum: 1000,
-    //   liked: true,
-    // },
-    // {
-    //   id: 2,
-    //   name: "카페라떼",
-    //   company: "스타벅스",
-    //   registNum: 10,
-    //   liked: true,
-    // },
-    // {
-    //   id: 3,
-    //   name: "자몽허니블랙티",
-    //   company: "스타벅스",
-    //   registNum: 105,
-    //   liked: true,
-    // },
-  ];
+  const router = useRouter();
+
   return (
     <div>
+      {/* 상단바 */}
       <div css={topBarWrapperCSS}>
         <div css={backIconWrapperCSS}>
-          <div>{LEFTARROW}</div>
+          <div onClick={() => router.back()}>{LEFTARROW}</div>
         </div>
         <div css={searchBarWrapperCSS}>
           <div css={searchIconWrapperCSS}>
@@ -55,6 +58,7 @@ function Beverage() {
         </div>
       </div>
       <div css={emptyTopBarCSS}></div>
+      {/* 결과 */}
       <div css={resultWrapperCSS}>
         <div css={favBevSubTitleCSS}>즐겨찾기</div>
         {testFormData.length === 0 ? (
@@ -64,7 +68,8 @@ function Beverage() {
         ) : (
           testFormData.map((item) => (
             <Form
-              css={favBevWrapperCSS}
+              cssProps={favBevWrapperCSS}
+              shadow={true}
               key={item?.id}
               content={
                 <BeverageForm
@@ -78,6 +83,7 @@ function Beverage() {
           ))
         )}
       </div>
+      {/* 작성버튼 */}
       <button css={registerBtnWrapperCSS}>
         <div>{PENCIL}</div>
       </button>
