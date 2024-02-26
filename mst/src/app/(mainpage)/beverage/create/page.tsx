@@ -1,5 +1,5 @@
 function BeverageCreate() {
-  return <div></div>;
+  return <div>create</div>;
 }
 
 export default BeverageCreate;
