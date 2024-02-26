@@ -5,9 +5,9 @@ import { css } from "@emotion/react";
 
 import type { FormPropsType } from "@/types/formTypes";
 
-function Form({ content }: FormPropsType) {
+function Form({ content, cssProps, shadow }: FormPropsType) {
   return (
-    <div css={formWrapperCSS}>
+    <div css={[formWrapperCSS, cssProps, shadow && shadowCSS]}>
       <div css={formContentWrapperCSS}>{content}</div>
     </div>
   );
@@ -20,6 +20,10 @@ const formWrapperCSS = css`
 
 const formContentWrapperCSS = css`
   padding: 20px;
+`;
+
+const shadowCSS = css`
+  box-shadow: 0px 10px 10px 0px rgba(0, 0, 0, 0.2);
 `;
 
 export default Form;
