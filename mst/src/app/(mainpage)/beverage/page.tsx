@@ -5,6 +5,7 @@ import { LEFTARROW, SEARCH } from "@/assets/icons";
 import BeverageForm from "@/components/Beverage/BeverageForm";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import PencilButton from "@/components/common/Button/PencilButton";
 
 interface FormData {
   id: number;
@@ -105,6 +106,7 @@ function Beverage() {
         )}
       </div>
       {/* 작성버튼 */}
+			<PencilButton/>
     </div>
   );
 }
