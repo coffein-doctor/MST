@@ -7,30 +7,42 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
+  ResponsiveContainer,
 } from "recharts";
 
 function StatsGraph() {
   const data = [
-    { name: "Jan", pv: 100 },
-    { name: "Feb", pv: 150 },
-    { name: "Mar", pv: 50 },
-    { name: "Apr", pv: 100 },
+    { time: "0", pv: 30 },
+    { time: "3", pv: 150 },
+    { time: "6", pv: 400 },
+    { time: "6.5", pv: 370 },
+    { time: "7", pv: 350 },
+    { time: "12" },
+    { time: "18" },
+    { time: "24" },
   ];
 
+  // const xAxisTicks = ["6", "12", "18", "24"];
+  // const interval = Math.floor(data.length / (xAxisTicks.length - 1));
+
   return (
-    <LineChart
-      width={300}
-      height={400}
-      data={data}
-      margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-    >
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="name" />
-      <YAxis />
-      <Tooltip />
-      {/* <Legend /> */}
-      <Line type="monotone" dataKey="pv" stroke="#8884d8" />
-    </LineChart>
+    <ResponsiveContainer width={320} height={300}>
+      <LineChart
+        data={data}
+        // margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+      >
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis
+          dataKey="time"
+          type="number" // 숫자로 설정
+          domain={[0, 24]}
+        />
+        <YAxis />
+        <Tooltip />
+        {/* <Legend /> */}
+        <Line type="monotone" dataKey="pv" stroke="#8884d8" />
+      </LineChart>
+    </ResponsiveContainer>
   );
 }
 
