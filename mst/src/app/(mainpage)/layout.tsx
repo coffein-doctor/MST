@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import "@/styles/globals.css";
 import Nav from "@/components/common/Nav/Nav";
+import TopBar from "@/components/common/TopBar/TopBar";
 import { css } from "@emotion/react";
 
 export default function MainPageLayout({
@@ -10,23 +11,38 @@ export default function MainPageLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const pathname = usePathname();
-
-  // layout이 필요없는 router주소는 여기에 넣어준다.
-  if (pathname === "/") {
-    return (
-      <div>
-        <div css={contentWrapperCSS}>{children}</div>
-        <Nav />
-      </div>
-    );
+  interface PagesConfig {
+    [key: string]: {
+      showTopBar: boolean;
+      title: string;
+      showNavBar: boolean;
+    };
   }
 
-  // 그 외의 경우에는 Nav 컴포넌트와 함께 렌더링
+  const pathname = usePathname();
+
+  const pagesConfig: PagesConfig = {
+    "/home": {
+      showTopBar: true,
+      title: "홈페이지",
+      showNavBar: true,
+    },
+    "/stats": {
+      showTopBar: true,
+      title: "통계",
+      showNavBar: true,
+    },
+  };
+
+  const currentPageConfig = pagesConfig[pathname];
+
   return (
     <div>
+      {currentPageConfig?.showTopBar && (
+        <TopBar content={currentPageConfig.title} />
+      )}
       <div css={contentWrapperCSS}>{children}</div>
-      <Nav />
+      {currentPageConfig?.showNavBar && <Nav />}
     </div>
   );
 }
