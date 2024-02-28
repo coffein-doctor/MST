@@ -62,8 +62,8 @@ function Beverage() {
     <div>
       {/* 상단바 */}
       <div css={topBarWrapperCSS}>
-        <div css={backIconWrapperCSS}>
-          <div onClick={() => router.back()}>{LEFTARROW}</div>
+        <div css={backIconWrapperCSS} onClick={() => router.back()}>
+          <LEFTARROW color="var(--gray-color-4)" />
         </div>
         <div css={searchBarWrapperCSS}>
           <div css={searchIconWrapperCSS}>
