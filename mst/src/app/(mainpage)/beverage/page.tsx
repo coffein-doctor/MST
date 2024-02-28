@@ -1,7 +1,7 @@
 "use client";
 import Form from "@/components/common/Form/Form";
 import { css } from "@emotion/react";
-import { LEFTARROW, SEARCH, PENCIL } from "@/assets/icons";
+import { LEFTARROW, SEARCH } from "@/assets/icons";
 import BeverageForm from "@/components/Beverage/BeverageForm";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -105,9 +105,6 @@ function Beverage() {
         )}
       </div>
       {/* 작성버튼 */}
-      <button css={registerBtnWrapperCSS}>
-        <div>{PENCIL}</div>
-      </button>
     </div>
   );
 }
@@ -192,20 +189,6 @@ const emptyFavTextCSS = css`
 
 const favBevWrapperCSS = css`
   margin-bottom: 13px;
-`;
-
-// Register Btn
-const registerBtnWrapperCSS = css`
-  height: 50px;
-  width: 50px;
-  border-radius: 100%;
-  background-color: var(--default-yellow-color);
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;
 
 export default Beverage;
