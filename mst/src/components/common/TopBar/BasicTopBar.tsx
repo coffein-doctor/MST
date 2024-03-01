@@ -3,11 +3,10 @@ import React from "react";
 import { css } from "@emotion/react";
 import { useRouter } from "next/navigation";
 import { LEFTARROW } from "@/assets/icons";
-import { TopBarPropsType } from "@/types/topBarTypes";
+import { BasicTopBarProps } from "@/types/topBarTypes";
 
-function TopBar({type, content }: TopBarPropsType) {
+function BasicTopBar({ content }: BasicTopBarProps) {
   const router = useRouter();
-	
   return (
     <div css={topBarWrapperCSS}>
       <div css={backIconWrapperCSS} onClick={() => router.back()}>
@@ -36,6 +35,7 @@ const backIconWrapperCSS = css`
 const topBarContentCSS = css`
   color: var(--gray-color-2);
   font-size: var(--font-size-h3);
+	font-weight: var(--font-weight-bold);
 `;
 
-export default TopBar;
+export default BasicTopBar;
