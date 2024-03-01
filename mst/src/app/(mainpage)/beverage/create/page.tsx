@@ -26,6 +26,9 @@ function BeverageCreate() {
         <SubmitFormWrapper position="bottom" leftLabel="섭취량" rightLabel="ml">
           <input css={beverageRightContentCSS} type="text" />
         </SubmitFormWrapper>
+        {/* 날짜/시간 */}
+        <div>time</div>
+        {/* 평가 */}
       </form>
     </div>
   );
@@ -49,5 +52,7 @@ const beverageRightContentCSS = css`
   ${beverageContentCSS}
   text-align: right;
 `;
+
+//datePicker
 
 export default BeverageCreate;
