@@ -13,8 +13,9 @@ export default function MainPageLayout({
 }) {
   interface PagesConfig {
     [key: string]: {
+      TopBarType: "basic" | "select" | "search";
       showTopBar: boolean;
-      title: string;
+      title?: string;
       showNavBar: boolean;
     };
   }
@@ -23,23 +24,29 @@ export default function MainPageLayout({
 
   const pagesConfig: PagesConfig = {
     "/home": {
+      TopBarType: "basic",
       showTopBar: true,
       title: "홈페이지",
       showNavBar: true,
     },
-    "/stats": {
-      showTopBar: true,
-      title: "통계",
+    "/stats.*": {
+      TopBarType: "basic",
+      showTopBar: false,
       showNavBar: true,
     },
   };
 
-  const currentPageConfig = pagesConfig[pathname];
+  const currentPageConfig = Object.entries(pagesConfig).find(([key]) => {
+    return new RegExp(`^${key.replace("*", ".*")}$`).test(pathname);
+  })?.[1];
 
   return (
     <div>
-      {currentPageConfig?.showTopBar && (
-        <TopBar content={currentPageConfig.title} />
+      {currentPageConfig?.showTopBar && currentPageConfig.title && (
+        <TopBar
+          content={currentPageConfig.title}
+          type={currentPageConfig.TopBarType}
+        />
       )}
       <div css={contentWrapperCSS}>{children}</div>
       {currentPageConfig?.showNavBar && <Nav />}

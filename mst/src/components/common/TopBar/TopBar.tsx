@@ -5,17 +5,26 @@ import { useRouter } from "next/navigation";
 import { LEFTARROW } from "@/assets/icons";
 import { TopBarPropsType } from "@/types/topBarTypes";
 
-function TopBar({type, content }: TopBarPropsType) {
+function TopBar({ type, content }: TopBarPropsType) {
   const router = useRouter();
-	
-  return (
-    <div css={topBarWrapperCSS}>
-      <div css={backIconWrapperCSS} onClick={() => router.back()}>
-        <LEFTARROW color="var(--gray-color-2)" />
-      </div>
-      <div css={topBarContentCSS}>{content}</div>
-    </div>
-  );
+
+  switch (type) {
+    case "basic":
+      return (
+        <div css={topBarWrapperCSS}>
+          <div css={backIconWrapperCSS} onClick={() => router.back()}>
+            <LEFTARROW color="var(--gray-color-2)" />
+          </div>
+          <div css={topBarContentCSS}>{content}</div>
+        </div>
+      );
+
+    case "select":
+      return <div>select component but not yet</div>;
+
+    case "search":
+      return <div>search component but not yet</div>;
+  }
 }
 
 const topBarWrapperCSS = css`
