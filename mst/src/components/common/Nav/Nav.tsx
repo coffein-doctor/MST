@@ -24,7 +24,7 @@ function Nav() {
     <div css={NavWrapperCSS(windowWidth)}>
       <div css={NavContentWrapperCSS}>
         <NavSquareContent title={"홈"} svg={HOME} link={"home"} />
-        <NavSquareContent title={"통계"} svg={STATS} link={"stats"} />
+        <NavSquareContent title={"통계"} svg={STATS} link={"stats/daily"} />
         <NavSquareContent />
         <NavCircleContent svg={PLUS} link={"link"} />
         <NavSquareContent
