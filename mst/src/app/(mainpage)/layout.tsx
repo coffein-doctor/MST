@@ -13,10 +13,11 @@ export default function MainPageLayout({
 }) {
   interface PagesConfig {
     [key: string]: {
-      TopBarType: "basic" | "select" | "search";
       showTopBar: boolean;
+      TopBarType?: "basic" | "select" | "search";
       title?: string;
       showNavBar: boolean;
+      selectOptions?: { value: string; label: string }[];
     };
   }
 
@@ -24,13 +25,52 @@ export default function MainPageLayout({
 
   const pagesConfig: PagesConfig = {
     "/home": {
-      TopBarType: "basic",
       showTopBar: true,
+      TopBarType: "basic",
       title: "홈페이지",
       showNavBar: true,
     },
     "/stats.*": {
-      TopBarType: "basic",
+      showTopBar: true,
+      TopBarType: "select",
+      selectOptions: [
+        { value: "/stats/daily", label: "일간" },
+        { value: "/stats/monthly", label: "월간" },
+      ],
+      showNavBar: true,
+    },
+
+    "/beverage": {
+      showTopBar: false,
+      showNavBar: true,
+    },
+
+    "/beverage.*": {
+      showTopBar: false,
+      showNavBar: true,
+    },
+
+    "/community": {
+      showTopBar: true,
+      TopBarType: "select",
+      selectOptions: [
+        { value: "/community", label: "커뮤니티" },
+        { value: "/community/feed", label: "피드" },
+      ],
+      showNavBar: true,
+    },
+
+    "/community.*": {
+      showTopBar: true,
+      TopBarType: "select",
+      selectOptions: [
+        { value: "/community", label: "커뮤니티" },
+        { value: "/community/feed", label: "피드" },
+      ],
+      showNavBar: true,
+    },
+
+    "/mypage": {
       showTopBar: false,
       showNavBar: true,
     },
@@ -42,10 +82,11 @@ export default function MainPageLayout({
 
   return (
     <div>
-      {currentPageConfig?.showTopBar && currentPageConfig.title && (
+      {currentPageConfig?.showTopBar && (
         <TopBar
           content={currentPageConfig.title}
           type={currentPageConfig.TopBarType}
+          selectOptions={currentPageConfig.selectOptions}
         />
       )}
       <div css={contentWrapperCSS}>{children}</div>

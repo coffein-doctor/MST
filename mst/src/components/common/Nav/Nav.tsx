@@ -26,7 +26,7 @@ function Nav() {
         <NavSquareContent title={"홈"} svg={HOME} link={"home"} />
         <NavSquareContent title={"통계"} svg={STATS} link={"stats/daily"} />
         <NavSquareContent />
-        <NavCircleContent svg={PLUS} link={"link"} />
+        <NavCircleContent svg={PLUS} link={"beverage"} />
         <NavSquareContent
           title={"커뮤니티"}
           svg={COMMUNITY}

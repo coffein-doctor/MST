@@ -1,6 +1,7 @@
 export type TopBarPropsType = {
-  type: "basic" | "select" | "search";
-  content: string;
+  type?: "basic" | "select" | "search";
+  content?: string;
+  selectOptions?: { value: string; label: string }[]; // 추가: selectOptions prop을 설정
 };
 
 export type BasicTopBarProps = {
