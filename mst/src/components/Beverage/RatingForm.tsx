@@ -47,7 +47,7 @@ function RatingForm() {
           </button>
         ))}
       </div>
-      <textarea css={ratingTextareaCSS} />
+      <textarea css={ratingTextareaCSS} id="ratingComemnt" name="ratingComemnt"/>
       {/* <Button>추가하기</Button> */}
     </div>
   );
