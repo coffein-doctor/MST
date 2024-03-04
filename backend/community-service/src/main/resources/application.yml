@@ -4,3 +4,11 @@ server:
 spring:
   application:
     name: community-service
+
+# ??? ??? ??
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://admin:1234mst@localhost:8761/eureka
