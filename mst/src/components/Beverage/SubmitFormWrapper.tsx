@@ -33,9 +33,11 @@ function SubmitFormWrapper({
 
   return (
     <div css={wrapperPos}>
-      {leftLabel && <div css={inputLabelLeftWrapperCSS}>{leftLabel}</div>}
+      {leftLabel && <label css={inputLabelLeftWrapperCSS}>{leftLabel}</label>}
       {children}
-      {rightLabel && <div css={inputLabelRightWrapperCSS}>{rightLabel}</div>}
+      {rightLabel && (
+        <label css={inputLabelRightWrapperCSS}>{rightLabel}</label>
+      )}
     </div>
   );
 }
@@ -58,7 +60,6 @@ const formSetWrapperCSS = css`
 
 const formSetTopWrapperCSS = css`
   ${formSetWrapperCSS}
-
   border-radius: 15px 15px 0px 0px;
   margin-top: 10px;
 `;

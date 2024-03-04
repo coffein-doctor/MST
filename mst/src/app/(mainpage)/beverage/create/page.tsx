@@ -14,13 +14,26 @@ function BeverageCreate() {
     intake: "",
   });
 
-  console.log(formData);
+	// 추후 hook 분리 예정
+  const [ratingData, setRatingData] = useState({
+    ratingValue: null,
+    ratingText: "",
+  });
+
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
+    }));
+  };
+
+  const handleRatingChange = (ratingValue: number, ratingText: string) => {
+    setRatingData((prevData) => ({
+      ...prevData,
+      [ratingValue]: ratingValue,
+      [ratingText]: ratingText,
     }));
   };
 
@@ -37,8 +50,7 @@ function BeverageCreate() {
             type="text"
             id="name"
             name="name"
-            // 자동완성 관련 설정
-            // autoComplete="off"
+            autoComplete="off"
             autoFocus
           />
         </SubmitFormWrapper>
@@ -86,7 +98,11 @@ function BeverageCreate() {
         {/* 날짜/시간 */}
         <div>time</div>
         {/* 평가 */}
-        <RatingForm />
+        <RatingForm
+          ratingValue={ratingData.ratingValue}
+          ratingText={ratingData.ratingText}
+          onRatingChange={handleRatingChange}
+        />
       </form>
     </div>
   );
@@ -100,8 +116,6 @@ const beverageContentCSS = css`
   background-color: transparent;
   font-size: var(--font-size-h5);
   padding-bottom: 3px;
-
-
 `;
 
 const beverageLeftContentCSS = css`

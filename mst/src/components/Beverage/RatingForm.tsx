@@ -1,15 +1,31 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { css } from "@emotion/react";
 import Button from "../common/Button/Button";
 
-function RatingForm() {
+interface RatingFormProps {
+  ratingValue: number | null;
+  ratingText: string;
+  onRatingChange: (ratingValue: number, ratingText: string) => void;
+}
+
+function RatingForm({
+  ratingValue,
+  ratingText,
+  onRatingChange,
+}: RatingFormProps) {
   const [selectedRatingBtn, setSelectedRatingBtn] = useState<number | null>(
-    null
+    ratingValue
   );
 
   // Btn 선택시
   const handleRatingClick = (val: number) => {
     setSelectedRatingBtn(val);
+    onRatingChange(val, ratingText || "");
+  };
+
+  const handleTextChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    const newText = event.target.value;
+    onRatingChange(ratingValue || 0, newText);
   };
 
   // Btn 컬러
@@ -47,7 +63,12 @@ function RatingForm() {
           </button>
         ))}
       </div>
-      <textarea css={ratingTextareaCSS} id="ratingComemnt" name="ratingComemnt"/>
+      <textarea
+        css={ratingTextareaCSS}
+        id="ratingComemnt"
+        name="ratingComemnt"
+        onChange={handleTextChange}
+      />
       {/* <Button>추가하기</Button> */}
     </div>
   );
