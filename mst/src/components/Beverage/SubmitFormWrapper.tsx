@@ -33,11 +33,9 @@ function SubmitFormWrapper({
 
   return (
     <div css={wrapperPos}>
-      {leftLabel && <label css={inputLabelLeftWrapperCSS}>{leftLabel}</label>}
+      {leftLabel && <div css={inputLabelLeftWrapperCSS}>{leftLabel}</div>}
       {children}
-      {rightLabel && (
-        <label css={inputLabelRightWrapperCSS}>{rightLabel}</label>
-      )}
+      {rightLabel && <div css={inputLabelRightWrapperCSS}>{rightLabel}</div>}
     </div>
   );
 }
