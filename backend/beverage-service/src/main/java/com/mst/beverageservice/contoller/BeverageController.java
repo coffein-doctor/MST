@@ -4,9 +4,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class BaverageController {
+public class BeverageController {
     @GetMapping("/")
     public String getServiceName(){
-        return  "baverage-service";
+        return  "beverage-service";
     }
 }
