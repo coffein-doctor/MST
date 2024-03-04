@@ -68,6 +68,7 @@ function RatingForm({
         id="ratingComemnt"
         name="ratingComemnt"
         onChange={handleTextChange}
+        placeholder="음료평을 남겨주세요"
       />
       {/* <Button>추가하기</Button> */}
     </div>
@@ -120,5 +121,10 @@ const ratingTextareaCSS = css`
   resize: none;
   outline: none;
   font-size: var(--font-size-h4);
+
+  &::placeholder {
+    font-size: var(--font-size-h4);
+    color: var(--gray-color-4);
+  }
 `;
 export default RatingForm;
