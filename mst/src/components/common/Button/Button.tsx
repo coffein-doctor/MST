@@ -3,7 +3,7 @@
 import React from "react";
 import { css } from "@emotion/react";
 import { ButtonPropsType } from "@/types/buttonTypes";
-import "../../styles/globals.css"/
+import "../../styles/globals.css"
 
 function Button({ children, onClick, type }: ButtonPropsType) {
   return (

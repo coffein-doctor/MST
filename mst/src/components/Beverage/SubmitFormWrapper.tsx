@@ -1,19 +1,19 @@
 import { css } from "@emotion/react";
 import React from "react";
 interface SubmitFormProps {
-  children: React.ReactNode;
   position: "top" | "middle" | "bottom";
-  leftLabel?: string
-  rightLabel?: string
+  leftLabel?: string;
+  rightLabel?: string;
+  inputAlign?: "left" | "right";
 }
 // 상, 중, 하 position 모양 지정
 // label(L/R) 유무 지정
-// 내부에 input
+// 왼쪽/오른쪽 정렬 지정
 function SubmitFormWrapper({
-  children,
   position,
   leftLabel,
   rightLabel,
+  inputAlign = "left",
 }: SubmitFormProps) {
   let wrapperPos;
 
@@ -34,7 +34,16 @@ function SubmitFormWrapper({
   return (
     <div css={wrapperPos}>
       {leftLabel && <div css={inputLabelLeftWrapperCSS}>{leftLabel}</div>}
-      {children}
+      <input
+        css={
+          inputAlign === "left"
+            ? beverageLeftContentCSS
+            : beverageRightContentCSS
+        }
+        type="text"
+        autoFocus
+      />
+
       {rightLabel && <div css={inputLabelRightWrapperCSS}>{rightLabel}</div>}
     </div>
   );
@@ -88,6 +97,24 @@ const inputLabelRightWrapperCSS = css`
   color: var(--gray-color-4);
   font-size: var(--font-size-h5);
   margin-left: 5px;
+`;
+
+const beverageContentCSS = css`
+  flex: 1 0 auto;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  font-size: var(--font-size-h5);
+  padding-bottom: 3px;
+`;
+
+const beverageLeftContentCSS = css`
+  ${beverageContentCSS}
+`;
+
+const beverageRightContentCSS = css`
+  ${beverageContentCSS}
+  text-align: right;
 `;
 
 export default SubmitFormWrapper;
