@@ -2,7 +2,7 @@ import { css } from "@emotion/react";
 import React from "react";
 interface SubmitFormProps {
   children: React.ReactNode;
-  position: "top" | "middle" | "bottom";
+  position?: "top" | "middle" | "bottom";
   leftLabel?: string;
   rightLabel?: string;
 }
@@ -28,7 +28,7 @@ function SubmitFormWrapper({
       wrapperPos = formSetBottomWrapperCSS;
       break;
     default:
-      wrapperPos = formSetTopWrapperCSS;
+      wrapperPos = formSetWrapperCSS;
   }
 
   return (
@@ -48,6 +48,7 @@ const formSetWrapperCSS = css`
   padding: 0px 20px;
   justify-content: center;
   align-items: center;
+  border-radius: 15px;
 
   input[type="number"]::-webkit-inner-spin-button,
   input[type="number"]::-webkit-outer-spin-button {
@@ -64,6 +65,7 @@ const formSetTopWrapperCSS = css`
 
 const formSetMiddleWrapperCSS = css`
   ${formSetWrapperCSS}
+  border-radius: 0px;
   border-top: none;
 `;
 
