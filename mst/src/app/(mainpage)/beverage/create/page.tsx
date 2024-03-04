@@ -3,6 +3,7 @@ import React from "react";
 import { css } from "@emotion/react";
 import TopBar from "@/components/common/TopBar/TopBar";
 import SubmitFormWrapper from "@/components/Beverage/SubmitFormWrapper";
+import RatingForm from "@/components/Beverage/RatingForm";
 
 function BeverageCreate() {
   return (
@@ -29,6 +30,7 @@ function BeverageCreate() {
         {/* 날짜/시간 */}
         <div>time</div>
         {/* 평가 */}
+        <RatingForm />
       </form>
     </div>
   );
