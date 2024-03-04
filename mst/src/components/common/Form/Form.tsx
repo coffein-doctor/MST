@@ -23,7 +23,7 @@ const formContentWrapperCSS = css`
 `;
 
 const shadowCSS = css`
-  box-shadow: 0px 10px 10px 0px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.2);
 `;
 
 export default Form;
