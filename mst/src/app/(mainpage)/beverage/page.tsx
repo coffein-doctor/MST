@@ -1,7 +1,6 @@
 "use client";
 import Form from "@/components/common/Form/Form";
 import { css } from "@emotion/react";
-import { LEFTARROW, SEARCH } from "@/assets/icons";
 import BeverageForm from "@/components/Beverage/BeverageForm";
 import { useRouter } from "next/navigation";
 import { useState } from "react";

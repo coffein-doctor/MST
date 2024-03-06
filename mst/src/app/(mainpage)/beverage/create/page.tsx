@@ -4,6 +4,7 @@ import { css } from "@emotion/react";
 import TopBar from "@/components/common/TopBar/TopBar";
 import SubmitFormWrapper from "@/components/Beverage/SubmitFormWrapper";
 import RatingForm from "@/components/Beverage/RatingForm";
+import DatePicker from "@/components/Beverage/DatePicker/CustomDatePicker";
 
 function BeverageCreate() {
   const [formData, setFormData] = useState({
@@ -96,7 +97,7 @@ function BeverageCreate() {
           />
         </SubmitFormWrapper>
         {/* 날짜/시간 */}
-        <div>time</div>
+        <DatePicker/>
         {/* 평가 */}
         <RatingForm
           ratingValue={ratingData.ratingValue}
