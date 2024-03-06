@@ -42,12 +42,14 @@ export default function MainPageLayout({
 
     "/beverage": {
       showTopBar: false,
-      showNavBar: true,
+      showNavBar: false,
     },
 
     "/beverage.*": {
-      showTopBar: false,
-      showNavBar: true,
+      showTopBar: true,
+      TopBarType: "basic",
+      title: "음료 등록",
+      showNavBar: false,
     },
 
     "/community": {
