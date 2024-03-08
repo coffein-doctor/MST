@@ -32,6 +32,7 @@ function statsdaily() {
 }
 
 const statsDailyWrapperCSS = css`
+  overflow-x: hidden;
   overflow-y: hidden;
 `;
 
