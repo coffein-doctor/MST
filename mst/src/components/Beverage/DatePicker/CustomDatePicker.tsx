@@ -51,7 +51,6 @@ export default function CustomDatePicker() {
             toolbar: CustomDatePickerToolbar,
             actionBar: CustomDatePickerActionbar,
           }}
-					
           slotProps={{
             // selected될 시 색변화
             day: {
