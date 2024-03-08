@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 import React from "react";
 interface SubmitFormProps {
-  id: string;
+  id?: string;
   children: React.ReactNode;
   position?: "top" | "middle" | "bottom";
   leftLabel?: string;
@@ -36,13 +36,13 @@ function SubmitFormWrapper({
   return (
     <div css={wrapperPos}>
       {leftLabel && (
-        <label htmlFor={id} css={inputLabelLeftWrapperCSS}>
+        <label htmlFor={id || ""} css={inputLabelLeftWrapperCSS}>
           {leftLabel}
         </label>
       )}
       {children}
       {rightLabel && (
-        <label htmlFor={id} css={inputLabelRightWrapperCSS}>
+        <label htmlFor={id || ""} css={inputLabelRightWrapperCSS}>
           {rightLabel}
         </label>
       )}

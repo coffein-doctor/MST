@@ -99,7 +99,6 @@ const ratingBtnCSS = css`
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
 `;
 
 const selectedRatingBtnCSS = css`
