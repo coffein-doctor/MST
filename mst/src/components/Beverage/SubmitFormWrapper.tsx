@@ -1,6 +1,7 @@
 import { css } from "@emotion/react";
 import React from "react";
 interface SubmitFormProps {
+  id: string;
   children: React.ReactNode;
   position?: "top" | "middle" | "bottom";
   leftLabel?: string;
@@ -10,6 +11,7 @@ interface SubmitFormProps {
 // label(L/R) 유무 지정
 // 내부에 input
 function SubmitFormWrapper({
+  id,
   children,
   position,
   leftLabel,
@@ -33,9 +35,17 @@ function SubmitFormWrapper({
 
   return (
     <div css={wrapperPos}>
-      {leftLabel && <div css={inputLabelLeftWrapperCSS}>{leftLabel}</div>}
+      {leftLabel && (
+        <label htmlFor={id} css={inputLabelLeftWrapperCSS}>
+          {leftLabel}
+        </label>
+      )}
       {children}
-      {rightLabel && <div css={inputLabelRightWrapperCSS}>{rightLabel}</div>}
+      {rightLabel && (
+        <label htmlFor={id} css={inputLabelRightWrapperCSS}>
+          {rightLabel}
+        </label>
+      )}
     </div>
   );
 }

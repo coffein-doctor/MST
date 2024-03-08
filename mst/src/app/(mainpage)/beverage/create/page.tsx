@@ -44,7 +44,7 @@ function BeverageCreate() {
       <TopBar content="음료 등록" />
       <form>
         {/* 이름/제조사 */}
-        <SubmitFormWrapper position="top" leftLabel="이름">
+        <SubmitFormWrapper position="top" leftLabel="이름" id="name">
           <input
             value={formData.name}
             onChange={handleInputChange}
@@ -56,7 +56,11 @@ function BeverageCreate() {
             autoFocus
           />
         </SubmitFormWrapper>
-        <SubmitFormWrapper position="bottom" leftLabel="제조사">
+        <SubmitFormWrapper
+          position="bottom"
+          leftLabel="제조사"
+          id="manufacturer"
+        >
           <input
             value={formData.manufacturer}
             onChange={handleInputChange}
@@ -67,7 +71,12 @@ function BeverageCreate() {
           />
         </SubmitFormWrapper>
         {/* 카페인/당/섭취량 */}
-        <SubmitFormWrapper position="top" leftLabel="카페인" rightLabel="mg">
+        <SubmitFormWrapper
+          position="top"
+          leftLabel="카페인"
+          rightLabel="mg"
+          id="caffeine"
+        >
           <input
             value={formData.caffeine}
             onChange={handleInputChange}
@@ -77,7 +86,12 @@ function BeverageCreate() {
             name="caffeine"
           />
         </SubmitFormWrapper>
-        <SubmitFormWrapper position="middle" leftLabel="당" rightLabel="g">
+        <SubmitFormWrapper
+          position="middle"
+          leftLabel="당"
+          rightLabel="g"
+          id="sugar"
+        >
           <input
             value={formData.sugar}
             onChange={handleInputChange}
@@ -87,7 +101,12 @@ function BeverageCreate() {
             name="sugar"
           />
         </SubmitFormWrapper>
-        <SubmitFormWrapper position="bottom" leftLabel="섭취량" rightLabel="ml">
+        <SubmitFormWrapper
+          position="bottom"
+          leftLabel="섭취량"
+          rightLabel="ml"
+          id="intake"
+        >
           <input
             value={formData.intake}
             onChange={handleInputChange}
@@ -98,8 +117,8 @@ function BeverageCreate() {
           />
         </SubmitFormWrapper>
         {/* 날짜/시간 */}
-				<CustomDatePicker/>
-				<CustomTimePicker/>
+        <CustomDatePicker />
+        <CustomTimePicker />
         {/* 평가 */}
         <RatingForm
           ratingValue={ratingData.ratingValue}
