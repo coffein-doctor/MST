@@ -2,16 +2,9 @@ import { useState } from "react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
-import {
-  InputAdornment,
-  Popover,
-  TextField,
-  ThemeProvider,
-  createTheme,
-} from "@mui/material";
+import { Popover, TextField, ThemeProvider, createTheme } from "@mui/material";
 import dayjs, { Dayjs } from "dayjs";
 import CustomDigitalClock from "./CustomDigitalClock";
-import { CalendarIcon } from "@mui/x-date-pickers";
 
 const theme = createTheme({
   typography: {
@@ -43,7 +36,7 @@ export default function CustomTimePicker() {
 
   return (
     <ThemeProvider theme={theme}>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <LocalizationProvider dateAdapter={AdapterDayjs} >
         {/* 입력창 */}
         <TextField
           id="time-picker-textField"

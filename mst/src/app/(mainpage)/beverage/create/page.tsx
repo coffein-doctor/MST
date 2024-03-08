@@ -1,12 +1,12 @@
 "use client";
 import React, { ChangeEvent, useState } from "react";
 import { css } from "@emotion/react";
-import TopBar from "@/components/common/TopBar/TopBar";
 import SubmitFormWrapper from "@/components/Beverage/SubmitFormWrapper";
 import CustomTimePicker from "@/components/Beverage/TimePicker/CustomTimePicker";
 import CustomDatePicker from "@/components/Beverage/DatePicker/CustomDatePicker";
 import RatingForm from "@/components/Beverage/RatingForm";
 import Button from "@/components/common/Button/Button";
+import BasicHR from "@/components/Beverage/BasicHR";
 
 function BeverageCreate() {
   const [formData, setFormData] = useState({
@@ -41,7 +41,6 @@ function BeverageCreate() {
 
   return (
     <div>
-      <TopBar content="음료 등록" />
       <form>
         {/* 이름/제조사 */}
         <SubmitFormWrapper position="top" leftLabel="이름" id="name">
@@ -119,6 +118,7 @@ function BeverageCreate() {
         {/* 날짜/시간 */}
         <CustomDatePicker />
         <CustomTimePicker />
+				<BasicHR/>
         {/* 평가 */}
         <RatingForm
           ratingValue={ratingData.ratingValue}

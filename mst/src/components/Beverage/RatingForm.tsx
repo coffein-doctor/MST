@@ -44,7 +44,6 @@ function RatingForm({
 
   return (
     <div>
-      <hr css={hrCSS} />
       <div css={ratingInfoCSS}>음료에 대한 평가를 남겨주세요</div>
       <div css={ratingBtnWrapperCSS}>
         {[5, 4, 3, 2, 1].map((val) => (
@@ -75,10 +74,6 @@ function RatingForm({
 }
 
 // Evaluation
-const hrCSS = css`
-  color: var(--gray-color-4);
-  margin-bottom: 30px;
-`;
 
 const ratingInfoCSS = css`
   color: var(--gray-color-2);
