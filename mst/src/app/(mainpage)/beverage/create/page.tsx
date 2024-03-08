@@ -3,8 +3,10 @@ import React, { ChangeEvent, useState } from "react";
 import { css } from "@emotion/react";
 import TopBar from "@/components/common/TopBar/TopBar";
 import SubmitFormWrapper from "@/components/Beverage/SubmitFormWrapper";
+import CustomTimePicker from "@/components/Beverage/TimePicker/CustomTimePicker";
+import CustomDatePicker from "@/components/Beverage/DatePicker/CustomDatePicker";
 import RatingForm from "@/components/Beverage/RatingForm";
-import DatePicker from "@/components/Beverage/DatePicker/CustomDatePicker";
+import Button from "@/components/common/Button/Button";
 
 function BeverageCreate() {
   const [formData, setFormData] = useState({
@@ -15,12 +17,11 @@ function BeverageCreate() {
     intake: "",
   });
 
-	// 추후 hook 분리 예정
+  // 추후 hook 분리 예정
   const [ratingData, setRatingData] = useState({
     ratingValue: null,
     ratingText: "",
   });
-
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -97,13 +98,15 @@ function BeverageCreate() {
           />
         </SubmitFormWrapper>
         {/* 날짜/시간 */}
-        <DatePicker/>
+				<CustomDatePicker/>
+				<CustomTimePicker/>
         {/* 평가 */}
         <RatingForm
           ratingValue={ratingData.ratingValue}
           ratingText={ratingData.ratingText}
           onRatingChange={handleRatingChange}
         />
+        <Button content="추가하기" />
       </form>
     </div>
   );

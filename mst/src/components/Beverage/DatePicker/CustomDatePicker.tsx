@@ -5,7 +5,7 @@ import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import { useState } from "react";
 import { ThemeProvider, createTheme } from "@mui/material";
 
-import { CustomTextField } from "./CustomDPInputTextField";
+import { CustomDPTextField } from "./CustomDPInputTextField";
 import CustomDatePickerToolbar from "./CustomDPToolbar";
 import CustomDatePickerActionbar from "./CustomDPActionbar";
 import "dayjs/locale/ko";
@@ -33,7 +33,7 @@ export default function CustomDatePicker() {
   return (
     <ThemeProvider theme={theme}>
       <LocalizationProvider
-        //날짜 라이브러리Day.js 활용
+        //날짜 라이브러리 Day.js 활용
         dateAdapter={AdapterDayjs}
         adapterLocale="ko"
         localeText={{
@@ -47,12 +47,13 @@ export default function CustomDatePicker() {
           format="YYYY년 MM월 DD일"
           disableFuture
           slots={{
-            textField: CustomTextField,
+            textField: CustomDPTextField,
             toolbar: CustomDatePickerToolbar,
             actionBar: CustomDatePickerActionbar,
           }}
+					
           slotProps={{
-						// selected될 시 색변화
+            // selected될 시 색변화
             day: {
               sx: {
                 "&.MuiPickersDay-root.Mui-selected": {
@@ -70,6 +71,7 @@ export default function CustomDatePicker() {
 
 const datePickerCSS = {
   width: "100%",
+  marginBottom: "12px",
   "& .MuiOutlinedInput-root": {
     color: "var(--default-black-color)",
     borderRadius: "15px",

@@ -1,6 +1,5 @@
 import React, { ChangeEvent, useState } from "react";
 import { css } from "@emotion/react";
-import Button from "../common/Button/Button";
 
 interface RatingFormProps {
   ratingValue: number | null;
