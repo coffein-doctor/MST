@@ -96,7 +96,7 @@ function BeverageDetail({ params: { id } }: BeverageParams) {
               value={amount}
               onChange={handleChange}
               type="number"
-              css={amountContentCSS}
+              css={amountInputContentCSS}
             />
             <div css={plusMinusBtnCSS} onClick={handleIncrease}>
               +
@@ -183,10 +183,10 @@ const contentTitleCSS = css`
   font-size: var(--font-size-h3);
   font-weight: var(--font-weight-bold);
   text-align: center;
-  margin-bottom: 8px;
+  margin-bottom: 15px;
 `;
 
-const amountContentCSS = css`
+const amountInputContentCSS = css`
   flex: 1 0 auto;
   border: none;
   outline: none;

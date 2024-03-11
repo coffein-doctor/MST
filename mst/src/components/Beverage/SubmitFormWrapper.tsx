@@ -7,7 +7,7 @@ interface SubmitFormProps {
   leftLabel?: string;
   rightLabel?: string;
 }
-// 상, 중, 하 position 모양 지정
+// default, 상, 중, 하 position 모양 지정
 // label(L/R) 유무 지정
 // 내부에 input
 function SubmitFormWrapper({
