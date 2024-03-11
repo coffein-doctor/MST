@@ -1,6 +1,7 @@
 import { css } from "@emotion/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowDropDownIcon } from "@mui/x-date-pickers";
+import { transform } from "next/dist/build/swc";
 
 export interface SelectOptionsProps {
   options: Option[];
@@ -13,8 +14,7 @@ export interface Option {
 export default function SelectDropDown({ options }: SelectOptionsProps) {
   const [selectedOption, setSelectedOption] = useState<Option>(options[0]);
   const [isOpen, setIsOpen] = useState(false);
-
-  const wrapperRef = useRef<HTMLUListElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -25,42 +25,40 @@ export default function SelectDropDown({ options }: SelectOptionsProps) {
     setIsOpen(false);
   };
 
-  const handleTouchStart = (event: React.TouchEvent<HTMLUListElement>) => {
-    const touchStartY = event.touches[0].clientY;
-
-    if (wrapperRef.current) {
-      wrapperRef.current.dataset.touchStartY = touchStartY.toString();
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        wrapperRef.current &&
+        !wrapperRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
     }
-  };
 
-  const handleTouchMove = (event: React.TouchEvent<HTMLUListElement>) => {
-    if (!wrapperRef.current || !wrapperRef.current.dataset.touchStartY) return;
-    const touchMoveY = event.touches[0].clientY;
-    const touchStartY = parseFloat(wrapperRef.current.dataset.touchStartY);
-    const deltaY = touchStartY - touchMoveY;
-    if (wrapperRef.current) wrapperRef.current.scrollTop += deltaY;
-  };
-
-  const handleTouchEnd = () => {
-    if (wrapperRef.current) {
-      wrapperRef.current.dataset.touchStartY = "";
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
     }
-  };
 
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
   return (
-    <div css={selectWrapperCSS} onClick={toggleDropdown}>
+    <div css={selectWrapperCSS} onClick={toggleDropdown} ref={wrapperRef}>
       <div css={selectInputWrapperCSS}>
         {selectedOption ? selectedOption.value : "사이즈가 없습니다"}
       </div>
-      <ArrowDropDownIcon css={inputIconCSS} />
+      {isOpen ? (
+        <ArrowDropDownIcon
+          css={[inputIconCSS, { transform: "rotate(180deg)" }]}
+        />
+      ) : (
+        <ArrowDropDownIcon css={inputIconCSS} />
+      )}
       {isOpen && (
-        <ul
-          css={optionWrapperCSS}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-          ref={wrapperRef}
-        >
+        <ul css={optionWrapperCSS}>
           {options.map((option, idx) => (
             <li
               css={optionContentCSS}
@@ -111,10 +109,10 @@ const optionWrapperCSS = css`
   border: 1px solid var(--gray-color-4);
   border-radius: 15px;
   height: 130px;
-  overflow-y: hidden;
-  padding: 0;
-  margin: 0;
-  list-style-type: none;
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const optionContentCSS = css`

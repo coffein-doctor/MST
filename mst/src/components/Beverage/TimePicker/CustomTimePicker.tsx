@@ -57,6 +57,7 @@ export default function CustomTimePicker() {
                     position: "absolute",
                     right: "2%",
                     color: "var(--gray-color-4)",
+                    transform: open ? "rotate(180deg)" : "",
                   }}
                 />
               </InputAdornment>
@@ -72,10 +73,10 @@ export default function CustomTimePicker() {
           open={open}
           anchorEl={anchorEl}
           onClose={handleClose}
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "center",
-          }}
+					anchorOrigin={{
+						vertical: 'bottom',
+						horizontal: 'center',
+					}}
           transformOrigin={{
             vertical: "top",
             horizontal: "center",

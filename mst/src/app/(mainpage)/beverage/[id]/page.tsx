@@ -13,6 +13,7 @@ import SubmitFormWrapper from "@/components/Beverage/SubmitFormWrapper";
 import { ChangeEvent, useState } from "react";
 import SelectDropDown from "@/components/Beverage/SelectDropdown";
 
+
 const testOptions = [
   { value: "톨사이즈" },
   { value: "그란데사이즈" },
@@ -48,6 +49,7 @@ function BeverageDetail({ params: { id } }: BeverageParams) {
   return (
     <div>
       {/* 상단 Detail */}
+
       <div css={detailWrapperCSS}>
         <div css={detailTitleWrapperCSS}>
           <div css={detailTitleCSS}>카페라떼</div>
