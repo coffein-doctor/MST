@@ -1,7 +1,6 @@
 import { css } from "@emotion/react";
 import { useEffect, useRef, useState } from "react";
 import { ArrowDropDownIcon } from "@mui/x-date-pickers";
-import { transform } from "next/dist/build/swc";
 
 export interface SelectOptionsProps {
   options: Option[];
@@ -45,6 +44,7 @@ export default function SelectDropDown({ options }: SelectOptionsProps) {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen]);
+
   return (
     <div css={selectWrapperCSS} onClick={toggleDropdown} ref={wrapperRef}>
       <div css={selectInputWrapperCSS}>

@@ -45,6 +45,13 @@ export default function MainPageLayout({
       showNavBar: false,
     },
 
+    "/beverage/water": {
+      showTopBar: true,
+      TopBarType: "basic",
+      title: "물",
+      showNavBar: false,
+    },
+		
     "/beverage.*": {
       showTopBar: true,
       TopBarType: "basic",
