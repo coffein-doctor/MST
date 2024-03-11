@@ -1,6 +1,7 @@
 server:
   port: 8761
 
+# 프로젝트 이름
 spring:
   application:
     name: eureka-server
@@ -9,5 +10,5 @@ eureka:
   client:
     # 유레카 서버가 자기자신을 등룍하는 것을 막음
     register-with-eureka: false
-    # 유레카 서버의 정보를 가져올지 여부
+    # 유레카 서버로 부터 정보를 가져올지 여부
     fetch-registry: false
