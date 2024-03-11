@@ -2,9 +2,16 @@ import { useState } from "react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
-import { Popover, TextField, ThemeProvider, createTheme } from "@mui/material";
+import {
+  InputAdornment,
+  Popover,
+  TextField,
+  ThemeProvider,
+  createTheme,
+} from "@mui/material";
 import dayjs, { Dayjs } from "dayjs";
 import CustomDigitalClock from "./CustomDigitalClock";
+import { ArrowDropDownIcon } from "@mui/x-date-pickers";
 
 const theme = createTheme({
   typography: {
@@ -36,13 +43,24 @@ export default function CustomTimePicker() {
 
   return (
     <ThemeProvider theme={theme}>
-      <LocalizationProvider dateAdapter={AdapterDayjs} >
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
         {/* 입력창 */}
         <TextField
           id="time-picker-textField"
           value={selectedTime ? selectedTime.format("A hh:mm") : ""}
           InputProps={{
             readOnly: true,
+            endAdornment: (
+              <InputAdornment position="end" sx={{ position: "relative" }}>
+                <ArrowDropDownIcon
+                  sx={{
+                    position: "absolute",
+                    right: "2%",
+                    color: "var(--gray-color-4)",
+                  }}
+                />
+              </InputAdornment>
+            ),
           }}
           onClick={handleOpen}
           sx={timePickerCSS}
@@ -66,7 +84,7 @@ export default function CustomTimePicker() {
           slotProps={{
             paper: {
               sx: {
-                width: "100%",
+                width: "80%",
                 borderRadius: "15px",
               },
             },

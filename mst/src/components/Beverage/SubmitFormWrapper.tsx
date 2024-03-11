@@ -53,7 +53,7 @@ function SubmitFormWrapper({
 const formSetWrapperCSS = css`
   height: 45px;
   border: solid 1px var(--gray-color-4);
-  background-color: white;
+  background-color: var(--default-white-color);
   display: flex;
   padding: 0px 20px;
   justify-content: center;

@@ -9,18 +9,12 @@ export function CustomDPTextField(props: TextFieldProps) {
       InputProps={{
         readOnly: true,
         endAdornment: (
-          <InputAdornment
-            position="end"
-            sx={{
-              position: "fixed",
-              right: "35px",
-            }}
-          >
+          <InputAdornment position="end" sx={{ position: "relative" }}>
             <CalendarIcon
               sx={{
+                position: "absolute",
+                right:"2%",
                 color: "var(--gray-color-4)",
-                width: "2px",
-                height: "25px",
               }}
             />
           </InputAdornment>

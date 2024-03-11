@@ -11,11 +11,20 @@ import CustomTimePicker from "@/components/Beverage/TimePicker/CustomTimePicker"
 import CustomDatePicker from "@/components/Beverage/DatePicker/CustomDatePicker";
 import SubmitFormWrapper from "@/components/Beverage/SubmitFormWrapper";
 import { ChangeEvent, useState } from "react";
+import SelectDropDown from "@/components/Beverage/SelectDropdown";
 
 const testOptions = [
   { value: "톨사이즈" },
-  { value: "banana" },
-  { value: "orange" },
+  { value: "그란데사이즈" },
+  { value: "라지사이즈" },
+  { value: "톨사이즈" },
+  { value: "그란데사이즈그란데사이즈그란데사이즈" },
+  { value: "그란데사이즈" },
+  { value: "라지사이즈" },
+  { value: "톨사이즈" },
+  { value: "그란데사이즈" },
+  { value: "라지사이즈" },
+  { value: "톨사이즈" },
 ];
 interface BeverageParams {
   params: { id: string };
@@ -72,16 +81,8 @@ function BeverageDetail({ params: { id } }: BeverageParams) {
       <form>
         <div css={amountWrapperCSS}>
           <div css={contentTitleCSS}>섭취량</div>
-					
-          <SubmitFormWrapper>
-            <select css={amountContentCSS}>
-              {testOptions.map((item, idx) => (
-                <option key={idx} value={item.value}>
-                  {item.value}
-                </option>
-              ))}
-            </select>
-          </SubmitFormWrapper>
+          {/* DropDown */}
+          <SelectDropDown options={testOptions} />
           <br css={emptyCSS} />
           <SubmitFormWrapper>
             <div css={plusMinusBtnCSS} onClick={handleDecrease}>
