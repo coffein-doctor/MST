@@ -1,6 +1,5 @@
 "use client";
 import { css } from "@emotion/react";
-
 import BasicHR from "@/components/Beverage/BasicHR";
 import { EMPTYHEART } from "@/assets/icons";
 import Image from "next/image";
