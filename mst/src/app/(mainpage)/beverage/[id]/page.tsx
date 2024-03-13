@@ -13,7 +13,6 @@ import SubmitFormWrapper from "@/components/Beverage/SubmitFormWrapper";
 import { ChangeEvent, useState } from "react";
 import SelectDropDown from "@/components/Beverage/SelectDropdown";
 
-
 const testOptions = [
   { value: "톨사이즈" },
   { value: "그란데사이즈" },
@@ -83,6 +82,7 @@ function BeverageDetail({ params: { id } }: BeverageParams) {
       <form>
         <div css={amountWrapperCSS}>
           <div css={contentTitleCSS}>섭취량</div>
+
           {/* DropDown */}
           <SelectDropDown options={testOptions} />
           <br css={emptyCSS} />
@@ -177,7 +177,7 @@ const detailTextAmountCSS = css`
 
 // form
 const amountWrapperCSS = css`
-  margin-bottom: 25px;
+  margin-bottom: 103px;
 `;
 const contentTitleCSS = css`
   font-size: var(--font-size-h3);

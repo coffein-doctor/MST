@@ -47,10 +47,12 @@ function WaterCreate() {
             />
           </SubmitFormWrapper>
         </div>
-        <div>
+        <div css={timeDatePickerWrapperCSS}>
           <div css={waterContentTitleCSS}>섭취시간</div>
-          <CustomDatePicker />
-          <CustomTimePicker />
+          <div>
+            <CustomDatePicker />
+            <CustomTimePicker />
+          </div>
         </div>
         <Button content="추가하기" />
       </form>
@@ -66,7 +68,7 @@ const waterContentTitleCSS = css`
   font-size: var(--font-size-h3);
   font-weight: var(--font-weight-bold);
   text-align: center;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 `;
 
 const waterAmountInputContentCSS = css`
@@ -77,4 +79,8 @@ const waterAmountInputContentCSS = css`
   font-size: var(--font-size-h4);
   padding-bottom: 3px;
   text-align: end;
+`;
+
+const timeDatePickerWrapperCSS = css`
+  margin-bottom: 103px;
 `;

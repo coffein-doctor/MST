@@ -90,7 +90,7 @@ const inputLabelLeftWrapperCSS = css`
   width: 60px;
   color: var(--gray-color-4);
   font-size: var(--font-size-h5);
-  margin-right: 10px;
+  margin-right: 5px;
 `;
 
 const inputLabelRightWrapperCSS = css`

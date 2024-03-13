@@ -2,7 +2,7 @@ import { css } from "@emotion/react";
 import { useEffect, useRef, useState } from "react";
 import { ArrowDropDownIcon } from "@mui/x-date-pickers";
 
-export interface SelectOptionsProps {
+export interface OptionsProps {
   options: Option[];
 }
 
@@ -10,7 +10,7 @@ export interface Option {
   value: string;
 }
 
-export default function SelectDropDown({ options }: SelectOptionsProps) {
+export default function SelectDropDown({ options }: OptionsProps) {
   const [selectedOption, setSelectedOption] = useState<Option>(options[0]);
   const [isOpen, setIsOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -108,7 +108,7 @@ const optionWrapperCSS = css`
   background-color: white;
   border: 1px solid var(--gray-color-4);
   border-radius: 15px;
-  height: 130px;
+  height: 150px;
   overflow-y: auto;
   &::-webkit-scrollbar {
     display: none;

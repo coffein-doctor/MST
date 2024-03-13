@@ -51,7 +51,7 @@ export default function MainPageLayout({
       title: "물",
       showNavBar: false,
     },
-		
+
     "/beverage.*": {
       showTopBar: true,
       TopBarType: "basic",
@@ -107,4 +107,5 @@ export default function MainPageLayout({
 const contentWrapperCSS = css`
   margin: 0 20px;
   overflow-x: hidden;
+  overflow-y: hidden;
 `;

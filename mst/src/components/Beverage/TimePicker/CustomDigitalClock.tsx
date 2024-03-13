@@ -44,4 +44,5 @@ const digitalClockCSS = {
     width: "100%",
     margin: "0px",
   },
+	
 };

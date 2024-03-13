@@ -116,9 +116,12 @@ function BeverageCreate() {
           />
         </SubmitFormWrapper>
         {/* 날짜/시간 */}
-        <CustomDatePicker />
-        <CustomTimePicker />
-				<BasicHR/>
+        <div css={timeDatePickerWrapperCSS}>
+          <CustomDatePicker />
+          <CustomTimePicker />
+        </div>
+
+        <BasicHR />
         {/* 평가 */}
         <RatingForm
           ratingValue={ratingData.ratingValue}
@@ -151,5 +154,8 @@ const beverageRightContentCSS = css`
 `;
 
 //datePicker
+const timeDatePickerWrapperCSS = css`
+  margin: 20px 0px;
+`;
 
 export default BeverageCreate;
