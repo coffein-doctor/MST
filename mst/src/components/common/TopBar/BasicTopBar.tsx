@@ -29,13 +29,12 @@ const topBarWrapperCSS = css`
 const backIconWrapperCSS = css`
   position: absolute;
   left: 20px;
-  cursor: pointer;
 `;
 
 const topBarContentCSS = css`
   color: var(--gray-color-2);
   font-size: var(--font-size-h3);
-	font-weight: var(--font-weight-bold);
+  font-weight: var(--font-weight-bold);
 `;
 
 export default BasicTopBar;

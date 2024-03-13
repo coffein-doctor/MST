@@ -42,12 +42,21 @@ export default function MainPageLayout({
 
     "/beverage": {
       showTopBar: false,
-      showNavBar: true,
+      showNavBar: false,
+    },
+
+    "/beverage/water": {
+      showTopBar: true,
+      TopBarType: "basic",
+      title: "물",
+      showNavBar: false,
     },
 
     "/beverage.*": {
-      showTopBar: false,
-      showNavBar: true,
+      showTopBar: true,
+      TopBarType: "basic",
+      title: "음료 등록",
+      showNavBar: false,
     },
 
     "/community": {
@@ -98,4 +107,5 @@ export default function MainPageLayout({
 const contentWrapperCSS = css`
   margin: 0 20px;
   overflow-x: hidden;
+  overflow-y: hidden;
 `;
