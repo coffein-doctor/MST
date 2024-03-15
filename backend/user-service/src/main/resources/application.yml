@@ -1,6 +1,6 @@
 # 현재 프로젝트 포트 지정
 server:
-  port: 0
+  port: 8081
 
 # 현재 프로젝트 이름 지정
 spring:
