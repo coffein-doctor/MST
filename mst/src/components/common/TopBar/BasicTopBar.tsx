@@ -18,12 +18,11 @@ function BasicTopBar({ content }: BasicTopBarProps) {
 }
 
 const topBarWrapperCSS = css`
-  width: 100vw;
+  width: auto;
   height: 64px;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0px 20px;
 `;
 
 const backIconWrapperCSS = css`
