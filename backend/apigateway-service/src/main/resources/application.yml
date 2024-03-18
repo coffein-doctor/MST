@@ -1,6 +1,17 @@
 server:
   port: 8000
 
+# eureka 클라이언트 설정 (eureka 서버와 연결)
+eureka:
+  client:
+    # eureka 서버에 등록할지 여부
+    register-with-eureka: true
+    # eureka 서버로 부터 인스턴스들의 정보를 가져올 것인지 설정하는 속성
+    fetch-registry: true
+    # eureka 서버 주소에 마이크로서비스 정보 등록
+    service-url:
+      defaultZone: http://admin:1234mst@localhost:8761/eureka
+
 spring:
   application:
     name: apigateway-service
@@ -8,19 +19,19 @@ spring:
     gateway:
       routes:
         - id: user-service
-          uri: http://localhost:8081
+          uri: http://localhost:8081/
           predicates:
             - Path=/user-service/**
           filters:
             - RewritePath=/user-service/(?<segment>.*),/$\{segment}
         - id: beverage-service
-          uri: http://localhost:8082
+          uri: http://localhost:8082/
           predicates:
             - Path=/beverage-service/**
           filters:
             - RewritePath=/beverage-service/(?<segment>.*),/$\{segment}
         - id: community-service
-          uri: http://localhost:8083
+          uri: http://localhost:8083/
           predicates:
             - Path=/community-service/**
           filters:
