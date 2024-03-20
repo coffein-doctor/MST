@@ -19,4 +19,9 @@ public class UserServiceController {
         log.info(header);
         return "Hello World in User Service";
     }
+
+    @GetMapping("/check")
+    public String check() {
+        return "Hi, there. This is a message from User Service";
+    }
 }

@@ -19,4 +19,9 @@ public class CommunityServiceController {
         log.info(header);
         return "Hello World in Community Service";
     }
+
+    @GetMapping("/check")
+    public String check() {
+        return "Hi, there. This is a message from Community Service";
+    }
 }

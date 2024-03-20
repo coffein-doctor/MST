@@ -19,4 +19,9 @@ public class BeverageServiceController {
         return "Hello World in Beverage Service";
     }
 
+    @GetMapping("/check")
+    public String check() {
+        return "Hi, there. This is a message from Beverage Service";
+    }
+
 }
