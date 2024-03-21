@@ -8,7 +8,7 @@ import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
-// 사용자 정의 필터
+// 사용자 정의 필터 (개별적으로 서비스에 따로 등록)
 @Component // 일반적인 빈 형태
 @Slf4j // 로그파일 출력
 public class CustomFilter extends AbstractGatewayFilterFactory<CustomFilter.Config> {
