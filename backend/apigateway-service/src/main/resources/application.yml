@@ -62,6 +62,11 @@ spring:
             - Path=/community-service/**
           filters:
             - RewritePath=/community-service/(?<segment>.*),/$\{segment}
-            - CustomFilter
+            - name: CustomFilter
+            - name: LoggingFilter
+              args:
+                baseMessage: Spring Cloud Gateway LoggingFilter
+                preLogger: true
+                postLogger: true
 #            - AddRequestHeader=community-request, community-request-header # {headerName: headerValue} header 삽입, 요청할 때
 #            - AddResponseHeader=community-response, community-response-header # header 삽입, 반환할 때
