@@ -50,6 +50,7 @@ const topBarWrapperCSS = css`
   width: 100vw;
   height: 64px;
   display: flex;
+  justify-content: center;
   align-items: center;
   padding: 0px 20px;
 `;

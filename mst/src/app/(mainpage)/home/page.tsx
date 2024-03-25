@@ -1,7 +1,15 @@
-import React from "react";
+"use client";
 
-function home() {
-  return <div>home</div>;
+import { css } from "@emotion/react";
+import Form from "@/components/common/Form/Form";
+import HomeFormContent from "@/components/Home/HomeFormContent";
+
+function Home() {
+  return (
+    <div>
+      <Form content={<HomeFormContent />} />
+    </div>
+  );
 }
 
-export default home;
+export default Home;
