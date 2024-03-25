@@ -10,10 +10,10 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
 #    url: ${SPRING_DATASOURCE_URL}
-    url: jdbc:mysql://localhost:3306/MST_UserService?serverTimezone=UTC
-    username: root
+    url: jdbc:mysql://localhost:3306/MST?useSSL=false&serverTimezone=UTC
+    username: admin
 #    password: ${SPRING_DATASOURCE_PASSWORD}
-    password: mst0117
+    password: mst@0117
   jpa:
     database: mysql
     database-platform: org.hibernate.dialect.MySQLDialect
