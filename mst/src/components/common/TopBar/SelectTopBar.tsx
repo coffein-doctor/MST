@@ -1,36 +1,36 @@
 "use client";
 import React, { useState } from "react";
 import { css } from "@emotion/react";
-import { SelectTopBarProps } from "@/types/topBarTypes";
+import { useRouter } from "next/navigation";
 
-function SelectTopBar({ firstCategory, secondCategory }: SelectTopBarProps) {
-  // 나중에 parentcomponent에서 관리할 때 변경 필요
-  const [selectedCategory, setSelectedCategory] = useState(firstCategory);
+function SelectTopBar({
+  options,
+}: {
+  options: { name: string; value: string }[];
+}) {
+  const [selectedOption, setSelectedOption] = useState(options[0].value);
 
-  const handleCategorySelected = (category: string) => {
-    setSelectedCategory(category);
+  const router = useRouter();
+
+  const handleOptionClick = (value: string) => {
+    setSelectedOption(value);
+    router.push(`/${value}`);
   };
 
   return (
     <div css={selectTopBarWrapperCSS}>
-      <div
-        css={[
-          selectTopBarContentCSS,
-          selectedCategory === firstCategory && clickedTopBarContentCSS,
-        ]}
-        onClick={() => handleCategorySelected(firstCategory)}
-      >
-        {firstCategory}
-      </div>
-      <div
-        css={[
-          selectTopBarContentCSS,
-          selectedCategory === secondCategory && clickedTopBarContentCSS,
-        ]}
-        onClick={() => handleCategorySelected(secondCategory)}
-      >
-        {secondCategory}
-      </div>
+      {options.map((option) => (
+        <div
+          key={option.value}
+          css={[
+            selectTopBarContentCSS,
+            selectedOption === option.value && clickedTopBarContentCSS,
+          ]}
+          onClick={() => handleOptionClick(option.value)}
+        >
+          {option.name}
+        </div>
+      ))}
     </div>
   );
 }
@@ -41,7 +41,6 @@ const selectTopBarWrapperCSS = css`
   display: flex;
   justify-content: start;
   align-items: center;
-  padding: 0px 20px;
 `;
 
 const selectTopBarContentCSS = css`

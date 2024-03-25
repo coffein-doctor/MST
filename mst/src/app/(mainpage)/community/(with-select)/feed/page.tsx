@@ -4,6 +4,7 @@ import { css } from "@emotion/react";
 import FeedForm from "@/components/Community/FeedForm";
 import Form from "@/components/common/Form/Form";
 import useGetRatingColor from "@/utils/useGetRatingColor";
+import SelectTopBar from "@/components/common/TopBar/SelectTopBar";
 
 interface FeedData {
   id: number;

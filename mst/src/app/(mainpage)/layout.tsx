@@ -18,7 +18,6 @@ export default function MainPageLayout({
 }
 
 const contentWrapperCSS = css`
-  margin: 0 20px;
   overflow-x: hidden;
   overflow-y: hidden;
 `;

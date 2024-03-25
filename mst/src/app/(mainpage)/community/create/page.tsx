@@ -2,6 +2,7 @@
 import { css } from "@emotion/react";
 import Button from "@/components/common/Button/Button";
 import { ChangeEvent, useState } from "react";
+import BasicTopBar from "@/components/common/TopBar/BasicTopBar";
 
 export default function PostCreate() {
   const [postFormData, setPostFormData] = useState({
@@ -22,6 +23,7 @@ export default function PostCreate() {
 
   return (
     <div>
+			<BasicTopBar content="글 작성하기"/>
       <form method="submit">
         <input
           id="title"

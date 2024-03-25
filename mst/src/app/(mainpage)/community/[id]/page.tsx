@@ -1,6 +1,7 @@
 "use client";
 import { FULLHEART } from "@/assets/icons";
 import CommentSet from "@/components/Community/Comment/CommentSet";
+import BasicTopBar from "@/components/common/TopBar/BasicTopBar";
 import { css } from "@emotion/react";
 interface CommunityParams {
   params: { id: number };
@@ -8,10 +9,9 @@ interface CommunityParams {
 export default function PostDetail({ params: { id } }: CommunityParams) {
   return (
     <div>
-      <div>상단바</div>
-      {/* 글제목 및 정보 */}
+      <BasicTopBar content="커뮤니티" />
       <div css={postInfoWrapperCSS}>
-        <div css={postTitleCSS}>제목이 어쩌구저꺼지ㅑㅜㄹ나ㅣ우ㅑㅠㅈㄷㄹ</div>
+        <div css={postTitleCSS}>제목제목제목</div>
         <div css={postUserCSS}>김작성자</div>
         <div css={postInfoCSS}>
           <span>{"24.01.02"} · </span>
@@ -57,6 +57,7 @@ const postInfoWrapperCSS = css`
 const postTitleCSS = css`
   font-size: var(--font-size-h3);
   font-weight: var(--font-weight-bold);
+  margin-top: 15px;
   margin-bottom: 30px;
 `;
 
