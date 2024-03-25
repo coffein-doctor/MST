@@ -31,9 +31,9 @@ public class SignUpUserRequestDto {
 
     private String gender;
 
-    private Integer height;
+    private int height;
 
-    private Integer weight;
+    private int weight;
 
     private MultipartFile profileImg;
 

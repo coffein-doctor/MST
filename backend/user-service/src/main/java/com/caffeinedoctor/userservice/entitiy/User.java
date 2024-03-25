@@ -2,6 +2,7 @@ package com.caffeinedoctor.userservice.entitiy;
 
 
 
+import com.caffeinedoctor.userservice.entitiy.enums.Gender;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,7 +29,8 @@ public class User {
     private LocalDate birth;
 
     @Column(nullable = false)
-    private String gender; // [m, w]
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
     @Column(nullable = false)
     private int height;
