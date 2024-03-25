@@ -5,7 +5,7 @@ import Form from "@/components/common/Form/Form";
 import PostForm from "@/components/Community/PostForm";
 import PencilButton from "@/components/common/Button/PencilButton";
 
-interface CmFormData {
+interface PostFormData {
   id: number;
   title: string;
   author: string;
@@ -14,7 +14,7 @@ interface CmFormData {
   replies: number;
 }
 
-const cmDummyData: CmFormData[] = [
+const postDummyData: PostFormData[] = [
   {
     id: 1,
     title: "첫 번째입니다adsssssssssssssssssssssssssssssssssssssss.",
@@ -54,9 +54,9 @@ function Community() {
     <div>
       <div css={communityContentCSS}>사람들과 이야기를 나눠보세요.</div>
       <div>
-        {cmDummyData.map((item) => (
+        {postDummyData.map((item) => (
           <Form
-            cssProps={cmFormWrapperCSS}
+            cssProps={postFormWrapperCSS}
             shadow={true}
             key={item.id}
             content={
@@ -82,7 +82,7 @@ const communityContentCSS = css`
   margin-bottom: 20px;
 `;
 
-const cmFormWrapperCSS = css`
+const postFormWrapperCSS = css`
   margin-bottom: 13px;
 `;
 
