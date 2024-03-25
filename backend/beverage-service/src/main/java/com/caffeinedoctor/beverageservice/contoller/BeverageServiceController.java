@@ -27,11 +27,6 @@ public class BeverageServiceController {
         return "Hello World in Beverage Service";
     }
 
-    @GetMapping("/check")
-    public String check() {
-        return "Hi, there. This is a message from Beverage Service";
-    }
-
     // 현재 사용되는 랜덤 포트 번호 출력
     @GetMapping("/check")
     public String check(HttpServletRequest request) {

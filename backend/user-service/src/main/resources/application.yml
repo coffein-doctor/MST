@@ -1,11 +1,31 @@
 # 현재 프로젝트 포트 지정
 server:
-  port: 0
+  port: 8081
+#  port: 0
 
 # 현재 프로젝트 이름 지정
 spring:
   application:
     name: user-service
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+##    url: ${SPRING_DATASOURCE_URL}
+#    url: jdbc:mysql://localhost:3306/MST_UserService?serverTimezone=UTC
+#    username: root
+##    password: ${SPRING_DATASOURCE_PASSWORD}
+#    password: mst0117
+#  jpa:
+#    database: mysql
+#    database-platform: org.hibernate.dialect.MySQLDialect
+#    # SQL 쿼리를 로그로 출력할지 여부
+#    show-sql: true
+#    # 데이터베이스 스키마를 자동으로 업데이트할지 여부 (db 초기화 전략. create: 기존 테이블 삭제 후 생성)
+#    hibernate:
+#      ddl-auto: update
+#    # SQL 쿼리를 출력할 때 가독성을 높이기 위해 서식을 지정
+#    properties:
+#      hibernate:
+#        format_sql: true
 
 # eureka 설정
 eureka:
@@ -18,6 +38,9 @@ eureka:
     register-with-eureka: true
     # eureka 서버로 부터 인스턴스들의 정보를 가져올 것인지 설정하는 속성
     fetch-registry: true
-    # eureka 서버 주소에 마이크로서비스 정보 등록
+    # eureka 서버 주소에 마이크로서비스 정보 등록 (접속아이디, 비밀번호)
     service-url:
       defaultZone: http://admin:1234mst@localhost:8761/eureka
+
+greeting:
+  message: Welcome to the MST Project.
