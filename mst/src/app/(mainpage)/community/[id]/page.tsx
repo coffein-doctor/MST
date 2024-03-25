@@ -42,9 +42,10 @@ export default function PostDetail({ params: { id } }: CommunityParams) {
         <div css={commentTitleCSS}>댓글</div>
         <div>
           <CommentSet />
-          <div>대댓글</div>
         </div>
       </div>
+      {/* 댓글 입력창 */}
+      <div>댓글입력</div>
     </div>
   );
 }
