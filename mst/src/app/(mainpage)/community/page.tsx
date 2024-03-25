@@ -3,6 +3,7 @@ import { css } from "@emotion/react";
 import React from "react";
 import Form from "@/components/common/Form/Form";
 import CommunityForm from "@/components/Community/CommunityForm";
+import PencilButton from "@/components/common/Button/PencilButton";
 
 interface CmFormData {
   id: number;
@@ -70,6 +71,7 @@ function Community() {
           />
         ))}
       </div>
+      <PencilButton />
       <div css={emptyNavCSS} />
     </div>
   );
