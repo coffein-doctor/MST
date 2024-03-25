@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
-public class SignUpRequestDto {
+public class SignUpUserRequestDto {
     @NotBlank(message = "Email cannot be null")
     @Size(min = 2, message = "Email not be less than two characters")
     @Email
