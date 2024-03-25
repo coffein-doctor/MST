@@ -42,6 +42,24 @@ const dummyData: FeedData[] = [
       "다른 제품에 대한 더미 데이터입니다. 여러분은 이것을 자유롭게 변경할 수 있습니다.",
     ratingNum: 3,
   },
+  {
+    id: 234,
+    beverageName: "다른 제품",
+    manufacturer: "다른 제조사",
+    userName: "다른 유저",
+    content:
+      "다른 제품에 대한 더미 데이터입니다. 여러분은 이것을 자유롭게 변경할 수 있습니다.",
+    ratingNum: 3,
+  },
+  {
+    id: 45645,
+    beverageName: "다른 제품",
+    manufacturer: "다른 제조사",
+    userName: "다른 유저",
+    content:
+      "다른 제품에 대한 더미 데이터입니다. 여러분은 이것을 자유롭게 변경할 수 있습니다.",
+    ratingNum: 3,
+  },
 ];
 
 function Feed() {
@@ -55,6 +73,7 @@ function Feed() {
 
   return (
     <div>
+      {/* 상단 Pill */}
       <div css={pillBtnWrapperCSS}>
         {RATING_VALUES.map((val) => (
           <button
@@ -71,23 +90,30 @@ function Feed() {
           </button>
         ))}
       </div>
+      {/* 하단 피드 */}
       <div>
-        {dummyData.map((item) => (
-          <Form
-            key={item?.id}
-            cssProps={feedFormWrapperCSS}
-            content={
-              <FeedForm
-                beverageName={item?.beverageName}
-                manufacturer={item?.manufacturer}
-                userName={item?.userName}
-                content={item?.content}
-                ratingNum={item?.ratingNum}
-              />
-            }
-          />
-        ))}
+        {dummyData.length === 0 ? (
+          <div css={emptyFeedTextCSS}>즐겨찾기한 음료가 없습니다</div>
+        ) : (
+          dummyData?.map((item) => (
+            <Form
+              key={item?.id}
+              cssProps={feedFormWrapperCSS}
+              content={
+                <FeedForm
+                  beverageName={item?.beverageName}
+                  manufacturer={item?.manufacturer}
+                  userName={item?.userName}
+                  content={item?.content}
+                  ratingNum={item?.ratingNum}
+                />
+              }
+            />
+          ))
+        )}
       </div>
+      {/* Navbar 여백 */}
+      <div css={emptyNavCSS} />
     </div>
   );
 }
@@ -115,4 +141,18 @@ const selectedRatingPillCSS = css`
 const feedFormWrapperCSS = css`
   margin-bottom: 20px;
 `;
+
+const emptyFeedTextCSS = css`
+  color: var(--gray-color-3);
+  font-size: var(--font-size-h6);
+  height: 60vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const emptyNavCSS = css`
+  height: 80px;
+`;
+
 export default Feed;
