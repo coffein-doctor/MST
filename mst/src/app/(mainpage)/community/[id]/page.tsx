@@ -1,6 +1,8 @@
+
+
 interface CommunityParams {
   params: { id: number };
 }
-export default function CommunityDetail({ params: { id } }: CommunityParams) {
+export default function PostDetail({ params: { id } }: CommunityParams) {
   return <div></div>;
 }

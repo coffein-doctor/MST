@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 import dayjs from "dayjs";
 
-interface CmContentProps {
+interface PostContentProps {
   title: string;
   author: string;
   timestamp: string;
@@ -9,13 +9,13 @@ interface CmContentProps {
   replies: number;
 }
 
-export default function CommunityForm({
+export default function PostForm({
   title,
   author,
   timestamp,
   views,
   replies,
-}: CmContentProps) {
+}: PostContentProps) {
   const currentTime = dayjs();
   const createdTime = dayjs(timestamp);
 

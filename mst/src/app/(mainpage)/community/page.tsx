@@ -2,7 +2,7 @@
 import { css } from "@emotion/react";
 import React from "react";
 import Form from "@/components/common/Form/Form";
-import CommunityForm from "@/components/Community/CommunityForm";
+import PostForm from "@/components/Community/PostForm";
 import PencilButton from "@/components/common/Button/PencilButton";
 
 interface CmFormData {
@@ -60,7 +60,7 @@ function Community() {
             shadow={true}
             key={item.id}
             content={
-              <CommunityForm
+              <PostForm
                 title={item.title}
                 author={item.author}
                 timestamp={item.timestamp}
