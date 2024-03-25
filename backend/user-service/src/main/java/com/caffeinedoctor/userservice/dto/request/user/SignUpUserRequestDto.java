@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 
@@ -26,13 +27,13 @@ public class SignUpUserRequestDto {
     @Size(min = 2, message = "Nickname not be less than two characters")
     private String nickname;
 
-    private String birth;
+    private LocalDate birth;
 
     private String gender;
 
-    private Long height;
+    private Integer height;
 
-    private Long weight;
+    private Integer weight;
 
     private MultipartFile profileImg;
 

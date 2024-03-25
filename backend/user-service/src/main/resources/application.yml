@@ -9,10 +9,8 @@ spring:
     name: user-service
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: ${SPRING_DATASOURCE_URL}
     url: jdbc:mysql://localhost:3306/MST?useSSL=false&serverTimezone=UTC
-    username: admin
-#    password: ${SPRING_DATASOURCE_PASSWORD}
+    username: root
     password: mst@0117
   jpa:
     database: mysql
@@ -20,12 +18,19 @@ spring:
     # 데이터베이스 스키마를 자동으로 업데이트할지 여부 (db 초기화 전략. create: 기존 테이블 삭제 후 생성)
     hibernate:
       ddl-auto: update
-    # SQL 쿼리를 로그로 출력할지 여부
-    show-sql: true
-    # SQL 쿼리를 출력할 때 가독성을 높이기 위해 서식을 지정
     properties:
       hibernate:
+        # SQL 쿼리를 로그로 출력할지 여부
+        show-sql: true
+# JPA의 구현체인 Hibernate가 동작하면서 발생한 SQL의 가독성을 높여준다.
         format_sql: true
+
+logging:
+  level:
+    # hibernate, jpa 성성한 SQL 쿼리 debug 로그로 남긴다.
+    org.hibernate.SQL: debug
+    # sql 실행 파라미터를 로그로 남긴다.
+    org.hibernate.type: trace
 
 # eureka 설정
 eureka:
