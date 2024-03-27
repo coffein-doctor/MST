@@ -9,9 +9,9 @@ spring:
     name: user-service
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/MST?useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://3.36.123.194:3306/mst?useSSL=false&serverTimezone=UTC
     username: root
-    password: mst@0117
+    password: mst1@0117
   jpa:
     database: mysql
     database-platform: org.hibernate.dialect.MySQLDialect
