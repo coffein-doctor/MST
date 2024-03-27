@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Baverage {
+public class Beverage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,11 +28,11 @@ public class Baverage {
     @Column(nullable = false)
     private Boolean isCustom;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "custom_id")
-//    private BavaerageCustom custom;
-//
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "baverage_id")
-//    private BaverageBasic basic;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "custom_id")
+    private BeverageCustom custom;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "beverage_id")
+    private BeverageBasic basic;
 }
