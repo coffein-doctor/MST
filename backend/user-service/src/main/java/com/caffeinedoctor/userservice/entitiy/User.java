@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "user")
-@Getter @Setter
+@Getter
 public class User {
 
     @Id
@@ -44,5 +44,8 @@ public class User {
 
     @Column(name = "created_date")
     private LocalDateTime SignUpDate;
+
+    @Column(name = "login_date")
+    private LocalDateTime loginDate;
 
 }
