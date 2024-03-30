@@ -13,6 +13,9 @@ import java.util.List;
 @Repository
 // CrudRepository<연동 될 entity, entity의 기본키 타입>
 public interface UserRepository extends CrudRepository<User, Long> {
-    // 이메일로 찾기
+    // 같은 이메일 찾기
     List<User> findByEmail(String email);
+
+    // 같은 닉네임 찾기
+    List<User> findByNickname(String nickname);
 }

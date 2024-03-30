@@ -1,8 +1,7 @@
 package com.caffeinedoctor.userservice.dto.request.user;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import com.caffeinedoctor.userservice.entitiy.enums.Gender;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,26 +13,27 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 public class SignUpUserRequestDto {
-    @NotBlank(message = "Email cannot be null")
-    @Size(min = 2, message = "Email not be less than two characters")
-    @Email
+
+    @NotBlank(message = "Email must not be blank")
+    @Email(message = "Invalid email format")
     private String email;
 
-    @NotBlank(message = "Password cannot be null")
-    @Size(min = 8, message = "Password must not be equal or grater than 8 characters")
-    private String password;
-
-    @NotBlank(message = "Nickname cannot be null")
-    @Size(min = 2, message = "Nickname not be less than two characters")
+    @NotBlank(message = "Nickname must not be blank")
     private String nickname;
 
+    @NotNull(message = "Birth must not be null")
     private LocalDate birth;
 
-    private String gender;
+    @NotNull(message = "Gender must not be null")
+    private Gender gender;
 
-    private int height;
+    @NotNull(message = "Height must not be null")
+    @Min(value = 1, message = "Height must be greater than 0")
+    private Integer height;
 
-    private int weight;
+    @NotNull(message = "Weight must not be null")
+    @Min(value = 1, message = "Weight must be greater than 0")
+    private Integer weight;
 
     private MultipartFile profileImg;
 
@@ -41,5 +41,8 @@ public class SignUpUserRequestDto {
 
     private LocalDateTime createAt;
 
-    private String encryptedPwd;
+//    private LocalDateTime signUpDate;
+//
+//    private LocalDateTime loginDate;
+
 }

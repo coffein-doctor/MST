@@ -33,10 +33,19 @@ public class UserServiceImpl implements UserService {
     }
 
     private void validateDuplicateUser(User user) {
-        List<User> findUsers =  userRepository.findByEmail(user.getEmail());
-        if (!findUsers.isEmpty()) {
-            throw new IllegalStateException("이미 존재하는 회원입니다.");
+        // 이메일 유효성 검사
+        List<User> findByEmailUsers =  userRepository.findByEmail(user.getEmail());
+        if (!findByEmailUsers.isEmpty()) {
+            throw new IllegalStateException("이미 존재하는 회원 이메일입니다.");
         }
+
+        // 닉네임 유효성 검사
+        List<User> findByNicknameUsers =  userRepository.findByNickname(user.getNickname());
+        if (!findByNicknameUsers.isEmpty()) {
+            throw new IllegalStateException("이미 존재하는 회원 닉네임입니다.");
+        }
+
+
     }
 
     // 회원 조회
