@@ -73,4 +73,32 @@ public class User {
         this.loginDate = LocalDateTime.now();
     }
 
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void updateBirth(LocalDate birth) {
+        this.birth = birth;
+    }
+
+    public void updateGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public void updateHeight(int height) {
+        this.height = height;
+    }
+
+    public void updateWeight(int weight) {
+        this.weight = weight;
+    }
+
+    public void updateProfile(String profile) {
+        this.profile = profile;
+    }
+
+    public void updateIntroduction(String introduction) {
+        this.introduction = introduction;
+    }
+
 }
