@@ -120,6 +120,7 @@ function Feed() {
     </div>
   );
 }
+
 const communityContentCSS = css`
   font-size: var(--font-size-h6);
   margin-bottom: 20px;

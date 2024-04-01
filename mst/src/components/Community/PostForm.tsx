@@ -7,6 +7,7 @@ interface PostContentProps {
   timestamp: string;
   views: number;
   replies: number;
+  onClick?(): any;
 }
 
 export default function PostForm({
@@ -16,7 +17,6 @@ export default function PostForm({
   views,
   replies,
 }: PostContentProps) {
-  
   const formattedTimestamp = getFormattedTimestamp(timestamp);
 
   return (

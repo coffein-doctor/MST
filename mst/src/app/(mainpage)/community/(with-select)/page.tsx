@@ -4,6 +4,7 @@ import React from "react";
 import Form from "@/components/common/Form/Form";
 import PostForm from "@/components/Community/PostForm";
 import PencilButton from "@/components/common/Button/PencilButton";
+import { useRouter } from "next/navigation";
 
 interface PostFormData {
   id: number;
@@ -50,12 +51,24 @@ const postDummyData: PostFormData[] = [
 ];
 
 function Community() {
+  const router = useRouter();
+
   return (
     <div>
-      <div css={communityContentCSS}>사람들과 이야기를 나눠보세요.</div>
+      <div
+        onClick={() => {
+          console.log("Clicked");
+        }}
+        css={communityContentCSS}
+      >
+        사람들과 이야기를 나눠보세요.
+      </div>
       <div>
         {postDummyData.map((item) => (
           <Form
+            onClick={() => {
+              router.push(`community/${item.id}`);
+            }}
             cssProps={postFormWrapperCSS}
             shadow={true}
             key={item.id}
