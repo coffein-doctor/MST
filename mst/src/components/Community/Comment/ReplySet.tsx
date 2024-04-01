@@ -1,6 +1,7 @@
 import { css } from "@emotion/react";
 import Image from "next/image";
 import BrownCircle from "../../../assets/png/BrownCircle.png";
+import CommentEditModal from "./CommentEditModal";
 
 export default function ReplySet() {
   return (
@@ -11,6 +12,7 @@ export default function ReplySet() {
       <div css={replyContentWrapperCSS}>
         <div css={replyUpsideWrapperCSS}>
           <div css={replyUserCSS}>저닉네임</div>
+					<CommentEditModal />
         </div>
         <div css={replyTimeCSS}>13:53</div>
         <div css={replyContentCSS}>

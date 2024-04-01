@@ -4,7 +4,6 @@ import { css } from "@emotion/react";
 import FeedForm from "@/components/Community/FeedForm";
 import Form from "@/components/common/Form/Form";
 import getRatingColor from "@/utils/getRatingColor";
-import SelectTopBar from "@/components/common/TopBar/SelectTopBar";
 
 interface FeedData {
   id: number;
@@ -74,6 +73,9 @@ function Feed() {
 
   return (
     <div>
+      <div css={communityContentCSS}>
+        팔로우한 사람이 마신 음료를 확인하세요
+      </div>
       {/* 상단 Pill */}
       <div css={pillBtnWrapperCSS}>
         {RATING_VALUES.map((val) => (
@@ -118,6 +120,10 @@ function Feed() {
     </div>
   );
 }
+const communityContentCSS = css`
+  font-size: var(--font-size-h6);
+  margin-bottom: 20px;
+`;
 
 const pillBtnWrapperCSS = css`
   margin-bottom: 20px;

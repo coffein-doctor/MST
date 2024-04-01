@@ -1,5 +1,5 @@
+import getFormattedTimestamp from "@/utils/getFormattedTimeStamp";
 import { css } from "@emotion/react";
-import dayjs from "dayjs";
 
 interface PostContentProps {
   title: string;
@@ -16,14 +16,8 @@ export default function PostForm({
   views,
   replies,
 }: PostContentProps) {
-  const currentTime = dayjs();
-  const createdTime = dayjs(timestamp);
-
-  // 하루이상 차이나면 기존의 시간에서 날짜로 형식 변경
-  const formattedTimestamp =
-    currentTime.diff(createdTime, "day") >= 1
-      ? createdTime.format("MM.DD")
-      : createdTime.format("HH:mm");
+  
+  const formattedTimestamp = getFormattedTimestamp(timestamp);
 
   return (
     <>

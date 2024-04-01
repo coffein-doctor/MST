@@ -5,21 +5,75 @@ import BasicTopBar from "@/components/common/TopBar/BasicTopBar";
 import { css } from "@emotion/react";
 import BrownCircle from "../../../../assets/png/BrownCircle.png";
 import Image from "next/image";
+import { useState } from "react";
+import getFormattedTimestamp from "@/utils/getFormattedTimeStamp";
 
 interface CommunityParams {
   params: { id: number };
 }
+
+interface Post {
+  title: string;
+  user: string;
+  date: string;
+  views: number;
+  comments: number;
+  content: string;
+  likes: number;
+}
+
+interface Comment {
+  id: number;
+  username: string;
+  dateTime: string;
+  content: string;
+}
+
+const dummyPost: Post = {
+  title: "제목제목제목",
+  user: "김작성자",
+  date: "2024-01-02T00:00:00+00:00",
+  views: 60,
+  comments: 1,
+  content:
+    "어쩌구저쩌구어쩌구저쩌구어쩌구저쩌구어쩌구저쩌구어쩌구저쩌구어쩌구저쩌구어쩌구저쩌구어쩌구저쩌구어쩌구저쩌구어쩌구저쩌구",
+  likes: 3,
+};
+
+const dummyComments: Comment[] = [
+  {
+    id: 1,
+    username: "이닉네임1",
+    dateTime: "2024-04-01T00:00:00+00:00",
+    content: "댓글내용1",
+  },
+  {
+    id: 2,
+    username: "이닉네임2",
+    dateTime: "2024-01-03T00:00:00+00:00",
+    content: "댓글내용2",
+  },
+];
+
 export default function PostDetail({ params: { id } }: CommunityParams) {
+  const formattedDate = getFormattedTimestamp(dummyPost.date);
+
+  const [isComment, setIsComment] = useState(true);
+
+  const handleReplyInput = () => {
+    setIsComment(!isComment);
+  };
+
   return (
     <div>
       <BasicTopBar content="커뮤니티" />
       <div css={postInfoWrapperCSS}>
-        <div css={postTitleCSS}>제목제목제목</div>
-        <div css={postUserCSS}>김작성자</div>
+        <div css={postTitleCSS}>{dummyPost.title}</div>
+        <div css={postUserCSS}>{dummyPost.user}</div>
         <div css={postInfoCSS}>
-          <span>{"24.01.02"} · </span>
-          <span>조회수 {"60"} · </span>
-          <span>댓글 {"1"}</span>
+          <span>{formattedDate} · </span>
+          <span>조회수 {dummyPost.views} · </span>
+          <span>댓글 {dummyPost.comments}</span>
         </div>
       </div>
       <hr css={hrCSS} />
@@ -29,13 +83,11 @@ export default function PostDetail({ params: { id } }: CommunityParams) {
           <div css={[editDeleteBtnCSS, { marginRight: "12px" }]}>수정</div>
           <div css={[editDeleteBtnCSS, { marginRight: "17px" }]}>삭제</div>
         </div>
-        <p css={postContentCSS}>
-          어쩌구저쩌구어쩌구저쩌구어쩌구저쩌구어쩌구저쩌구어쩌구저쩌구어쩌구저쩌구어쩌구저쩌구어쩌구저쩌구어쩌구저쩌구
-        </p>
+        <p css={postContentCSS}>{dummyPost.content}</p>
         <div css={likedBtnWrapperCSS}>
           <div css={likedBtnCSS}>
             <div css={likedBtnIconCSS}>{FULLHEART}</div>
-            <div css={likedBtnContentCSS}>3</div>
+            <div css={likedBtnContentCSS}>{dummyPost.likes}</div>
           </div>
         </div>
       </div>
@@ -44,14 +96,27 @@ export default function PostDetail({ params: { id } }: CommunityParams) {
       <div>
         <div css={commentTitleCSS}>댓글</div>
         <div>
-          <CommentSet />
+          {dummyComments.map((item) => (
+            <CommentSet
+              key={item.id}
+              username={item.username}
+              dateTime={item.dateTime}
+              content={item.content}
+              handleReplyInput={handleReplyInput}
+            />
+          ))}
         </div>
       </div>
-			<div css={emptyCommentCSS}/>
+      <div css={emptyCommentCSS} />
       {/* 댓글 입력창 */}
       <div css={commentInputWrapperCSS}>
         <Image src={BrownCircle} alt="프로필사진" css={profileImgCSS} />
-        <input css={amountInputContentCSS} placeholder="댓글을 입력해주세요" />
+        <input
+          css={amountInputContentCSS}
+          placeholder={
+            isComment ? "댓글을 입력해주세요" : "대댓글을 입력해주세요"
+          }
+        />
         <button css={commentBtnWrapperCSS}>{CHAT}</button>
       </div>
     </div>
@@ -177,7 +242,6 @@ const commentBtnWrapperCSS = css`
   justify-content: center;
   align-items: center;
 `;
-
 
 const emptyCommentCSS = css`
   height: 64px;

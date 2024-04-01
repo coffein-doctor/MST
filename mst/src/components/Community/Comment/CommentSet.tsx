@@ -2,19 +2,28 @@ import { css } from "@emotion/react";
 import { useState } from "react";
 import Image from "next/image";
 import BrownCircle from "../../../assets/png/BrownCircle.png";
-import { THREEDOT } from "@/assets/icons";
 import ReplySet from "./ReplySet";
+import CommentEditModal from "./CommentEditModal";
+import getFormattedTimestamp from "@/utils/getFormattedTimeStamp";
 
-export default function CommentSet() {
+interface CommentSetProps {
+  username: string;
+  dateTime: string;
+  content: string;
+  handleReplyInput: () => void;
+}
+
+export default function CommentSet({
+  username,
+  dateTime,
+  content,
+  handleReplyInput,
+}: CommentSetProps) {
+  const formattedDate = getFormattedTimestamp(dateTime);
   const [isReplyOpen, setIsReplyOpen] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
   const toggleOpenReply = () => {
     setIsReplyOpen(!isReplyOpen);
-  };
-
-  const toggleOpenModal = () => {
-    setIsModalOpen(!isModalOpen);
+    handleReplyInput();
   };
 
   return (
@@ -24,27 +33,13 @@ export default function CommentSet() {
       </div>
       <div css={commentContentWrapperCSS}>
         <div css={commentUpsideWrapperCSS}>
-          <div css={commentUserCSS}>이닉네임</div>
-          <div css={editDeleteModalBtnCSS}>
-            <div onClick={toggleOpenModal}>
-              {/* THREEDOT 아이콘 클릭 시 수정삭제 옵션을 보여줌 */}
-              {THREEDOT}
-            </div>
-            {/* 수정삭제 옵션 */}
-            {isModalOpen && (
-              <div css={editDeleteModalWrapperCSS}>
-                <div css={editDeleteBtnCSS}>수정</div>
-                <div css={editDeleteBtnCSS}>삭제</div>
-              </div>
-            )}
-          </div>
+          <div css={commentUserCSS}>{username}</div>
+          <CommentEditModal />
         </div>
-        <div css={commentTimeCSS}>12:54</div>
-        <div css={commentContentCSS}>
-          댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용
-        </div>
+        <div css={commentTimeCSS}>{formattedDate}</div>
+        <div css={commentContentCSS}>{content}</div>
         <div css={replyBtnCSS} onClick={toggleOpenReply}>
-          대댓글 1개
+          대댓글 {"1"}개
         </div>
         {/* Reply */}
         {isReplyOpen && <ReplySet />}
@@ -85,26 +80,6 @@ const commentUserCSS = css`
   font-size: var(--font-size-h5);
 `;
 
-const editDeleteModalBtnCSS = css`
-  position: relative;
-`;
-
-const editDeleteModalWrapperCSS = css`
-  position: absolute;
-  top: 100%;
-  right: 0;
-  width: 70px;
-  border-radius: 15px;
-  background-color: var(--default-white-color);
-  font-size: var(--font-size-h5);
-  color: var(--gray-color-3);
-`;
-
-const editDeleteBtnCSS = css`
-  padding: 10px 18px;
-  height: 34px;
-`;
-
 const commentTimeCSS = css`
   font-size: var(--font-size-h6);
   color: var(--gray-color-3);
@@ -118,5 +93,6 @@ const commentContentCSS = css`
 
 const replyBtnCSS = css`
   color: var(--gray-color-3);
+  font-size: var(--font-size-h5);
   margin-bottom: 20px;
 `;
