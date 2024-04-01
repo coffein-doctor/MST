@@ -1,4 +1,4 @@
-import useGetRatingColor from "@/utils/useGetRatingColor";
+import getRatingColor from "@/utils/getRatingColor";
 import { css } from "@emotion/react";
 
 interface FeedContentProps {
@@ -17,7 +17,7 @@ export default function FeedForm({
   content,
 }: FeedContentProps) {
   9;
-  const getRatingCircleColor = useGetRatingColor();
+  const getRatingCircleColor = getRatingColor();
 
   return (
     <div css={articleFormWrapperCSS}>

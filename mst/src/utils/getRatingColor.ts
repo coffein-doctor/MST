@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 
-export default function useGetRatingColor() {
+export default function getRatingColor() {
   return (val: number) => {
     const colorMap: { [key: number]: string } = {
       5: "#ff8a00",

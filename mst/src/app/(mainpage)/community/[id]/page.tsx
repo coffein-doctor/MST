@@ -2,11 +2,14 @@
 import { FULLHEART } from "@/assets/icons";
 import CommentSet from "@/components/Community/Comment/CommentSet";
 import BasicTopBar from "@/components/common/TopBar/BasicTopBar";
+import { showNavBarState } from "@/recoil/atoms/showNavBarState";
 import { css } from "@emotion/react";
+import { useSetRecoilState } from "recoil";
 interface CommunityParams {
   params: { id: number };
 }
 export default function PostDetail({ params: { id } }: CommunityParams) {
+
   return (
     <div>
       <BasicTopBar content="커뮤니티" />

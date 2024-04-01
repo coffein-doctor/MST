@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { css } from "@emotion/react";
 import FeedForm from "@/components/Community/FeedForm";
 import Form from "@/components/common/Form/Form";
-import useGetRatingColor from "@/utils/useGetRatingColor";
+import getRatingColor from "@/utils/getRatingColor";
 import SelectTopBar from "@/components/common/TopBar/SelectTopBar";
 
 interface FeedData {
@@ -66,7 +66,7 @@ const dummyData: FeedData[] = [
 function Feed() {
   const [selectedRatingPill, setSelectedRatingPill] = useState<number | null>();
 
-  const getRatingPillColor = useGetRatingColor();
+  const getRatingPillColor = getRatingColor();
 
   const handlePillClick = (val: number) => {
     setSelectedRatingPill(val);

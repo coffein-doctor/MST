@@ -48,11 +48,6 @@ const postDummyData: PostFormData[] = [
     replies: 3,
   },
 ];
-const TopbarProp =  [
-	{value:"community", label : "커뮤니티"},
-	{value:"feed", label : "피드"},
-]
-
 
 function Community() {
   return (
