@@ -22,6 +22,7 @@ public class Beverage {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column
     @CreatedDate
     private LocalDateTime drinkDate;
 

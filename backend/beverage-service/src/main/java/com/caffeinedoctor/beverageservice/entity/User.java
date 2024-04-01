@@ -1,10 +1,17 @@
 package com.caffeinedoctor.beverageservice.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 
+@Entity
+@Builder
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     @Id
@@ -24,6 +31,7 @@ public class User {
 //    @JoinColumn(name = "profile")
 //    private DateFile profile;
 
+    @Column
     @CreatedDate
     private LocalDateTime createdDate;
 
