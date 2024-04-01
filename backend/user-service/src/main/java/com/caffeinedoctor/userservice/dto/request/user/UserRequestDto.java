@@ -1,18 +1,22 @@
 package com.caffeinedoctor.userservice.dto.request.user;
 
 import com.caffeinedoctor.userservice.entitiy.enums.Gender;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 
 @Getter
 @NoArgsConstructor
-public class SignUpUserRequestDto {
+public class UserRequestDto {
 
     @NotBlank(message = "Email must not be blank")
     @Email(message = "Invalid email format")
@@ -35,14 +39,20 @@ public class SignUpUserRequestDto {
     @Min(value = 1, message = "Weight must be greater than 0")
     private Integer weight;
 
-    private MultipartFile profileImg;
+    private String profileImgUrl;
 
     private String introduction;
 
-    private LocalDateTime createAt;
-
-//    private LocalDateTime signUpDate;
-//
-//    private LocalDateTime loginDate;
+    @Builder
+    public UserRequestDto(String email, String nickname, LocalDate birth, Gender gender, int height, int weight, String profileImgUrl, String introduction, LocalDateTime createAt) {
+        this.email = email;
+        this.nickname = nickname;
+        this.birth = birth;
+        this.gender = gender;
+        this.height = height;
+        this.weight = weight;
+        this.profileImgUrl = profileImgUrl;
+        this.introduction = introduction;
+    }
 
 }
