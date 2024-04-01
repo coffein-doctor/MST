@@ -1,15 +1,15 @@
 "use client";
-import { FULLHEART } from "@/assets/icons";
+import { CHAT, FULLHEART } from "@/assets/icons";
 import CommentSet from "@/components/Community/Comment/CommentSet";
 import BasicTopBar from "@/components/common/TopBar/BasicTopBar";
-import { showNavBarState } from "@/recoil/atoms/showNavBarState";
 import { css } from "@emotion/react";
-import { useSetRecoilState } from "recoil";
+import BrownCircle from "../../../../assets/png/BrownCircle.png";
+import Image from "next/image";
+
 interface CommunityParams {
   params: { id: number };
 }
 export default function PostDetail({ params: { id } }: CommunityParams) {
-
   return (
     <div>
       <BasicTopBar content="커뮤니티" />
@@ -47,8 +47,13 @@ export default function PostDetail({ params: { id } }: CommunityParams) {
           <CommentSet />
         </div>
       </div>
+			<div css={emptyCommentCSS}/>
       {/* 댓글 입력창 */}
-      <div>댓글입력</div>
+      <div css={commentInputWrapperCSS}>
+        <Image src={BrownCircle} alt="프로필사진" css={profileImgCSS} />
+        <input css={amountInputContentCSS} placeholder="댓글을 입력해주세요" />
+        <button css={commentBtnWrapperCSS}>{CHAT}</button>
+      </div>
     </div>
   );
 }
@@ -129,4 +134,51 @@ const commentTitleCSS = css`
   font-weight: var(--font-weight-bold);
   font-size: var(--font-size-h5);
   margin-bottom: 13px;
+`;
+
+const commentInputWrapperCSS = css`
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 64px;
+  background-color: var(--default-white-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 20px;
+`;
+
+const profileImgCSS = css`
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+`;
+
+const amountInputContentCSS = css`
+  flex: 1 0 auto;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  font-size: var(--font-size-h5);
+  &::placeholder {
+    font-size: var(--font-size-h5);
+    color: var(--gray-color-4);
+  }
+`;
+
+const commentBtnWrapperCSS = css`
+  width: 40px;
+  height: 40px;
+  border-radius: 100%;
+  background-color: var(--default-yellow-color);
+  display: flex;
+  padding-top: 3px;
+  justify-content: center;
+  align-items: center;
+`;
+
+
+const emptyCommentCSS = css`
+  height: 64px;
 `;
