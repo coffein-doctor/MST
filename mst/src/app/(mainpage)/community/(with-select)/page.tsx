@@ -67,13 +67,18 @@ function Community() {
         {postDummyData.map((item) => (
           <Form
             onClick={() => {
-              router.push(`community/${item.id}`);
+              router.push(`/${item.id}`);
             }}
             cssProps={postFormWrapperCSS}
             shadow={true}
             key={item.id}
             content={
               <PostForm
+                onClick={() => {
+                  console.log("Clicked");
+                  console.log(item.id);
+                  // router.push(`/${item.id}`);
+                }}
                 title={item.title}
                 author={item.author}
                 timestamp={item.timestamp}
