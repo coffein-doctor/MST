@@ -5,7 +5,7 @@ import BasicTopBar from "@/components/common/TopBar/BasicTopBar";
 import { css } from "@emotion/react";
 import BrownCircle from "../../../../assets/png/BrownCircle.png";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import getFormattedTimestamp from "@/utils/getFormattedTimeStamp";
 
 interface CommunityParams {
@@ -25,8 +25,10 @@ interface Post {
 interface Comment {
   id: number;
   username: string;
-  dateTime: string;
+  createdDate: string;
   content: string;
+  postId: number;
+  parentId: number | null;
 }
 
 const dummyPost: Post = {
@@ -43,26 +45,61 @@ const dummyPost: Post = {
 const dummyComments: Comment[] = [
   {
     id: 1,
-    username: "이닉네임1",
-    dateTime: "2024-04-01T00:00:00+00:00",
     content: "댓글내용1",
+    createdDate: "2024-04-01T00:00:00+00:00",
+    username: "이닉네임1",
+    postId: 1,
+    parentId: null,
+  },
+  {
+    id: 3,
+    content: "댓글내용2",
+    createdDate: "2024-01-03T00:00:00+00:00",
+    username: "이닉네임2",
+    postId: 1,
+    parentId: null,
   },
   {
     id: 2,
+    content: "1번대댓글대댓글",
+    createdDate: "2024-01-03T00:00:00+00:00",
     username: "이닉네임2",
-    dateTime: "2024-01-03T00:00:00+00:00",
-    content: "댓글내용2",
+    postId: 1,
+    parentId: 1,
   },
 ];
 
 export default function PostDetail({ params: { id } }: CommunityParams) {
   const formattedDate = getFormattedTimestamp(dummyPost.date);
 
-  const [isComment, setIsComment] = useState(true);
-
-  const handleReplyInput = () => {
-    setIsComment(!isComment);
+  // map형식으로 대댓글 열림 닫힘 상태 관리
+  const [commentStates, setCommentStates] = useState<Map<number, boolean>>(
+    new Map()
+  );
+  const handleReplyInput = (id: number) => {
+    setCommentStates((prev) => {
+      const newCommentStates = new Map(prev);
+      newCommentStates.forEach((_, key) => {
+        if (key === id) {
+          const currentValue = newCommentStates.get(key);
+          newCommentStates.set(key, !currentValue);
+        } else {
+          newCommentStates.set(key, false);
+        }
+      });
+      return newCommentStates;
+    });
   };
+
+  useEffect(() => {
+    const initialCommentStates = new Map<number, boolean>();
+    dummyComments.forEach((item) => {
+      if (item.parentId === null) {
+        initialCommentStates.set(item.id, false);
+      }
+    });
+    setCommentStates(initialCommentStates);
+  }, []);
 
   return (
     <div>
@@ -99,10 +136,14 @@ export default function PostDetail({ params: { id } }: CommunityParams) {
           {dummyComments.map((item) => (
             <CommentSet
               key={item.id}
+              id={item.id}
               username={item.username}
-              dateTime={item.dateTime}
+              createdDate={item.createdDate}
               content={item.content}
-              handleReplyInput={handleReplyInput}
+              postId={item.postId}
+              parentId={item.parentId}
+              handleReplyInput={() => handleReplyInput(item.id)}
+              isCommentOpen={commentStates.get(item.id)}
             />
           ))}
         </div>
@@ -114,7 +155,9 @@ export default function PostDetail({ params: { id } }: CommunityParams) {
         <input
           css={amountInputContentCSS}
           placeholder={
-            isComment ? "댓글을 입력해주세요" : "대댓글을 입력해주세요"
+            ![...commentStates.values()].some((state) => state === true)
+              ? "댓글을 입력해주세요"
+              : "대댓글을 입력해주세요"
           }
         />
         <button css={commentBtnWrapperCSS}>{CHAT}</button>

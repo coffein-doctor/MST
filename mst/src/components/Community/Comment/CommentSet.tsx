@@ -1,5 +1,4 @@
 import { css } from "@emotion/react";
-import { useState } from "react";
 import Image from "next/image";
 import BrownCircle from "../../../assets/png/BrownCircle.png";
 import ReplySet from "./ReplySet";
@@ -7,25 +6,30 @@ import CommentEditModal from "./CommentEditModal";
 import getFormattedTimestamp from "@/utils/getFormattedTimeStamp";
 
 interface CommentSetProps {
+	id:number;
   username: string;
-  dateTime: string;
+  createdDate: string;
   content: string;
-  handleReplyInput: () => void;
+  postId: number;
+  parentId: number | null;
+	isCommentOpen: boolean;
+  handleReplyInput:(idx:number) => void;
 }
 
 export default function CommentSet({
+	id,
   username,
-  dateTime,
+  createdDate,
   content,
+  postId,
+  parentId,
+	isCommentOpen,
   handleReplyInput,
 }: CommentSetProps) {
-  const formattedDate = getFormattedTimestamp(dateTime);
-  const [isReplyOpen, setIsReplyOpen] = useState(false);
-  const toggleOpenReply = () => {
-    setIsReplyOpen(!isReplyOpen);
-    handleReplyInput();
-  };
+	
+  const formattedDate = getFormattedTimestamp(createdDate);
 
+	
   return (
     <div css={commentFormWrapperCSS}>
       <div css={profileImgWrapperCSS}>
@@ -38,11 +42,11 @@ export default function CommentSet({
         </div>
         <div css={commentTimeCSS}>{formattedDate}</div>
         <div css={commentContentCSS}>{content}</div>
-        <div css={replyBtnCSS} onClick={toggleOpenReply}>
+        <div css={replyBtnCSS} onClick={()=>handleReplyInput(id)}>
           대댓글 {"1"}개
         </div>
         {/* Reply */}
-        {isReplyOpen && <ReplySet />}
+        {isCommentOpen && <ReplySet />}
       </div>
     </div>
   );
