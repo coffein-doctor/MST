@@ -24,8 +24,8 @@ public class User {
     @Column(nullable = false, unique = true)
     private String uuid;
 
-//    @Column(nullable = false)
-//    private String password;
+    @Column(nullable = false)
+    private String password;
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -46,7 +46,8 @@ public class User {
     @Column(nullable = false)
     private int weight;
 
-    private String profile;
+    @Column(name = "profile_image_url")
+    private String profileImageUrl;
 
     private String introduction;
 
@@ -58,15 +59,16 @@ public class User {
 
     // 생성자
     @Builder
-    public User(String email, String nickname, LocalDate birth, Gender gender, int height, int weight, String profile, String introduction, LocalDateTime signUpDate, LocalDateTime loginDate) {
-        this.uuid = UUID.randomUUID().toString(); // UUID 생성 및 할당
+    public User(String uuid, String password, String email, String nickname, LocalDate birth, Gender gender, int height, int weight, String profileImageUrl, String introduction, LocalDateTime signUpDate, LocalDateTime loginDate) {
+        this.uuid = uuid; // UUID 생성 및 할당
+        this.password = password;
         this.email = email;
         this.nickname = nickname;
         this.birth = birth;
         this.gender = gender;
         this.height = height;
         this.weight = weight;
-        this.profile = profile;
+        this.profileImageUrl = profileImageUrl;
         this.introduction = introduction;
         this.signUpDate = LocalDateTime.now();
     }
@@ -97,7 +99,7 @@ public class User {
     }
 
     public void updateProfile(String profile) {
-        this.profile = profile;
+        this.profileImageUrl = profile;
     }
 
     public void updateIntroduction(String introduction) {

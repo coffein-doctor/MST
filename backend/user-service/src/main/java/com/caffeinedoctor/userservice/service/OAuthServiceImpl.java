@@ -1,8 +1,8 @@
 package com.caffeinedoctor.userservice.service;
 
 import com.caffeinedoctor.userservice.dto.response.KakaoOAuthTokenResponseDto;
-import com.caffeinedoctor.userservice.dto.response.KakaoUserAllInfoResponseDto;
 import com.caffeinedoctor.userservice.dto.response.KakaoUserInfoResponseDto;
+import com.caffeinedoctor.userservice.dto.response.UserResponseDto;
 import com.caffeinedoctor.userservice.entitiy.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,12 +18,16 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.UUID;
+
 
 @Service
 @Transactional(readOnly = true) // (성능 최적화 - 읽기 전용에만 사용)
 @RequiredArgsConstructor // 파이널 필드만 가지고 생성사 주입 함수 만듬 (따로 작성할 필요 없다.)
 @Slf4j
-public class OAuthUserServiceImpl implements OAuthUserService {
+public class OAuthServiceImpl implements OAuthService {
+
+    private final UserService userService;
 
 //    @Value("${kakao.auth-url}")
 //    private String kakaoAuthUrl;
@@ -53,7 +57,7 @@ public class OAuthUserServiceImpl implements OAuthUserService {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
         params.add("client_id", "4c2e4d4852cafb55e5d18db0521ecee3");
-        params.add("redirect_uri", "http://localhost:8081/oauth2/callback/kakao");
+        params.add("redirect_uri", "http://localhost:8081/oauth/callback/kakao");
         params.add("code", code);
 
         // HttpHeader와 HttpBody를 하나의 오브젝트에 담기 (exchange에는 HttpEntity 오브젝트를 넣어야하기 때문)
@@ -86,7 +90,7 @@ public class OAuthUserServiceImpl implements OAuthUserService {
     }
 
     @Override
-    public String requestKakaoUserInfo(String accessToken) {
+    public UserResponseDto requestKakaoUserInfo(String accessToken) {
         // post 방식으로 key=value 데이터 요청
         RestTemplate rt = new RestTemplate();
 
@@ -118,18 +122,19 @@ public class OAuthUserServiceImpl implements OAuthUserService {
             throw new RuntimeException(e);
         }
 
-        System.out.println(kakaoUserInfo.getId());
-        System.out.println(kakaoUserInfo.getKakaoAccount().getEmail());
-        System.out.println(kakaoUserInfo.getKakaoAccount().getProfile().getNickname());
-        System.out.println(kakaoUserInfo.getKakaoAccount().getProfile().getProfileImageUrl());
+        log.info(kakaoUserInfo.getKakaoAccount().getEmail());
+        log.info(kakaoUserInfo.getConnectedAt());
 
-//        User user = User.builder()
-//                .email(kakaoProfile.getKakaoAccount().)
-//                .build();
 
-        return response.getBody();
+        UserResponseDto userDto = UserResponseDto.builder()
+                .kakaoId(kakaoUserInfo.getId())
+                .connectedAt(kakaoUserInfo.getConnectedAt())
+                .email(kakaoUserInfo.getKakaoAccount().getEmail())
+                .profileImageUrl(kakaoUserInfo.getKakaoAccount().getProfile().getProfileImageUrl())
+                .build();
+
+        return userDto;
     }
-
 
 }
 

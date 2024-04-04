@@ -28,7 +28,8 @@ public class SecurityConfig {
             "/",
             "/user/**",
             "/**",
-            "/oauth2/**"
+            "/oauth2/**",
+            "/oauth/**"
     };
 
     // 비밀번호 암호화
