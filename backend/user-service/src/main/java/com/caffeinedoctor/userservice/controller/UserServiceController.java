@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/")
 @Slf4j
 public class UserServiceController {
     // application.yml 의 환경 설정 정보 가져오기

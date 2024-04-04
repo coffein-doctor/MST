@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/user")
 public class UserController {
     private Environment env;
     private Greeting greeting;

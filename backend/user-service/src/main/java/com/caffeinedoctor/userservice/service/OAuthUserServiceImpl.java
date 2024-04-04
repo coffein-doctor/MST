@@ -1,9 +1,13 @@
 package com.caffeinedoctor.userservice.service;
 
 import com.caffeinedoctor.userservice.dto.response.KakaoOAuthTokenResponseDto;
+import com.caffeinedoctor.userservice.dto.response.KakaoUserAllInfoResponseDto;
+import com.caffeinedoctor.userservice.dto.response.KakaoUserInfoResponseDto;
+import com.caffeinedoctor.userservice.entitiy.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.http.HttpEntity;
@@ -18,7 +22,21 @@ import org.springframework.web.client.RestTemplate;
 @Service
 @Transactional(readOnly = true) // (성능 최적화 - 읽기 전용에만 사용)
 @RequiredArgsConstructor // 파이널 필드만 가지고 생성사 주입 함수 만듬 (따로 작성할 필요 없다.)
-public class KakaoOAuthServiceImpl implements KakaoOAuthService {
+@Slf4j
+public class OAuthUserServiceImpl implements OAuthUserService {
+
+//    @Value("${kakao.auth-url}")
+//    private String kakaoAuthUrl;
+//
+//    @Value("${kakao.user-api-url}")
+//    private String kakaoUserApiUrl;
+//
+//    @Value("${kakao.restapi-key}")
+//    private String restapiKey;
+//
+//    @Value("${kakao.redirect-url}")
+//    private String redirectUrl;
+
 
     // 토큰 발급 요청
     @Override
@@ -35,7 +53,7 @@ public class KakaoOAuthServiceImpl implements KakaoOAuthService {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
         params.add("client_id", "4c2e4d4852cafb55e5d18db0521ecee3");
-        params.add("redirect_uri", "http://localhost:8081/auth/kakao/callback");
+        params.add("redirect_uri", "http://localhost:8081/oauth2/callback/kakao");
         params.add("code", code);
 
         // HttpHeader와 HttpBody를 하나의 오브젝트에 담기 (exchange에는 HttpEntity 오브젝트를 넣어야하기 때문)
@@ -49,11 +67,11 @@ public class KakaoOAuthServiceImpl implements KakaoOAuthService {
                 String.class // 응답 받을 타입
         );
 
-        System.out.println(response.getBody());
-
         // Gson, Json Simple, ObjectMapper
         ObjectMapper objectMapper = new ObjectMapper();
         KakaoOAuthTokenResponseDto oauthToken = null;
+
+        log.info(response.getBody());
 
         try {
             oauthToken = objectMapper.readValue(response.getBody(), KakaoOAuthTokenResponseDto.class);
@@ -61,34 +79,55 @@ public class KakaoOAuthServiceImpl implements KakaoOAuthService {
             throw new RuntimeException(e);
         }
 
-        System.out.println(oauthToken);
 
+        return oauthToken.getAccessToken();
+//        return "카카오 토큰 요청 완료: 토큰 요청애 대한 응답: " + response.getBody();
+//        return "카카오 로그인 인증 완료: 코드값: " + code;
+    }
 
+    @Override
+    public String requestKakaoUserInfo(String accessToken) {
         // post 방식으로 key=value 데이터 요청
-        RestTemplate rt2 = new RestTemplate();
+        RestTemplate rt = new RestTemplate();
 
         // HttpHeader 오브젝트 생성
-        HttpHeaders headers2 = new HttpHeaders();
+        HttpHeaders headers = new HttpHeaders();
         // 헤더
-        headers2.add("Authorization", "Bearer "+ oauthToken.getAccess_token());
-        headers2.add("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+        headers.add("Authorization", "Bearer "+ accessToken);
+        headers.add("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
 
         // HttpHeader와 HttpBody를 하나의 오브젝트에 담기 (exchange에는 HttpEntity 오브젝트를 넣어야하기 때문)
-        HttpEntity<MultiValueMap<String, String>> kakaoUserInfoRequest = new HttpEntity<>(headers2);
+        HttpEntity<MultiValueMap<String, String>> kakaoUserInfoRequest = new HttpEntity<>(headers);
 
         // Post방식으로 Http요청하기 -> response 변수의 응답을 받음.
-        ResponseEntity<String> response2 = rt2.exchange(
+        ResponseEntity<String> response = rt.exchange(
                 "https://kapi.kakao.com/v2/user/me", // 요청 주소
                 HttpMethod.POST, // 요청 메서드
                 kakaoUserInfoRequest, // 보낼 데이터 (헤더와 바디 값)
                 String.class // 응답 받을 타입
         );
 
-        return response2.getBody();
+        log.info(response.getBody());
+        // Gson, Json Simple, ObjectMapper
+        ObjectMapper objectMapper = new ObjectMapper();
+        KakaoUserInfoResponseDto kakaoUserInfo = null;
 
+        try {
+            kakaoUserInfo = objectMapper.readValue(response.getBody(), KakaoUserInfoResponseDto.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
 
-//        return "카카오 토큰 요청 완료: 토큰 요청애 대한 응답: " + response.getBody();
-//        return "카카오 로그인 인증 완료: 코드값: " + code;
+        System.out.println(kakaoUserInfo.getId());
+        System.out.println(kakaoUserInfo.getKakaoAccount().getEmail());
+        System.out.println(kakaoUserInfo.getKakaoAccount().getProfile().getNickname());
+        System.out.println(kakaoUserInfo.getKakaoAccount().getProfile().getProfileImageUrl());
+
+//        User user = User.builder()
+//                .email(kakaoProfile.getKakaoAccount().)
+//                .build();
+
+        return response.getBody();
     }
 
 
