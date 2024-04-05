@@ -3,7 +3,7 @@ import { css } from "@emotion/react";
 import Button from "@/components/common/Button/Button";
 import CustomDatePicker from "@/components/Beverage/DatePicker/CustomDatePicker";
 import CustomTimePicker from "@/components/Beverage/TimePicker/CustomTimePicker";
-import SubmitFormWrapper from "@/components/common/Form/SubmitForm";
+import SubmitForm from "@/components/common/Form/SubmitForm";
 import { ChangeEvent, useState } from "react";
 import WaterAmountButtons from "@/components/Beverage/WaterAmountButtons";
 
@@ -32,7 +32,7 @@ function WaterCreate() {
             handleWaterAmountBtnClick={handleWaterAmountBtnClick}
           />
           {/* 직접입력 */}
-          <SubmitFormWrapper
+          <SubmitForm
             leftLabel="섭취량"
             rightLabel="ml"
             id="water-amount"

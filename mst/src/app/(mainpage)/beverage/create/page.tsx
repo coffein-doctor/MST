@@ -1,7 +1,7 @@
 "use client";
 import React, { ChangeEvent, useState } from "react";
 import { css } from "@emotion/react";
-import SubmitFormWrapper from "@/components/common/Form/SubmitForm";
+import SubmitForm from "@/components/common/Form/SubmitForm";
 import CustomTimePicker from "@/components/Beverage/TimePicker/CustomTimePicker";
 import CustomDatePicker from "@/components/Beverage/DatePicker/CustomDatePicker";
 import RatingForm from "@/components/Beverage/RatingForm";
@@ -43,14 +43,14 @@ function BeverageCreate() {
     <div>
       <form>
         {/* 이름/제조사 */}
-        <SubmitFormWrapper
+        <SubmitForm
           position="top"
           leftLabel="이름"
           id="name"
           value={formData.name}
           onChange={handleInputChange}
         />
-        <SubmitFormWrapper
+        <SubmitForm
           position="bottom"
           leftLabel="제조사"
           id="manufacturer"
@@ -58,7 +58,7 @@ function BeverageCreate() {
           onChange={handleInputChange}
         />
         {/* 카페인/당/섭취량 */}
-        <SubmitFormWrapper
+        <SubmitForm
           position="top"
           leftLabel="카페인"
           rightLabel="mg"
@@ -67,7 +67,7 @@ function BeverageCreate() {
           onChange={handleInputChange}
           type="number"
         />
-        <SubmitFormWrapper
+        <SubmitForm
           position="middle"
           leftLabel="당"
           rightLabel="g"
@@ -76,7 +76,7 @@ function BeverageCreate() {
           onChange={handleInputChange}
           type="number"
         />
-        <SubmitFormWrapper
+        <SubmitForm
           position="bottom"
           leftLabel="섭취량"
           rightLabel="ml"

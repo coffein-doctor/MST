@@ -6,7 +6,7 @@ import { SubmitFormPropsType } from "@/types/formTypes";
 // default, 상, 중, 하 position 모양 지정
 // label(L/R) 유무 지정
 // 내부에 input
-function SubmitFormWrapper({
+function SubmitForm({
   id,
   position,
   leftLabel,
@@ -104,4 +104,4 @@ const inputLabelRightWrapperCSS = css`
   margin-left: 5px;
 `;
 
-export default SubmitFormWrapper;
+export default SubmitForm;
