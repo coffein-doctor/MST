@@ -4,4 +4,5 @@ export type FormPropsType = {
   content: any;
   cssProps?: SerializedStyles;
   shadow?: boolean;
+  onClick?():  any;
 };

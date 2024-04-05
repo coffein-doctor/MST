@@ -1,7 +1,7 @@
-"use client"
+"use client";
 import React from "react";
 import { css } from "@emotion/react";
-import { LEFTARROW, SEARCH } from "@/assets/icons";
+import { LEFTARROW, SEARCH } from "@/assets/svgs";
 import { useRouter } from "next/navigation";
 
 function SearchTopBar() {

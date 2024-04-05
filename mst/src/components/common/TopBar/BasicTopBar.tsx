@@ -2,7 +2,7 @@
 import React from "react";
 import { css } from "@emotion/react";
 import { useRouter } from "next/navigation";
-import { LEFTARROW } from "@/assets/icons";
+import { LEFTARROW } from "@/assets/svgs";
 import { BasicTopBarProps } from "@/types/topBarTypes";
 
 function BasicTopBar({ content }: BasicTopBarProps) {
@@ -33,7 +33,6 @@ const backIconWrapperCSS = css`
 const topBarContentCSS = css`
   color: var(--gray-color-2);
   font-size: var(--font-size-h3);
-  font-weight: var(--font-weight-bold);
 `;
 
 export default BasicTopBar;

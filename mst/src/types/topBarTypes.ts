@@ -11,7 +11,8 @@ export type BasicTopBarProps = {
 export type SelectTopBarProps = {
   firstCategory: string;
   secondCategory: string;
-  // onSelectCategory: (category: "first" | "second") => void;
+  firstValue: string;
+  secondValue: string;
 };
 
 export type SearchTopBarProps = {};

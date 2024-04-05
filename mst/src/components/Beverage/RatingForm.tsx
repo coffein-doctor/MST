@@ -68,7 +68,7 @@ function RatingForm({
         onChange={handleTextChange}
         placeholder="음료평을 남겨주세요"
       />
-      {/* <Button>추가하기</Button> */}
+  
     </div>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 import { css } from "@emotion/react";
 import BasicHR from "@/components/Beverage/BasicHR";
-import { EMPTYHEART } from "@/assets/icons";
+import { EMPTYHEART } from "@/assets/svgs";
 import Image from "next/image";
 import BrownCircle from "@/assets/png/BrownCircle.png";
 import OrangeCircle from "@/assets/png/OrangeCircle.png";

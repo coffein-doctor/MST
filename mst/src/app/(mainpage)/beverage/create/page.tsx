@@ -120,7 +120,6 @@ function BeverageCreate() {
           <CustomDatePicker />
           <CustomTimePicker />
         </div>
-
         <BasicHR />
         {/* 평가 */}
         <RatingForm

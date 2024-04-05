@@ -8,7 +8,7 @@ import BasicTopBar from "@/components/common/TopBar/BasicTopBar";
 // import Carousel from "react-material-ui-carousel";
 
 import HomeCarousel from "./_components/HomeCarousel";
-import { SUGAR, COFFEE, WATER } from "@/assets/icons";
+import { SUGAR, COFFEE, WATER } from "@/assets/svgs";
 
 function Home() {
   const [index, setIndex] = useState(0);

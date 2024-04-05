@@ -5,9 +5,12 @@ import { css } from "@emotion/react";
 
 import type { FormPropsType } from "@/types/formTypes";
 
-function Form({ content, cssProps, shadow }: FormPropsType) {
+function Form({ content, cssProps, shadow, onClick }: FormPropsType) {
   return (
-    <div css={[formWrapperCSS, cssProps, shadow && shadowCSS]}>
+    <div
+      onClick={onClick}
+      css={[formWrapperCSS, cssProps, shadow && shadowCSS]}
+    >
       <div css={formContentWrapperCSS}>{content}</div>
     </div>
   );

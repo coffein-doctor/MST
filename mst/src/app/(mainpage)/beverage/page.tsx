@@ -7,6 +7,7 @@ import { useState } from "react";
 import PencilButton from "@/components/common/Button/PencilButton";
 import SearchTopBar from "@/components/common/TopBar/SearchTopBar";
 
+
 interface FormData {
   id: number;
   registNum: number;
