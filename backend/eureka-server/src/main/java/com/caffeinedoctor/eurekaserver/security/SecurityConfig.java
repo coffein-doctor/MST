@@ -43,7 +43,7 @@ public class SecurityConfig {
         // user1 사용자 생성
         UserDetails user1 = User.builder()
                 .username("admin")
-                .password(bCryptPasswordEncoder().encode("admin"))
+                .password(bCryptPasswordEncoder().encode("1234mst"))
                 .roles("ADMIN")
                 .build();
 
