@@ -27,6 +27,26 @@ spring:
         show-sql: true
         # JPA의 구현체인 Hibernate가 동작하면서 발생한 SQL의 가독성을 높여준다.
         format_sql: true
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: 4c2e4d4852cafb55e5d18db0521ecee3
+            redirect-uri: http://localhost:8081/login/oauth2/code/kakao # http://localhost:8081/login/oauth2/code/kakao
+            client-authentication-method: POST
+            client-secret: NkzavTQYRPwGRFgbWHTtLxc7Zsr2Ncuf
+            authorization-grant-type: authorization_code
+            scope:
+              - profile_image
+              - account_email
+            client_name: kakao
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
 
 logging:
   level:

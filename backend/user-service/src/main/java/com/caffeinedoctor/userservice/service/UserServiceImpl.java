@@ -18,7 +18,6 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 //    @Autowired // 생성자 주입
 //    public UserServiceImpl(UserRepository userRepository) {

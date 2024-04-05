@@ -1,14 +1,11 @@
 package com.caffeinedoctor.userservice.common.security;
 
 
+import com.caffeinedoctor.userservice.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
@@ -25,11 +22,13 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final CustomOAuth2UserService customOAuth2UserService;
+
     // 허용 주소
     private static final String[] WHITE_LIST = {
             "/", "/**",
             "/users/**",
-            "/oauth2/**", "/oauth/**",
+            "/login/**", "/oauth/**",
             "/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs", "/api-docs/**"
     };
 
@@ -43,18 +42,12 @@ public class SecurityConfig {
     // 특정 경로에 대해서 보안 설정하기
     @Bean
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
-        // Configure AuthenticationManagerBuilder
-//        AuthenticationManagerBuilder authenticationManagerBuilder =
-//                http.getSharedObject(AuthenticationManagerBuilder.class);
-//        authenticationManagerBuilder.userDetailsService(userService).passwordEncoder(bCryptPasswordEncoder);
-
-//        AuthenticationManager authenticationManager = authenticationManagerBuilder.build();
 
         // 비활성화
         http
-                .formLogin(AbstractHttpConfigurer::disable) // form 기반 로그인 비활성화
-                .httpBasic(AbstractHttpConfigurer::disable) // httpBasic 비활성화
-                .csrf(AbstractHttpConfigurer::disable)  // CSRF 보안 비활성화
+                .formLogin(AbstractHttpConfigurer::disable) //From 로그인 방식 disable - OAuth2 방식
+                .httpBasic(AbstractHttpConfigurer::disable) //HTTP Basic 인증 방식 disable - OAuth2 방식
+                .csrf(AbstractHttpConfigurer::disable)  // CSRF 보안 disable - JWT 방식으로 관리
                 .headers(
                         headersConfigurer ->
                                 headersConfigurer
@@ -63,34 +56,32 @@ public class SecurityConfig {
                                         )
                 );  // frameOptions 비활성화
 
-        // 세션 사용하지 않으므로 STATELESS로 설정 //
-        http.sessionManagement((session) -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        //세션 설정 : STATELESS - 사용 안함
+        http
+                .sessionManagement((session) -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        //== URL별 권한 관리 옵션 ==// 모든 경로에 대해 권한이 필요하게 한다.
-        http.authorizeHttpRequests((authorize) -> authorize
-                .requestMatchers(WHITE_LIST).permitAll()
-                // 모든 요청에 대해 접근 제어 -> 주어진 IP 주소로부터의 요청만을 허용 (내 IP)
-                .requestMatchers("/**").access(
-                        new WebExpressionAuthorizationManager("hasIpAddress('127.0.0.1') or hasIpAddress('3.36.123.194')"))
-                .anyRequest().authenticated() // 위를 제외한 다른 요청은 모두 인증해야돼
-//                .requestMatchers("/", "/oauth2/**", "/user").permitAll()
-//                .requestMatchers(new AntPathRequestMatcher("/user", "POST")).permitAll()
-//                .requestMatchers("/**").access(this::hasIpAddress)
+        //경로별 인가 작업 - URL별 권한 관리 옵션: 모든 경로에 대해 권한이 필요하게 한다.
+        http
+                .authorizeHttpRequests((authorize) -> authorize
+                    .requestMatchers(WHITE_LIST).permitAll()
+                    // 모든 요청에 대해 접근 제어 -> 주어진 IP 주소로부터의 요청만을 허용 (내 IP)
+                    .requestMatchers("/**").access(
+                            new WebExpressionAuthorizationManager("hasIpAddress('127.0.0.1') or hasIpAddress('3.36.123.194')"))
+                    .anyRequest().authenticated() // 위를 제외한 다른 요청은 모두 인증해야돼
+//                    .requestMatchers("/", "/oauth2/**", "/user").permitAll()
+//                    .requestMatchers(new AntPathRequestMatcher("/user", "POST")).permitAll()
+//                    .requestMatchers("/**").access(this::hasIpAddress)
         );
 
-//        http.addFilter(getAuthenticationFilter(authenticationManager));
-
+        //oauth2
+        http
+                .oauth2Login((oauth2) -> oauth2
+                        .userInfoEndpoint((userInfoEndpointConfig) -> userInfoEndpointConfig
+                                .userService(customOAuth2UserService)));
 
         return http.build();
     }
-//    private AuthorizationDecision hasIpAddress(Supplier<Authentication> authentication, RequestAuthorizationContext object) {
-//        return new AuthorizationDecision(ALLOWED_IP_ADDRESS_MATCHER.matches(object.getRequest()));
-//    }
-//
-//    private AuthenticationFilterNew getAuthenticationFilter(AuthenticationManager authenticationManager) throws Exception {
-//        return new AuthenticationFilterNew(authenticationManager, userService, env);
-//    }
 
 
 }

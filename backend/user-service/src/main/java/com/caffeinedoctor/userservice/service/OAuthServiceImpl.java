@@ -133,7 +133,6 @@ public class OAuthServiceImpl implements OAuthService {
                 .profileImageUrl(kakaoUserInfo.getKakaoAccount().getProfile().getProfileImageUrl())
                 .build();
 
-
         return userDto;
     }
 
