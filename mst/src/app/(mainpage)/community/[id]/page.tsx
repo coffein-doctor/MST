@@ -143,7 +143,7 @@ export default function PostDetail({ params: { id } }: CommunityParams) {
               postId={item.postId}
               parentId={item.parentId}
               handleReplyInput={() => handleReplyInput(item.id)}
-              isCommentOpen={commentStates.get(item.id)}
+              isCommentOpen={commentStates.get(item.id) || false}
             />
           ))}
         </div>
