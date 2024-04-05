@@ -19,6 +19,7 @@ export default function Input({
       value={value}
       onChange={onChange}
       placeholder={placeholder}
+			autoComplete="true"
     />
   );
 }
