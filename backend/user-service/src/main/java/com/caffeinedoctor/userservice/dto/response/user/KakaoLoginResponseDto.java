@@ -1,6 +1,6 @@
 package com.caffeinedoctor.userservice.dto.response.user;
 
-import com.caffeinedoctor.userservice.dto.enums.UserType;
+import com.caffeinedoctor.userservice.common.enums.UserType;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.Builder;

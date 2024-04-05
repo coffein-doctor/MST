@@ -1,0 +1,18 @@
+springdoc:
+
+  api-docs:
+    path: /v3/api-docs #api 문서 확인 경로, localhost:8080/v3/api-docs 로 접근
+    enabled: true # swagger 사용 여부 설정(default: true)
+    version: openapi_3_0 #사용하는 버전을 명시
+
+  swagger-ui:
+    path: /swagger-ui.html #swagger ui 의 api 문서 확인 경로 defalut 는 /swagger-ui.html 이다.
+#    operations-sorter: alpha #  태그 내 각 api의 정렬 기준 (alpha(알파벳 오름차순), method(http method))
+    tags-sorter: alpha # 태그 정렬 기준
+    disable-swagger-default-url: true # swagger-default-url인 petstore html 문서 비활성화 여부
+    display-request-duration: true # 각 요청의 지속 시간을 표시
+    doc-expansion: none # tag와 operation을 펼치는 방법 설정
+
+  # API에서 사용할 기본 미디어 유형을 application/json으로 설정한다.
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json

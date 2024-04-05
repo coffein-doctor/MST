@@ -1,6 +1,6 @@
 package com.caffeinedoctor.userservice.dto.request.user;
 
-import com.caffeinedoctor.userservice.entitiy.enums.Gender;
+import com.caffeinedoctor.userservice.common.enums.Gender;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -10,8 +10,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 
 @Getter

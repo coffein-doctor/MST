@@ -1,6 +1,8 @@
-package com.caffeinedoctor.userservice.security;
+package com.caffeinedoctor.userservice.common.security;
 
 
+import com.caffeinedoctor.userservice.dto.request.user.LoginRequestDto;
+import com.caffeinedoctor.userservice.dto.request.user.UserLoginRequestDto;
 import com.caffeinedoctor.userservice.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
@@ -28,16 +30,16 @@ import java.util.Date;
 @Slf4j
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    private final UserService userService;
-    private final Environment environment;
-
-
+//    private final UserService userService;
+//    private final Environment environment;
+//
+//
 //    @Override
 //    public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res)
 //            throws AuthenticationException {
 //        try {
 //
-//            RequestLogin creds = new ObjectMapper().readValue(req.getInputStream(), RequestLogin.class);
+//            UserLoginRequestDto creds = new ObjectMapper().readValue(req.getInputStream(), UserLoginRequestDto.class);
 //
 //            return getAuthenticationManager().authenticate(
 //                    new UsernamePasswordAuthenticationToken(creds.getEmail(), creds.getPassword(), new ArrayList<>()));
@@ -46,7 +48,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 //            throw new RuntimeException(e);
 //        }
 //    }
-//
+
 //    @Override
 //    protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain,
 //                                            Authentication auth) throws IOException, ServletException {

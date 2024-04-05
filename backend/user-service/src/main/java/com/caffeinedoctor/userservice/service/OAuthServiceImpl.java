@@ -1,6 +1,6 @@
 package com.caffeinedoctor.userservice.service;
 
-import com.caffeinedoctor.userservice.dto.enums.UserType;
+import com.caffeinedoctor.userservice.common.enums.UserType;
 import com.caffeinedoctor.userservice.dto.response.user.KakaoOAuthTokenResponseDto;
 import com.caffeinedoctor.userservice.dto.response.user.KakaoUserInfoResponseDto;
 import com.caffeinedoctor.userservice.dto.response.user.KakaoLoginResponseDto;

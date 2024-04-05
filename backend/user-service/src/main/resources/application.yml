@@ -1,6 +1,8 @@
 # 현재 프로젝트 포트 지정
 server:
   port: 8081
+#  servlet:
+#    context-path: /api
 #  port: 0
 
 # 현재 프로젝트 이름 지정

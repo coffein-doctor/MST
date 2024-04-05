@@ -1,4 +1,4 @@
-package com.caffeinedoctor.userservice.security;
+package com.caffeinedoctor.userservice.common.security;
 
 
 import lombok.RequiredArgsConstructor;
@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
@@ -25,11 +27,10 @@ public class SecurityConfig {
 
     // 허용 주소
     private static final String[] WHITE_LIST = {
-            "/",
+            "/", "/**",
             "/users/**",
-            "/**",
-            "/oauth2/**",
-            "/oauth/**"
+            "/oauth2/**", "/oauth/**",
+            "/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs", "/api-docs/**"
     };
 
     // 비밀번호 암호화
@@ -42,6 +43,13 @@ public class SecurityConfig {
     // 특정 경로에 대해서 보안 설정하기
     @Bean
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
+        // Configure AuthenticationManagerBuilder
+//        AuthenticationManagerBuilder authenticationManagerBuilder =
+//                http.getSharedObject(AuthenticationManagerBuilder.class);
+//        authenticationManagerBuilder.userDetailsService(userService).passwordEncoder(bCryptPasswordEncoder);
+
+//        AuthenticationManager authenticationManager = authenticationManagerBuilder.build();
+
         // 비활성화
         http
                 .formLogin(AbstractHttpConfigurer::disable) // form 기반 로그인 비활성화
@@ -62,7 +70,7 @@ public class SecurityConfig {
         //== URL별 권한 관리 옵션 ==// 모든 경로에 대해 권한이 필요하게 한다.
         http.authorizeHttpRequests((authorize) -> authorize
                 .requestMatchers(WHITE_LIST).permitAll()
-                // 모든 요청에 대해 접근 제어 -> 주어진 IP 주소로부터의 요청만을 허용
+                // 모든 요청에 대해 접근 제어 -> 주어진 IP 주소로부터의 요청만을 허용 (내 IP)
                 .requestMatchers("/**").access(
                         new WebExpressionAuthorizationManager("hasIpAddress('127.0.0.1') or hasIpAddress('3.36.123.194')"))
                 .anyRequest().authenticated() // 위를 제외한 다른 요청은 모두 인증해야돼
@@ -71,8 +79,18 @@ public class SecurityConfig {
 //                .requestMatchers("/**").access(this::hasIpAddress)
         );
 
+//        http.addFilter(getAuthenticationFilter(authenticationManager));
+
+
         return http.build();
     }
+//    private AuthorizationDecision hasIpAddress(Supplier<Authentication> authentication, RequestAuthorizationContext object) {
+//        return new AuthorizationDecision(ALLOWED_IP_ADDRESS_MATCHER.matches(object.getRequest()));
+//    }
+//
+//    private AuthenticationFilterNew getAuthenticationFilter(AuthenticationManager authenticationManager) throws Exception {
+//        return new AuthenticationFilterNew(authenticationManager, userService, env);
+//    }
 
 
 }
