@@ -3,7 +3,7 @@ import { css } from "@emotion/react";
 import Button from "@/components/common/Button/Button";
 import CustomDatePicker from "@/components/Beverage/DatePicker/CustomDatePicker";
 import CustomTimePicker from "@/components/Beverage/TimePicker/CustomTimePicker";
-import SubmitFormWrapper from "@/components/Beverage/SubmitFormWrapper";
+import SubmitFormWrapper from "@/components/common/Form/SubmitForm";
 import { ChangeEvent, useState } from "react";
 import WaterAmountButtons from "@/components/Beverage/WaterAmountButtons";
 
@@ -36,16 +36,10 @@ function WaterCreate() {
             leftLabel="섭취량"
             rightLabel="ml"
             id="water-amount"
-          >
-            <input
-              id="water-amount"
-              name="waterAmount"
-              value={waterAmount}
-              onChange={handleChange}
-              type="number"
-              css={waterAmountInputContentCSS}
-            />
-          </SubmitFormWrapper>
+            value={waterAmount}
+            onChange={handleChange}
+            type="number"
+          />
         </div>
         <div css={timeDatePickerWrapperCSS}>
           <div css={waterContentTitleCSS}>섭취시간</div>
@@ -71,15 +65,6 @@ const waterContentTitleCSS = css`
   margin-bottom: 20px;
 `;
 
-const waterAmountInputContentCSS = css`
-  flex: 1 0 auto;
-  border: none;
-  outline: none;
-  background-color: transparent;
-  font-size: var(--font-size-h4);
-  padding-bottom: 3px;
-  text-align: end;
-`;
 
 const timeDatePickerWrapperCSS = css`
   margin-bottom: 103px;

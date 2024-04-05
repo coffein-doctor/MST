@@ -8,9 +8,9 @@ import OrangeCircle from "@/assets/png/OrangeCircle.png";
 import Button from "@/components/common/Button/Button";
 import CustomTimePicker from "@/components/Beverage/TimePicker/CustomTimePicker";
 import CustomDatePicker from "@/components/Beverage/DatePicker/CustomDatePicker";
-import SubmitFormWrapper from "@/components/Beverage/SubmitFormWrapper";
 import { ChangeEvent, useState } from "react";
 import SelectDropDown from "@/components/Beverage/SelectDropdown";
+import Input from "@/components/common/Form/Input";
 
 const testOptions = [
   { value: "톨사이즈" },
@@ -47,7 +47,6 @@ function BeverageDetail({ params: { id } }: BeverageParams) {
   return (
     <div>
       {/* 상단 Detail */}
-
       <div css={detailWrapperCSS}>
         <div css={detailTitleWrapperCSS}>
           <div css={detailTitleCSS}>카페라떼</div>
@@ -85,22 +84,25 @@ function BeverageDetail({ params: { id } }: BeverageParams) {
           {/* DropDown */}
           <SelectDropDown options={testOptions} />
           <br css={emptyCSS} />
-          <SubmitFormWrapper>
+          <div css={inputWrapperCSS}>
             <div css={plusMinusBtnCSS} onClick={handleDecrease}>
               -
             </div>
-            <input
+            <Input
               id="amount"
               name="amount"
               value={amount}
               onChange={handleChange}
               type="number"
-              css={amountInputContentCSS}
+              cssProps={css({
+                textAlign: "center",
+                fontSize: "var(--font-size-h4)",
+              })}
             />
             <div css={plusMinusBtnCSS} onClick={handleIncrease}>
               +
             </div>
-          </SubmitFormWrapper>
+          </div>
         </div>
         <div css={amountWrapperCSS}>
           <div css={contentTitleCSS}>섭취시간</div>
@@ -185,15 +187,6 @@ const contentTitleCSS = css`
   margin-bottom: 15px;
 `;
 
-const amountInputContentCSS = css`
-  flex: 1 0 auto;
-  border: none;
-  outline: none;
-  background-color: transparent;
-  font-size: var(--font-size-h4);
-  padding-bottom: 3px;
-  text-align: center;
-`;
 
 const plusMinusBtnCSS = css`
   color: var(--gray-color-4);
@@ -203,6 +196,17 @@ const plusMinusBtnCSS = css`
 
 const emptyCSS = css`
   width: 12px;
+`;
+
+const inputWrapperCSS = css`
+  height: 45px;
+  border: solid 1px var(--gray-color-4);
+  background-color: white;
+  padding: 0px 20px;
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export default BeverageDetail;

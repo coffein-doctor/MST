@@ -6,3 +6,13 @@ export type FormPropsType = {
   shadow?: boolean;
   onClick?():  any;
 };
+
+export type SubmitFormPropsType= {
+  id: string;
+  position?: "top" | "middle" | "bottom";
+  leftLabel?: string;
+  rightLabel?: string;
+  value?: string | number;
+  onChange?: any;
+  type?: "string" | "number";
+}
