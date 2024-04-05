@@ -3,7 +3,7 @@
 import React from "react";
 import { css } from "@emotion/react";
 import { useRouter } from "next/navigation";
-import { LEFTARROW } from "@/assets/icons";
+import { LEFTARROW } from "@/assets/svgs";
 import { TopBarPropsType } from "@/types/topBarTypes";
 import { usePathname } from "next/navigation";
 

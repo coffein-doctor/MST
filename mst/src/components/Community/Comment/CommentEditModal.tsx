@@ -1,4 +1,4 @@
-import { THREEDOT } from "@/assets/icons";
+import { THREEDOT } from "@/assets/svgs";
 import { css } from "@emotion/react";
 import { useState } from "react";
 
@@ -8,17 +8,13 @@ interface CommentEditModalProps {
 }
 
 export default function CommentEditModal() {
-
   const [isModalOpen, setIsModalOpen] = useState(false);
-
 
   const toggleOpenModal = () => {
     setIsModalOpen(!isModalOpen);
   };
 
-	const toChangeInput =()=> {
-		
-	}
+  const toChangeInput = () => {};
 
   return (
     <div css={editDeleteModalBtnCSS}>
@@ -29,7 +25,9 @@ export default function CommentEditModal() {
       {/* 수정삭제 옵션 */}
       {isModalOpen && (
         <div css={editDeleteModalWrapperCSS}>
-          <div onClick={toChangeInput} css={editDeleteBtnCSS}>수정</div>
+          <div onClick={toChangeInput} css={editDeleteBtnCSS}>
+            수정
+          </div>
           <div css={editDeleteBtnCSS}>삭제</div>
         </div>
       )}

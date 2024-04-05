@@ -2,7 +2,7 @@
 import React from "react";
 import { css } from "@emotion/react";
 import { useRouter } from "next/navigation";
-import { LEFTARROW } from "@/assets/icons";
+import { LEFTARROW } from "@/assets/svgs";
 import { BasicTopBarProps } from "@/types/topBarTypes";
 
 function BasicTopBar({ content }: BasicTopBarProps) {
@@ -18,7 +18,7 @@ function BasicTopBar({ content }: BasicTopBarProps) {
 }
 
 const topBarWrapperCSS = css`
-  width: 100%;
+  width: auto;
   height: 64px;
   display: flex;
   justify-content: center;

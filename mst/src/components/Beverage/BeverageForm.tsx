@@ -1,4 +1,4 @@
-import { EMPTYHEART, FULLHEART } from "@/assets/icons";
+import { EMPTYHEART, FULLHEART } from "@/assets/svgs";
 import { css } from "@emotion/react";
 import { useState } from "react";
 

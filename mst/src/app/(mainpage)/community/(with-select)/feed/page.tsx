@@ -129,7 +129,6 @@ const communityContentCSS = css`
 const pillBtnWrapperCSS = css`
   margin-bottom: 20px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
 `;
 
@@ -140,6 +139,7 @@ const ratingPillCSS = css`
   color: var(--default-white-color);
   font-size: var(--font-size-h6);
   font-weight: var(--font-weight-bold);
+  margin-right: 12px;
 `;
 
 const selectedRatingPillCSS = css`

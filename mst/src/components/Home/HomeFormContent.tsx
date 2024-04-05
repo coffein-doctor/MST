@@ -1,7 +1,7 @@
 import React from "react";
 import { css } from "@emotion/react";
 
-import { WATER, SUGAR, COFFEE } from "@/assets/icons";
+import { WATER, SUGAR, COFFEE } from "@/assets/svgs";
 
 function HomeFormContent() {
   const dummyData = ["2", "500", "40"];

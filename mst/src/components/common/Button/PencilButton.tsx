@@ -1,9 +1,9 @@
-"use client"
+"use client";
 import React from "react";
 import { css } from "@emotion/react";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
-import { PENCIL } from "@/assets/icons";
+import { PENCIL } from "@/assets/svgs";
 
 function PencilButton() {
   const router = useRouter();

@@ -3,13 +3,12 @@ import { css } from "@emotion/react";
 import NavCircleContent from "./NavCircleContent";
 import NavSquareContent from "./NavSquareContent";
 
-import { HOME, STATS, PLUS, COMMUNITY, MYPAGE } from "@/assets/icons";
+import { HOME, STATS, PLUS, COMMUNITY, MYPAGE } from "@/assets/svgs";
 import { useRecoilValue } from "recoil";
 import { showNavBarState } from "@/recoil/atoms/showNavBarState";
 import { usePathname } from "next/navigation";
 
 function Nav() {
-
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   useEffect(() => {
@@ -23,19 +22,6 @@ function Nav() {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-
-	// 임시
-	const pathname = usePathname()
-
-	const blackList = [
-		"/community"
-	]
-
-	if (pathname.includes("/community")) {
-    return null
-  } 
-
-	
 
   return (
     <div css={NavWrapperCSS(windowWidth)}>

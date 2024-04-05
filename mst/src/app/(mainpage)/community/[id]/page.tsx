@@ -1,5 +1,5 @@
 "use client";
-import { CHAT, FULLHEART } from "@/assets/icons";
+import { CHAT, FULLHEART } from "@/assets/svgs";
 import CommentSet from "@/components/Community/Comment/CommentSet";
 import BasicTopBar from "@/components/common/TopBar/BasicTopBar";
 import { css } from "@emotion/react";

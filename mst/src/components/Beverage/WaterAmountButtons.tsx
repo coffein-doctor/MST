@@ -1,4 +1,4 @@
-import { MUGCUP, PAPERCUP, PLASTICBOTTLE } from "@/assets/pictures";
+import { MUGCUP, PAPERCUP, PLASTICBOTTLE } from "@/assets/svgs";
 import { css } from "@emotion/react";
 
 const fixedWaterValue = [
