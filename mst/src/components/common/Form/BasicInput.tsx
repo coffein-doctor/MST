@@ -1,4 +1,4 @@
-import { InputPropsType } from "@/types/inputTypes";
+import { BasicInputPropsType } from "@/types/inputTypes";
 import { css } from "@emotion/react";
 
 export default function Input({
@@ -8,8 +8,8 @@ export default function Input({
   type,
   value,
   onChange,
-	placeholder
-}: InputPropsType) {
+  placeholder,
+}: BasicInputPropsType) {
   return (
     <input
       css={[signUpInputCSS, cssProps]}
@@ -18,7 +18,7 @@ export default function Input({
       type={type}
       value={value}
       onChange={onChange}
-			placeholder={placeholder}
+      placeholder={placeholder}
     />
   );
 }

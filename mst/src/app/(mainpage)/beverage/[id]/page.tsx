@@ -10,7 +10,7 @@ import CustomTimePicker from "@/components/Beverage/TimePicker/CustomTimePicker"
 import CustomDatePicker from "@/components/Beverage/DatePicker/CustomDatePicker";
 import { ChangeEvent, useState } from "react";
 import SelectDropDown from "@/components/Beverage/SelectDropdown";
-import Input from "@/components/common/Form/Input";
+import BasicInput from "@/components/common/Form/BasicInput";
 
 const testOptions = [
   { value: "톨사이즈" },
@@ -88,7 +88,7 @@ function BeverageDetail({ params: { id } }: BeverageParams) {
             <div css={plusMinusBtnCSS} onClick={handleDecrease}>
               -
             </div>
-            <Input
+            <BasicInput
               id="amount"
               name="amount"
               value={amount}
@@ -186,7 +186,6 @@ const contentTitleCSS = css`
   text-align: center;
   margin-bottom: 15px;
 `;
-
 
 const plusMinusBtnCSS = css`
   color: var(--gray-color-4);

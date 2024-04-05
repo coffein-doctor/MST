@@ -3,6 +3,7 @@ import { css } from "@emotion/react";
 import Button from "@/components/common/Button/Button";
 import { ChangeEvent, useState } from "react";
 import BasicTopBar from "@/components/common/TopBar/BasicTopBar";
+import BasicInput from "@/components/common/Form/BasicInput";
 
 export default function PostCreate() {
   const [postFormData, setPostFormData] = useState({
@@ -23,17 +24,15 @@ export default function PostCreate() {
 
   return (
     <div>
-			<BasicTopBar content="글 작성하기"/>
+      <BasicTopBar content="글 작성하기" />
       <form method="submit">
-        <input
+        <BasicInput
           id="title"
           name="title"
-          type="text"
           value={postFormData.title}
-          css={titleInputCSS}
           onChange={handleInputChange}
           placeholder="제목을 입력해주세요"
-          autoFocus
+          cssProps={titleInputCSS}
         />
         <hr css={hrCSS} />
         <textarea
@@ -52,11 +51,7 @@ export default function PostCreate() {
 
 const titleInputCSS = css`
   width: 100%;
-  border: none;
-  outline: none;
-  background-color: transparent;
   font-size: var(--font-size-h3);
-
   margin-bottom: 10px;
 
   &::placeholder {

@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 import React from "react";
-import Input from "./Input";
+import BasicInput from "./BasicInput";
 import { SubmitFormPropsType } from "@/types/formTypes";
 
 // default, 상, 중, 하 position 모양 지정
@@ -14,7 +14,7 @@ function SubmitFormWrapper({
   value,
   onChange,
   type,
-	placeholder,
+  placeholder,
 }: SubmitFormPropsType) {
   let wrapperPos;
 
@@ -39,7 +39,7 @@ function SubmitFormWrapper({
           {leftLabel}
         </label>
       )}
-      <Input
+      <BasicInput
         id={id}
         name={id}
         type={type}
