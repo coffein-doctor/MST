@@ -1,10 +1,9 @@
 package com.caffeinedoctor.userservice.service;
 
 import com.caffeinedoctor.userservice.dto.enums.UserType;
-import com.caffeinedoctor.userservice.dto.response.KakaoOAuthTokenResponseDto;
-import com.caffeinedoctor.userservice.dto.response.KakaoUserInfoResponseDto;
-import com.caffeinedoctor.userservice.dto.response.UserResponseDto;
-import com.caffeinedoctor.userservice.entitiy.User;
+import com.caffeinedoctor.userservice.dto.response.user.KakaoOAuthTokenResponseDto;
+import com.caffeinedoctor.userservice.dto.response.user.KakaoUserInfoResponseDto;
+import com.caffeinedoctor.userservice.dto.response.user.KakaoLoginResponseDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.UUID;
 
 
 @Service
@@ -91,7 +88,7 @@ public class OAuthServiceImpl implements OAuthService {
     }
 
     @Override
-    public UserResponseDto requestKakaoUserInfo(String accessToken) {
+    public KakaoLoginResponseDto requestKakaoUserInfo(String accessToken) {
         // post 방식으로 key=value 데이터 요청
         RestTemplate rt = new RestTemplate();
 
@@ -128,7 +125,7 @@ public class OAuthServiceImpl implements OAuthService {
         // 신규인지, 기존회원인지 체크
         UserType userType = userService.checkUserTypeByEmail(kakaoUserInfo.getKakaoAccount().getEmail());
 
-        UserResponseDto userDto = UserResponseDto.builder()
+        KakaoLoginResponseDto userDto = KakaoLoginResponseDto.builder()
                 .kakaoId(kakaoUserInfo.getId())
                 .userType(userType)
                 .connectedAt(kakaoUserInfo.getConnectedAt())

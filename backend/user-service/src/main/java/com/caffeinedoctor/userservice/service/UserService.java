@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface UserService {
     /** 회원가입 **/
-    Long createUser(UserRequestDto userDto);
+    Long signUp(UserRequestDto userDto);
 
     /** 회원조회 **/
     Optional<User> findOne(Long userId);

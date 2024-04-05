@@ -14,6 +14,7 @@ import java.util.UUID;
 
 @Entity
 @Getter
+@Table(name = "user")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
 
@@ -24,9 +25,6 @@ public class User {
 
     @Column(nullable = false, unique = true)
     private String uuid;
-//
-//    @Column(nullable = false)
-//    private String password;
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -53,7 +51,6 @@ public class User {
     private String introduction;
 
     @Column(name = "created_date")
-    @ColumnDefault(value = "CURRENT_TIMESTAMP")
     private LocalDateTime signUpDate;
 
     @Column(name = "login_date")
@@ -61,8 +58,8 @@ public class User {
 
     // 생성자
     @Builder
-    public User(String uuid, String email, String nickname, LocalDate birth, Gender gender, int height, int weight, String profileImageUrl, String introduction, LocalDateTime signUpDate, LocalDateTime loginDate) {
-        this.uuid = uuid; // UUID 생성 및 할당
+    public User(String email, String nickname, LocalDate birth, Gender gender, int height, int weight, String profileImageUrl, String introduction) {
+        this.uuid =UUID.randomUUID().toString(); // UUID 생성 및 할당
 //        this.password = password;
         this.email = email;
         this.nickname = nickname;

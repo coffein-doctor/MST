@@ -1,4 +1,4 @@
-package com.caffeinedoctor.userservice.dto.response;
+package com.caffeinedoctor.userservice.dto.response.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

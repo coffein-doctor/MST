@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional(readOnly = true) // (성능 최적화 - 읽기 전용에만 사용)
@@ -46,25 +47,24 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     @Transactional // 기본: false (true면 데이터 변경이 안된다.)
-    public Long createUser(@Valid UserRequestDto userDto) {
+    public Long signUp(@Valid UserRequestDto userDto) {
         // 중복 회원 검증
 
-//        User user = User.builder()
-//                .uuid(User.generateUUID())  // UUID 생성
-//                .email(userDto.getEmail())
-//                .nickname(userDto.getNickname())
-//                .birth(userDto.getBirth())
-//                .gender(userDto.getGender())
-//                .height(userDto.getHeight())
-//                .weight(userDto.getWeight())
-//                .profile(userDto.getProfileImgUrl())  // 프로필 이미지 URL
-//                .introduction(userDto.getIntroduction())
-//                .build();
+        User user = User.builder()
+                .email(userDto.getEmail())
+                .nickname(userDto.getNickname())
+                .birth(userDto.getBirth())
+                .gender(userDto.getGender())
+                .height(userDto.getHeight())
+                .weight(userDto.getWeight())
+                .profileImageUrl(userDto.getProfileImgUrl())
+                .introduction(userDto.getIntroduction())
+                .build();
 
         // UserDto -> UserEntity 변환 작업
-        ModelMapper mapper = new ModelMapper();
-        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        User user = mapper.map(userDto, User.class);
+//        ModelMapper mapper = new ModelMapper();
+//        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+//        User user = mapper.map(userDto, User.class);
         userRepository.save(user);
 
         return user.getId();

@@ -44,7 +44,7 @@ public class UserRequestDto {
     private String introduction;
 
     @Builder
-    public UserRequestDto(String email, String nickname, LocalDate birth, Gender gender, int height, int weight, String profileImgUrl, String introduction, LocalDateTime createAt) {
+    public UserRequestDto(String email, String nickname, LocalDate birth, Gender gender, int height, int weight, String profileImgUrl, String introduction) {
         this.email = email;
         this.nickname = nickname;
         this.birth = birth;

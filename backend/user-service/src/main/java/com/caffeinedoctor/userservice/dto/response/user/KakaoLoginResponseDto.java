@@ -1,4 +1,4 @@
-package com.caffeinedoctor.userservice.dto.response;
+package com.caffeinedoctor.userservice.dto.response.user;
 
 import com.caffeinedoctor.userservice.dto.enums.UserType;
 import jakarta.persistence.EnumType;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class UserResponseDto {
+public class KakaoLoginResponseDto {
     private long kakaoId;
     @Enumerated(EnumType.STRING)
     private UserType userType;
@@ -18,7 +18,7 @@ public class UserResponseDto {
     private String profileImageUrl;
 
     @Builder
-    private UserResponseDto(long kakaoId, UserType userType, String email, String connectedAt, String profileImageUrl) {
+    private KakaoLoginResponseDto(long kakaoId, UserType userType, String email, String connectedAt, String profileImageUrl) {
         this.kakaoId = kakaoId;
         this.userType = userType;
         this.connectedAt = connectedAt;
