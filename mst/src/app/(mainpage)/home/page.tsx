@@ -5,25 +5,15 @@ import { css } from "@emotion/react";
 import Form from "@/components/common/Form/Form";
 import HomeFormContent from "@/components/Home/HomeFormContent";
 import BasicTopBar from "@/components/common/TopBar/BasicTopBar";
-import Carousel from "react-material-ui-carousel";
+// import Carousel from "react-material-ui-carousel";
 
 import HomeCarousel from "./_components/HomeCarousel";
+import { SUGAR, COFFEE, WATER } from "@/assets/icons";
 
 function Home() {
   const [index, setIndex] = useState(0);
 
-  const handleChange = (cur: number, prev: number) => {
-    setIndex(cur);
-    console.log(cur, prev);
-  };
-
-  function Item({ item }: { item: { description: string } }) {
-    return (
-      <div style={{ width: "100%", height: "100%" }}>{item.description}</div>
-    );
-  }
-
-  var items = [
+  const items = [
     {
       name: "Random Name #1",
       description: "1 - Probably the most random thing you have ever seen!",
@@ -40,7 +30,7 @@ function Home() {
 
   return (
     <div>
-      <BasicTopBar content={"홈페이지"} />
+      {/* <BasicTopBar content={"홈페이지"} /> */}
 
       <Form content={<HomeFormContent />} />
 

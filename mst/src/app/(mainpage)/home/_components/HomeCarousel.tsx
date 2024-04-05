@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Carousel from "react-material-ui-carousel";
 
 interface Item {
+  item: string;
   description: string;
 }
 
@@ -30,6 +31,7 @@ const HomeCarousel: React.FC<HomeCarouselProps> = ({ items }) => {
     >
       {items.map((item, i) => (
         <div key={i} style={{ width: "100%", height: "100%" }}>
+          {item.name}
           {item.description}
         </div>
       ))}
