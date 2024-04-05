@@ -14,6 +14,7 @@ function SubmitFormWrapper({
   value,
   onChange,
   type,
+	placeholder,
 }: SubmitFormPropsType) {
   let wrapperPos;
 

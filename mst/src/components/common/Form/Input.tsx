@@ -8,6 +8,7 @@ export default function Input({
   type,
   value,
   onChange,
+	placeholder
 }: InputPropsType) {
   return (
     <input
@@ -17,6 +18,7 @@ export default function Input({
       type={type}
       value={value}
       onChange={onChange}
+			placeholder={placeholder}
     />
   );
 }

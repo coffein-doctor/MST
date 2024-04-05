@@ -4,10 +4,10 @@ export type FormPropsType = {
   content: any;
   cssProps?: SerializedStyles;
   shadow?: boolean;
-  onClick?():  any;
+  onClick?(): any;
 };
 
-export type SubmitFormPropsType= {
+export type SubmitFormPropsType = {
   id: string;
   position?: "top" | "middle" | "bottom";
   leftLabel?: string;
@@ -15,4 +15,5 @@ export type SubmitFormPropsType= {
   value?: string | number;
   onChange?: any;
   type?: "string" | "number";
-}
+  placeholder?: string;
+};

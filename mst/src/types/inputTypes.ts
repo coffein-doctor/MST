@@ -5,6 +5,7 @@ export type InputPropsType = {
   name: string;
   type?: string;
   value?: string | number;
+  placeholder?: string;
   cssProps?: SerializedStyles;
   onChange: any;
 };
