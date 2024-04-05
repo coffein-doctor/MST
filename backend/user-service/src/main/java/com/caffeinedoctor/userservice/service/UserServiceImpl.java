@@ -1,5 +1,6 @@
 package com.caffeinedoctor.userservice.service;
 
+import com.caffeinedoctor.userservice.dto.enums.UserType;
 import com.caffeinedoctor.userservice.dto.request.user.UserRequestDto;
 import com.caffeinedoctor.userservice.entitiy.User;
 import com.caffeinedoctor.userservice.repository.UserRepository;
@@ -11,7 +12,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,6 +26,21 @@ public class UserServiceImpl implements UserService {
 //    public UserServiceImpl(UserRepository userRepository) {
 //        this.userRepository = userRepository;
 //    }
+
+    // 소셜로그인 로직에서 회원 찾기
+    public UserType checkUserTypeByEmail(String email) {
+        // 이메일을 사용하여 사용자의 존재 여부 확인
+        boolean userExists = userRepository.existsByEmail(email);
+
+        if (userExists) {
+            // 기존 회원인 경우
+            return UserType.EXISTING_MEMBER;
+        } else {
+            // 신규 회원인 경우
+            return UserType.NEW_MEMBER;
+        }
+    }
+
     /**
      * 회원 가입
      */
@@ -55,17 +70,18 @@ public class UserServiceImpl implements UserService {
         return user.getId();
     }
 
+
     private void validateDuplicateUser(String email) {
         // 이메일 유효성 검사
-        List<User> findByEmailUsers = userRepository.findByEmail(email);
-        if (!findByEmailUsers.isEmpty()) {
+        Optional user = userRepository.findByEmail(email);
+        if (user.isPresent()) {
             throw new IllegalStateException("이미 존재하는 회원 이메일입니다.");
         }
     }
     private void validateDuplicateNickname(String nickname){
         // 닉네임 유효성 검사
-        List<User> findByNicknameUsers = userRepository.findByNickname(nickname);
-        if (!findByNicknameUsers.isEmpty()) {
+        Optional user = userRepository.findByNickname(nickname);
+        if (user.isPresent()) {
             throw new IllegalStateException("이미 존재하는 회원 닉네임입니다.");
         }
     }

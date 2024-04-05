@@ -1,5 +1,6 @@
 package com.caffeinedoctor.userservice.service;
 
+import com.caffeinedoctor.userservice.dto.enums.UserType;
 import com.caffeinedoctor.userservice.dto.response.KakaoOAuthTokenResponseDto;
 import com.caffeinedoctor.userservice.dto.response.KakaoUserInfoResponseDto;
 import com.caffeinedoctor.userservice.dto.response.UserResponseDto;
@@ -124,14 +125,17 @@ public class OAuthServiceImpl implements OAuthService {
 
         log.info(kakaoUserInfo.getKakaoAccount().getEmail());
         log.info(kakaoUserInfo.getConnectedAt());
-
+        // 신규인지, 기존회원인지 체크
+        UserType userType = userService.checkUserTypeByEmail(kakaoUserInfo.getKakaoAccount().getEmail());
 
         UserResponseDto userDto = UserResponseDto.builder()
                 .kakaoId(kakaoUserInfo.getId())
+                .userType(userType)
                 .connectedAt(kakaoUserInfo.getConnectedAt())
                 .email(kakaoUserInfo.getKakaoAccount().getEmail())
                 .profileImageUrl(kakaoUserInfo.getKakaoAccount().getProfile().getProfileImageUrl())
                 .build();
+
 
         return userDto;
     }

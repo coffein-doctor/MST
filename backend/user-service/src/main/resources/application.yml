@@ -28,6 +28,8 @@ spring:
 
 logging:
   level:
+    # 디버그 모드
+    com.caffeinedoctor.userservice: DEBUG
     # hibernate, jpa 성성한 SQL 쿼리 debug 로그로 남긴다.
     org.hibernate.SQL: debug
     # sql 실행 파라미터를 로그로 남긴다.

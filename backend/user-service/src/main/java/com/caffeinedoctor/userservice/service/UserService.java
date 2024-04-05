@@ -1,5 +1,6 @@
 package com.caffeinedoctor.userservice.service;
 
+import com.caffeinedoctor.userservice.dto.enums.UserType;
 import com.caffeinedoctor.userservice.dto.request.user.UserRequestDto;
 import com.caffeinedoctor.userservice.entitiy.User;
 
@@ -11,4 +12,7 @@ public interface UserService {
 
     /** 회원조회 **/
     Optional<User> findOne(Long userId);
+
+    /** 회원타입 **/
+    UserType checkUserTypeByEmail(String email);
 }

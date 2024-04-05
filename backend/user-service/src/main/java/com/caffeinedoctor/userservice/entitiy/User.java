@@ -5,6 +5,7 @@ package com.caffeinedoctor.userservice.entitiy;
 import com.caffeinedoctor.userservice.entitiy.enums.Gender;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Type;
 
 import java.time.LocalDate;
@@ -23,9 +24,9 @@ public class User {
 
     @Column(nullable = false, unique = true)
     private String uuid;
-
-    @Column(nullable = false)
-    private String password;
+//
+//    @Column(nullable = false)
+//    private String password;
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -52,6 +53,7 @@ public class User {
     private String introduction;
 
     @Column(name = "created_date")
+    @ColumnDefault(value = "CURRENT_TIMESTAMP")
     private LocalDateTime signUpDate;
 
     @Column(name = "login_date")
@@ -59,9 +61,9 @@ public class User {
 
     // 생성자
     @Builder
-    public User(String uuid, String password, String email, String nickname, LocalDate birth, Gender gender, int height, int weight, String profileImageUrl, String introduction, LocalDateTime signUpDate, LocalDateTime loginDate) {
+    public User(String uuid, String email, String nickname, LocalDate birth, Gender gender, int height, int weight, String profileImageUrl, String introduction, LocalDateTime signUpDate, LocalDateTime loginDate) {
         this.uuid = uuid; // UUID 생성 및 할당
-        this.password = password;
+//        this.password = password;
         this.email = email;
         this.nickname = nickname;
         this.birth = birth;

@@ -6,6 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 // paRepository는 페이징, 정렬, 쿼리 메서드와 같은 추가 기능을 제공
 // public interface UserRepository extends JpaRepository<User, Long> {
@@ -14,8 +15,12 @@ import java.util.List;
 // CrudRepository<연동 될 entity, entity의 기본키 타입>
 public interface UserRepository extends CrudRepository<User, Long> {
     // 같은 이메일 찾기
-    List<User> findByEmail(String email);
+    Optional findByEmail(String email);
 
     // 같은 닉네임 찾기
-    List<User> findByNickname(String nickname);
+    Optional findByNickname(String nickname);
+
+    // 이메일로 사용자 유무 찾기
+    // 이메일이 존재하는지 여부를 확인하는 함수
+    boolean existsByEmail(String email);
 }

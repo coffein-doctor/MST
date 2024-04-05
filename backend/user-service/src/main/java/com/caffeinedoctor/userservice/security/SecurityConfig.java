@@ -23,10 +23,10 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-
+    // 허용 주소
     private static final String[] WHITE_LIST = {
             "/",
-            "/user/**",
+            "/users/**",
             "/**",
             "/oauth2/**",
             "/oauth/**"
@@ -65,7 +65,7 @@ public class SecurityConfig {
                 // 모든 요청에 대해 접근 제어 -> 주어진 IP 주소로부터의 요청만을 허용
                 .requestMatchers("/**").access(
                         new WebExpressionAuthorizationManager("hasIpAddress('127.0.0.1') or hasIpAddress('3.36.123.194')"))
-                .anyRequest().authenticated()
+                .anyRequest().authenticated() // 위를 제외한 다른 요청은 모두 인증해야돼
 //                .requestMatchers("/", "/oauth2/**", "/user").permitAll()
 //                .requestMatchers(new AntPathRequestMatcher("/user", "POST")).permitAll()
 //                .requestMatchers("/**").access(this::hasIpAddress)
