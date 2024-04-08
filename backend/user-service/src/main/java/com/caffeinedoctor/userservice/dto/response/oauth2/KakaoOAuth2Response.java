@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.Map;
 
+// 카카오 응답 형태에 따라 생성
 @RequiredArgsConstructor
 public class KakaoOAuth2Response implements OAuth2Response {
     // 카카오 유저 데이터를 받을 변수 선언.

@@ -15,4 +15,10 @@ public interface UserService {
 
     /** 회원타입 **/
     UserType checkUserTypeByEmail(String email);
+
+    /** 회원 찾기 **/
+    boolean isUserExistsByEmail(String email);
+
+    /** 이미지 프로필 업데이트 **/
+    public void updateProfileImage(String userEmail, String newProfileImageUrl);
 }

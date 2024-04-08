@@ -34,13 +34,13 @@ spring:
           kakao:
             client-id: 4c2e4d4852cafb55e5d18db0521ecee3
             redirect-uri: http://localhost:8081/login/oauth2/code/kakao # http://localhost:8081/login/oauth2/code/kakao
-            client-authentication-method: POST
+#            redirect-uri: {baseUrl}/login/oauth2/code/{registrationId} # http://localhost:8081/login/oauth2/code/kakao
+            client-authentication-method: client_secret_post
             client-secret: NkzavTQYRPwGRFgbWHTtLxc7Zsr2Ncuf
             authorization-grant-type: authorization_code
             scope:
               - profile_image
               - account_email
-            client_name: kakao
         provider:
           kakao:
             authorization-uri: https://kauth.kakao.com/oauth/authorize

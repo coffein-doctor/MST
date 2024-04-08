@@ -95,8 +95,8 @@ public class User {
         this.weight = weight;
     }
 
-    public void updateProfile(String profile) {
-        this.profileImageUrl = profile;
+    public void updateProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
     }
 
     public void updateIntroduction(String introduction) {

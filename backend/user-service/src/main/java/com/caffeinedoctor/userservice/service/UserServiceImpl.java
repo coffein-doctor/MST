@@ -24,6 +24,23 @@ public class UserServiceImpl implements UserService {
 //        this.userRepository = userRepository;
 //    }
 
+    // 프로필 이미지를 업데이트하는 메서드
+    public void updateProfileImage(String userEmail, String newProfileImageUrl) {
+        // 이메일로 사용자를 찾습니다.
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+
+        // 사용자가 존재하면 프로필 이미지를 업데이트합니다.
+        user.updateProfileImageUrl(newProfileImageUrl);
+
+        // 변경된 사용자 엔티티를 저장하여 변경 사항을 반영합니다.
+        userRepository.save(user);
+    }
+
+    // 이메일로 사용자가 존재하는지 확인
+    public boolean isUserExistsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
     // 소셜로그인 로직에서 회원 찾기
     public UserType checkUserTypeByEmail(String email) {
         // 이메일을 사용하여 사용자의 존재 여부 확인
