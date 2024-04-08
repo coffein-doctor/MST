@@ -27,20 +27,15 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false, unique = true)
     private String nickname;
 
-    @Column(nullable = false)
     private LocalDate birth;
 
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @Column(nullable = false)
     private int height;
 
-    @Column(nullable = false)
     private int weight;
 
     @Column(name = "profile_image_url")
@@ -58,7 +53,6 @@ public class User {
     @Builder
     public User(String username, String email, String nickname, LocalDate birth, Gender gender, int height, int weight, String profileImageUrl, String introduction) {
         this.username = username;
-//        this.password = password;
         this.email = email;
         this.nickname = nickname;
         this.birth = birth;

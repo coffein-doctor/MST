@@ -24,6 +24,19 @@ public class JWTFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        //필터 위치에 따라 OAuth2 인증을 진행하는 필터보다 JWTFilter가 앞에 존재하는 경우 에러 발생
+        String requestUri = request.getRequestURI();
+        //JWTFilter 내부에 if문을 통해 특정 경로 요청은 넘어가도록 수정
+        if (requestUri.matches("^\\/login(?:\\/.*)?$")) {
+
+            filterChain.doFilter(request, response);
+            return;
+        }
+        if (requestUri.matches("^\\/oauth2(?:\\/.*)?$")) {
+
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         //cookie들을 불러온 뒤 Authorization Key에 담긴 쿠키를 찾음
         String authorization = null;
@@ -54,6 +67,7 @@ public class JWTFilter extends OncePerRequestFilter {
         if (jwtUtil.isExpired(token)) {
 
             System.out.println("token expired");
+            log.info("token expired");
             filterChain.doFilter(request, response);
 
             //조건이 해당되면 메소드 종료 (필수)
@@ -66,7 +80,7 @@ public class JWTFilter extends OncePerRequestFilter {
 
         //userDTO를 생성하여 값 set
         OAuth2UserResponseDto userDto = OAuth2UserResponseDto.builder()
-                .role("ROLE_USER")
+                .role(role)
                 .username(username)
 //                .userType(userType)
 //                .email(oAuth2Response.getEmail())
