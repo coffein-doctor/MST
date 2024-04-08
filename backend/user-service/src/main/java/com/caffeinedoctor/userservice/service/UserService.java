@@ -20,5 +20,8 @@ public interface UserService {
     boolean isUserExistsByEmail(String email);
 
     /** 이미지 프로필 업데이트 **/
-    public void updateProfileImage(String userEmail, String newProfileImageUrl);
+    void updateProfileImage(String userEmail, String newProfileImageUrl);
+
+    /** 로그인 시간 업데이트 **/
+     void updateLoginDate(String userEmail);
 }

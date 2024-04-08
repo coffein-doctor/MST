@@ -63,12 +63,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             userType = UserType.EXISTING_MEMBER;
             // 프로필 이미지 갱신
             userService.updateProfileImage(oAuth2Response.getEmail(), oAuth2Response.getProfileImageUrl());
+            // 로그인 시간 갱신
+            userService.updateLoginDate(oAuth2Response.getEmail());
 
         } else {
             // 신규 회원인 경우
             userType =  UserType.NEW_MEMBER;
         }
-
 
         OAuth2UserResponseDto userDto = OAuth2UserResponseDto.builder()
                 .role("ROLE_USER")
@@ -80,7 +81,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         log.info(username);
         log.info(oAuth2Response.getEmail());
-
 
         return new CustomOAuth2User(userDto);
     }

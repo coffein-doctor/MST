@@ -8,6 +8,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.UUID;
 
 @Entity
@@ -22,7 +23,7 @@ public class User {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String uuid;
+    private String username;
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -56,8 +57,8 @@ public class User {
 
     // 생성자
     @Builder
-    public User(String email, String nickname, LocalDate birth, Gender gender, int height, int weight, String profileImageUrl, String introduction) {
-        this.uuid =UUID.randomUUID().toString(); // UUID 생성 및 할당
+    public User(String username, String email, String nickname, LocalDate birth, Gender gender, int height, int weight, String profileImageUrl, String introduction) {
+        this.username = username;
 //        this.password = password;
         this.email = email;
         this.nickname = nickname;
@@ -72,7 +73,7 @@ public class User {
 
     // 로그인 시간 업데이트 함수
     public void updateLoginDate() {
-        this.loginDate = LocalDateTime.now();
+        this.loginDate = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
     }
 
     public void updateNickname(String nickname) {

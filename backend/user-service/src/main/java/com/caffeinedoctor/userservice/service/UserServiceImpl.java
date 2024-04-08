@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -32,6 +33,18 @@ public class UserServiceImpl implements UserService {
 
         // 사용자가 존재하면 프로필 이미지를 업데이트합니다.
         user.updateProfileImageUrl(newProfileImageUrl);
+
+        // 변경된 사용자 엔티티를 저장하여 변경 사항을 반영합니다.
+        userRepository.save(user);
+    }
+
+    public void updateLoginDate(String userEmail) {
+        // 이메일로 사용자를 찾습니다.
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+
+        // 사용자가 존재하면 로그인 시간을 현재 시간으로 업데이트합니다.
+        user.updateLoginDate();
 
         // 변경된 사용자 엔티티를 저장하여 변경 사항을 반영합니다.
         userRepository.save(user);

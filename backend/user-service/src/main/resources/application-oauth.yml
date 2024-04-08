@@ -23,10 +23,10 @@
 #            user-name-attribute: id
 
 
-#jwt:
-#  token:
-#    secret-key: chadoll
-#  access-token:
-#    expire-length: 1800000
-#  refresh-token:
-#    expire-length: 1209600000
+jwt:
+  token:
+    secret-key: chadoll
+  access-token:
+    expire-length: 1800000
+  refresh-token:
+    expire-length: 1209600000
