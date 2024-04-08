@@ -10,6 +10,7 @@ public class BeverageCustomInfo {
     private Long id;
     private String company;
     private String name;
+    private String size;
     private Long caffeine;
     private Long sugar;
     private Long volume;
@@ -18,6 +19,7 @@ public class BeverageCustomInfo {
         this.id = custom.getId();
         this.company = custom.getCompany();
         this.name = custom.getName();
+        this.size = custom.getSize();
         this.caffeine = custom.getCaffeine();
         this.sugar = custom.getSugar();
         this.volume = custom.getVolume();
