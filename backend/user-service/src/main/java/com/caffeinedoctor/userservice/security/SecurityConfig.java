@@ -1,6 +1,9 @@
 package com.caffeinedoctor.userservice.security;
 
 
+import com.caffeinedoctor.userservice.security.jwt.JWTFilter;
+import com.caffeinedoctor.userservice.security.jwt.JWTUtil;
+import com.caffeinedoctor.userservice.security.oauth2.CustomSuccessHandler;
 import com.caffeinedoctor.userservice.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -14,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 // 시큐리티 커스텀 config를 작성하여 특정 경로에 대해 접근을 막는다.
 @Configurable
@@ -23,6 +27,8 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 public class SecurityConfig {
 
     private final CustomOAuth2UserService customOAuth2UserService;
+    private final CustomSuccessHandler customSuccessHandler;
+    private final JWTUtil jwtUtil;
 
     // 허용 주소
     private static final String[] WHITE_LIST = {
@@ -74,11 +80,18 @@ public class SecurityConfig {
 //                    .requestMatchers("/**").access(this::hasIpAddress)
         );
 
+        //JWTFilter 추가
+        http
+                .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
+
         //oauth2
         http
                 .oauth2Login((oauth2) -> oauth2
                         .userInfoEndpoint((userInfoEndpointConfig) -> userInfoEndpointConfig
-                                .userService(customOAuth2UserService)));
+                                .userService(customOAuth2UserService))
+                        //로그인 성공하면 jwt 만들기
+                        .successHandler(customSuccessHandler)
+                );
 
         return http.build();
     }

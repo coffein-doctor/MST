@@ -50,7 +50,7 @@ public class CustomOAuth2User implements OAuth2User {
     }
 
 //    public String getUsername() {
-//        //
+//        // 사용자의 이름을 가져오는 함수입니다.
 //        return oAuth2Response.getUsername();
 //    }
 
