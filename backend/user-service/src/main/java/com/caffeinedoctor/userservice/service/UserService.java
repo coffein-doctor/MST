@@ -1,6 +1,6 @@
 package com.caffeinedoctor.userservice.service;
 
-import com.caffeinedoctor.userservice.common.enums.UserType;
+import com.caffeinedoctor.userservice.enums.UserType;
 import com.caffeinedoctor.userservice.dto.request.user.UserRequestDto;
 import com.caffeinedoctor.userservice.entitiy.User;
 

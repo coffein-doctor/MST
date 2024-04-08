@@ -1,6 +1,6 @@
 package com.caffeinedoctor.userservice.dto.response.oauth2;
 
-import com.caffeinedoctor.userservice.common.enums.UserType;
+import com.caffeinedoctor.userservice.enums.UserType;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Email;

@@ -2,14 +2,13 @@ package com.caffeinedoctor.userservice.entitiy;
 
 
 
-import com.caffeinedoctor.userservice.common.enums.Gender;
+import com.caffeinedoctor.userservice.enums.Gender;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.UUID;
 
 @Entity
 @Getter

@@ -1,4 +1,4 @@
-package com.caffeinedoctor.userservice.common.security.jwt;
+package com.caffeinedoctor.userservice.security.jwt;
 
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;

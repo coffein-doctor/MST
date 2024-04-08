@@ -1,4 +1,4 @@
-package com.caffeinedoctor.userservice.common.security;
+package com.caffeinedoctor.userservice.security;
 
 
 import com.caffeinedoctor.userservice.dto.request.user.LoginRequestDto;

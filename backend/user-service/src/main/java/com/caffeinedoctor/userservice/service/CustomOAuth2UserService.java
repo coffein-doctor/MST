@@ -1,11 +1,10 @@
 package com.caffeinedoctor.userservice.service;
 
-import com.caffeinedoctor.userservice.common.enums.UserType;
+import com.caffeinedoctor.userservice.enums.UserType;
 import com.caffeinedoctor.userservice.dto.response.oauth2.CustomOAuth2User;
 import com.caffeinedoctor.userservice.dto.response.oauth2.KakaoOAuth2Response;
 import com.caffeinedoctor.userservice.dto.response.oauth2.OAuth2Response;
 import com.caffeinedoctor.userservice.dto.response.oauth2.OAuth2UserResponseDto;
-import com.caffeinedoctor.userservice.entitiy.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;

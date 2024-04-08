@@ -1,4 +1,4 @@
-package com.caffeinedoctor.userservice.common.enums;
+package com.caffeinedoctor.userservice.enums;
 
 public enum UserType {
     NEW_MEMBER,

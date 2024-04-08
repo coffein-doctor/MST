@@ -1,6 +1,6 @@
 package com.caffeinedoctor.userservice.dto.request.user;
 
-import com.caffeinedoctor.userservice.common.enums.Gender;
+import com.caffeinedoctor.userservice.enums.Gender;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

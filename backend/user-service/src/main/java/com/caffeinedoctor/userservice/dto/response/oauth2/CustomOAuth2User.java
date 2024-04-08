@@ -1,6 +1,6 @@
 package com.caffeinedoctor.userservice.dto.response.oauth2;
 
-import com.caffeinedoctor.userservice.common.enums.UserType;
+import com.caffeinedoctor.userservice.enums.UserType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;

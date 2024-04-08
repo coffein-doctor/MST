@@ -1,4 +1,4 @@
-package com.caffeinedoctor.userservice.common.config;
+package com.caffeinedoctor.userservice.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
