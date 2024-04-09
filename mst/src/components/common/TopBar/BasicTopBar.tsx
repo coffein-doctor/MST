@@ -10,7 +10,7 @@ function BasicTopBar({ content }: BasicTopBarProps) {
   return (
     <div css={topBarWrapperCSS}>
       <div css={backIconWrapperCSS} onClick={() => router.back()}>
-        <LEFTARROW color="var(--gray-color-2)" />
+        <LEFTARROW color="var(--gray-color-2)" width="14" height="22" />
       </div>
       <div css={topBarContentCSS}>{content}</div>
     </div>
