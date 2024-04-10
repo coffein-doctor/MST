@@ -14,7 +14,7 @@ import java.time.LocalDate;
 
 @Getter
 @NoArgsConstructor
-public class UserRequestDto {
+public class UserInfoRequestDto {
 
     @NotBlank(message = "Email must not be blank")
     @Email(message = "Invalid email format")
@@ -37,19 +37,15 @@ public class UserRequestDto {
     @Min(value = 1, message = "Weight must be greater than 0")
     private Integer weight;
 
-    private String profileImgUrl;
-
     private String introduction;
 
     @Builder
-    public UserRequestDto(String email, String nickname, LocalDate birth, Gender gender, int height, int weight, String profileImgUrl, String introduction) {
-        this.email = email;
+    public UserInfoRequestDto(String nickname, LocalDate birth, Gender gender, int height, int weight, String introduction) {
         this.nickname = nickname;
         this.birth = birth;
         this.gender = gender;
         this.height = height;
         this.weight = weight;
-        this.profileImgUrl = profileImgUrl;
         this.introduction = introduction;
     }
 

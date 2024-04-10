@@ -3,6 +3,7 @@ package com.caffeinedoctor.userservice.entitiy;
 
 
 import com.caffeinedoctor.userservice.enums.Gender;
+import com.caffeinedoctor.userservice.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,6 +27,9 @@ public class User {
 
     @Column(nullable = false, unique = true)
     private String email;
+
+    @Enumerated(EnumType.STRING)
+    private UserStatus status;
 
     private String nickname;
 
@@ -51,22 +55,24 @@ public class User {
 
     // 생성자
     @Builder
-    public User(String username, String email, String nickname, LocalDate birth, Gender gender, int height, int weight, String profileImageUrl, String introduction) {
+    public User(String username, String email, String profileImageUrl) {
         this.username = username;
         this.email = email;
-        this.nickname = nickname;
-        this.birth = birth;
-        this.gender = gender;
-        this.height = height;
-        this.weight = weight;
         this.profileImageUrl = profileImageUrl;
-        this.introduction = introduction;
-        this.signUpDate = LocalDateTime.now();
+        this.status  = UserStatus.NEW_USER;
+        this.signUpDate = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
     }
 
     // 로그인 시간 업데이트 함수
     public void updateLoginDate() {
         this.loginDate = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+    }
+
+    // 신규 유저이면 회원 정보를 등록하면서 기존유저로 변경
+    public void updateUserStatus() {
+        if (this.status == UserStatus.NEW_USER) {
+            this.status = UserStatus.EXISTING_USER;
+        }
     }
 
     public void updateNickname(String nickname) {

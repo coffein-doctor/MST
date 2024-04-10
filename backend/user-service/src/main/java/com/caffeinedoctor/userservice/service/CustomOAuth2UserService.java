@@ -1,6 +1,7 @@
 package com.caffeinedoctor.userservice.service;
 
-import com.caffeinedoctor.userservice.enums.UserType;
+import com.caffeinedoctor.userservice.dto.request.user.UserLoginRequestDto;
+import com.caffeinedoctor.userservice.enums.UserStatus;
 import com.caffeinedoctor.userservice.dto.response.oauth2.CustomOAuth2User;
 import com.caffeinedoctor.userservice.dto.response.oauth2.KakaoOAuth2Response;
 import com.caffeinedoctor.userservice.dto.response.oauth2.OAuth2Response;
@@ -55,31 +56,34 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         // 이메일을 사용하여 사용자의 존재 여부 확인
         boolean userExists = userService.isUserExistsByEmail(oAuth2Response.getEmail());
-        UserType userType;
+
+        log.info(oAuth2Response.getEmail());
+        log.info(username);
 
         if (userExists) {
-            // 기존 회원인 경우
-            userType = UserType.EXISTING_MEMBER;
-            // 프로필 이미지 갱신
-            userService.updateProfileImage(oAuth2Response.getEmail(), oAuth2Response.getProfileImageUrl());
-            // 로그인 시간 갱신
-            userService.updateLoginDate(oAuth2Response.getEmail());
+            //기존 회원인 경우
+            // 프로필 이미지, 로그인 시간 갱신
+            userService.socialLogin(oAuth2Response.getEmail(), oAuth2Response.getProfileImageUrl());
 
         } else {
-            // 신규 회원인 경우
-            userType =  UserType.NEW_MEMBER;
+            //신규 회원인 경우
+            UserLoginRequestDto socialLoginSignUpDto = UserLoginRequestDto.builder()
+                    .email(oAuth2Response.getEmail())
+                    .username(username)
+                    .profileImageUrl(oAuth2Response.getProfileImageUrl())
+                    .build();
+            //DB에 소셜로그인 기본 정보 저장
+            userService.socialLoginSignUp(socialLoginSignUpDto);
+
         }
 
         OAuth2UserResponseDto userDto = OAuth2UserResponseDto.builder()
                 .role("ROLE_USER")
                 .username(username)
-                .userType(userType)
                 .email(oAuth2Response.getEmail())
                 .profileImageUrl(oAuth2Response.getProfileImageUrl())
                 .build();
 
-        log.info(username);
-        log.info(oAuth2Response.getEmail());
 
         return new CustomOAuth2User(userDto);
     }

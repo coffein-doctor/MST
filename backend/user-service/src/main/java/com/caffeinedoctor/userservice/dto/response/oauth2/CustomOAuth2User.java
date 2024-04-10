@@ -1,6 +1,5 @@
 package com.caffeinedoctor.userservice.dto.response.oauth2;
 
-import com.caffeinedoctor.userservice.enums.UserType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -57,11 +56,6 @@ public class CustomOAuth2User implements OAuth2User {
     public String getEmail() {
         // 사용자의 이메일 주소를 가져오는 함수입니다.
         return oAuth2Response.getEmail();
-    }
-
-    public UserType getUserType() {
-        // 사용자의 유형을 가져오는 함수입니다. 신규 or 기존
-        return oAuth2Response.getUserType();
     }
 
     public String getProfileImageUrl() {

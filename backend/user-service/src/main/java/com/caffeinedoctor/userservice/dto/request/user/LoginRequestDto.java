@@ -1,6 +1,6 @@
 package com.caffeinedoctor.userservice.dto.request.user;
 
-import com.caffeinedoctor.userservice.enums.UserType;
+import com.caffeinedoctor.userservice.enums.UserStatus;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Email;
@@ -17,7 +17,7 @@ public class LoginRequestDto {
     private long kakaoId;
     @NotBlank(message = "userType must not be blank. 'NEW_MEMBER' or 'EXISTING_MEMBER'")
     @Enumerated(EnumType.STRING)
-    private UserType userType;
+    private UserStatus userType;
     private String connectedAt;
     @NotBlank(message = "Email must not be blank")
     @Email(message = "Invalid email format")

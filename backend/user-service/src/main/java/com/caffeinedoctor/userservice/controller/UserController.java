@@ -1,16 +1,23 @@
 package com.caffeinedoctor.userservice.controller;
 
-import com.caffeinedoctor.userservice.dto.request.user.UserRequestDto;
+import com.caffeinedoctor.userservice.dto.request.user.UserInfoRequestDto;
+import com.caffeinedoctor.userservice.entitiy.User;
+import com.caffeinedoctor.userservice.enums.UserStatus;
 import com.caffeinedoctor.userservice.service.UserService;
 import com.caffeinedoctor.userservice.dto.GreetingDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "User", description = "User API")
@@ -37,10 +44,35 @@ public class UserController {
             description = "회원가입에 성공하였습니다."
     )
     @PostMapping("/signup")
-    public ResponseEntity<Long> signUp(@Valid @RequestBody UserRequestDto userDto) {
-        log.info(String.valueOf(userDto.getBirth()));
-        Long userId = userService.signUp(userDto);
+    public ResponseEntity<Long> registerUserInfo(@Valid @RequestBody UserInfoRequestDto userDto) {
+        log.info(String.valueOf(userDto.getEmail()));
+        Long userId = userService.registerUserInfo(userDto);
         return ResponseEntity.ok(userId);
+    }
+
+    @Operation(
+            summary = "유저의 상태",
+            description = "특정 사용자의 상태를 가져옵니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "성공적으로 상태를 가져옴"),
+            @ApiResponse(responseCode = "401", description = "인증되지 않음"),
+            @ApiResponse(responseCode = "404", description = "사용자 상태를 찾을 수 없음")
+    })
+    @GetMapping("/status")
+    public ResponseEntity<String> getUserStatus(@AuthenticationPrincipal UserDetails userDetails) {
+        // 현재 사용자 정보를 받아옴
+        String username = userDetails.getUsername();
+        System.out.println(username);
+        System.out.println(userDetails);
+
+        // 유저 이름을 사용하여 해당 유저의 상태 가져오기
+        UserStatus userStatus = userService.getUserStatusByUsername(username);
+        if (userStatus == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User status not found");
+        }
+
+        return ResponseEntity.ok(userStatus.toString());
     }
 
     // 작동 상태 체크
