@@ -1,30 +1,9 @@
 package com.caffeinedoctor.userservice.security;
 
 
-import com.caffeinedoctor.userservice.dto.request.user.LoginRequestDto;
-import com.caffeinedoctor.userservice.dto.request.user.UserLoginRequestDto;
-import com.caffeinedoctor.userservice.service.UserService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.env.Environment;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import javax.crypto.SecretKey;
-import java.io.IOException;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Date;
 
 @RequiredArgsConstructor
 @Slf4j

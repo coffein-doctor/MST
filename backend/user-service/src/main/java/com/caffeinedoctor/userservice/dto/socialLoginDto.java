@@ -1,15 +1,12 @@
-package com.caffeinedoctor.userservice.dto.request.user;
+package com.caffeinedoctor.userservice.dto;
 
-import com.caffeinedoctor.userservice.enums.Gender;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
-import java.time.LocalDate;
-
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserLoginRequestDto {
+public class socialLoginDto {
     @NotBlank(message = "Email must not be blank")
     @Email(message = "Invalid email format")
     private String email;
@@ -18,7 +15,7 @@ public class UserLoginRequestDto {
     private String profileImageUrl;
 
     @Builder
-    public UserLoginRequestDto(String email, String username, String profileImageUrl) {
+    public socialLoginDto(String email, String username, String profileImageUrl) {
         this.email = email;
         this.username = username;
         this.profileImageUrl = profileImageUrl;

@@ -3,19 +3,19 @@ package com.caffeinedoctor.userservice.security;
 
 import com.caffeinedoctor.userservice.security.jwt.JWTFilter;
 import com.caffeinedoctor.userservice.security.jwt.JWTUtil;
-import com.caffeinedoctor.userservice.security.oauth2.CustomSuccessHandler;
-import com.caffeinedoctor.userservice.service.CustomOAuth2UserService;
+import com.caffeinedoctor.userservice.security.oauth2.CustomOAuth2SuccessHandler;
+import com.caffeinedoctor.userservice.service.CustomOAuth2UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -32,9 +32,10 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final CustomOAuth2UserService customOAuth2UserService;
-    private final CustomSuccessHandler customSuccessHandler;
+    private final CustomOAuth2UserServiceImpl customOAuth2UserServiceImpl;
+    private final CustomOAuth2SuccessHandler customOAuth2SuccessHandler;
     private final JWTUtil jwtUtil;
+    private final Environment env;
 
     // 허용 주소
     private static final String[] WHITE_LIST = {
@@ -119,9 +120,9 @@ public class SecurityConfig {
         http
                 .oauth2Login((oauth2) -> oauth2
                         .userInfoEndpoint((userInfoEndpointConfig) -> userInfoEndpointConfig
-                                .userService(customOAuth2UserService))
+                                .userService(customOAuth2UserServiceImpl))
                         //로그인 성공하면 jwt 만들기
-                        .successHandler(customSuccessHandler)
+                        .successHandler(customOAuth2SuccessHandler)
                 );
 
         return http.build();

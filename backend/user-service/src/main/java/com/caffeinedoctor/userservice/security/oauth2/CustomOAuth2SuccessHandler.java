@@ -18,7 +18,7 @@ import java.util.Iterator;
 
 @Component
 @RequiredArgsConstructor
-public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     // 로그인이 성공하면 동작
 
     private final JWTUtil jwtUtil;
@@ -36,7 +36,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         GrantedAuthority auth = iterator.next();
         String role = auth.getAuthority();
 
-        //jwt 만들기 (유저이름, 역할, 토큰이 살아있는 시간)
+        //jwt 만들기 (유저이름, 역할, 토큰이 살아있는 시간) : 60초 * 60분 * 60시간 = 2.5일
         String token = jwtUtil.createJwt(username, role, 60*60*60L);
         //쿠키 방식으로 토큰 전달
         response.addCookie(createCookie("Authorization", token));

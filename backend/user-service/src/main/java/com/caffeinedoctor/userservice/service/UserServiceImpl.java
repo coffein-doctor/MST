@@ -1,6 +1,6 @@
 package com.caffeinedoctor.userservice.service;
 
-import com.caffeinedoctor.userservice.dto.request.user.UserLoginRequestDto;
+import com.caffeinedoctor.userservice.dto.socialLoginDto;
 import com.caffeinedoctor.userservice.dto.request.user.UserInfoRequestDto;
 import com.caffeinedoctor.userservice.entitiy.User;
 import com.caffeinedoctor.userservice.enums.UserStatus;
@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
     /** 신규 회원의 소셜 로그인을 통한 회원 가입 **/
     @Override
     @Transactional // 기본: false (true면 데이터 변경이 안된다.)
-    public Long socialLoginSignUp(@Valid UserLoginRequestDto userDto) {
+    public Long socialLoginSignUp(@Valid socialLoginDto userDto) {
         // 중복 회원 검증
         log.info(String.valueOf(userDto));
 
@@ -100,6 +100,14 @@ public class UserServiceImpl implements UserService {
     public boolean isUserExistsByEmail(String email) {
         return userRepository.existsByEmail(email);
     }
+
+    @Override
+    // 이메일로 사용자가 존재하는지 확인
+    public boolean isUserExistsByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
+
 
 
 
