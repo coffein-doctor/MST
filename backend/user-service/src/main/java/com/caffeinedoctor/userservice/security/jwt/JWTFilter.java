@@ -44,7 +44,6 @@ public class JWTFilter extends OncePerRequestFilter {
         for (Cookie cookie : cookies) {
 
             log.info(cookie.getName());
-            System.out.println(cookie.getName());
             if (cookie.getName().equals("Authorization")) {
                 authorization = cookie.getValue();
             }
@@ -66,7 +65,6 @@ public class JWTFilter extends OncePerRequestFilter {
         //토큰 소멸 시간 검증
         if (jwtUtil.isExpired(token)) {
 
-            System.out.println("token expired");
             log.info("token expired");
             filterChain.doFilter(request, response);
 

@@ -7,10 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "OAuth2 소셜 로그인", description = "OAuth2를 사용한 소셜 로그인 API")
 @RestController
@@ -27,7 +24,7 @@ public class OAuth2Controller {
             responseCode = "200",
             description = "소셜 로그인 페이지입니다."
     )
-    @GetMapping("/authorization/{social}")
+    @PostMapping("/authorization/{social}")
     public ResponseEntity<String> socialLogin(@PathVariable String social) {
         // 로직은 해당 소셜 미디어에 대한 로그인 처리를 구현하면 됩니다.
         return ResponseEntity.ok(social + " 로그인을 수행해주세요");
