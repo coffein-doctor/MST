@@ -39,8 +39,7 @@ public class SecurityConfig {
 
     // 허용 주소
     private static final String[] WHITE_LIST = {
-//            "/", "/**",
-//            "/users/**",
+            "/users/**",
             "/login/**", "/oauth2/**",
             "/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs", "/api-docs/**"
     };

@@ -24,7 +24,7 @@ public interface UserService {
     boolean isUserExistsByEmail(String email);
     boolean isUserExistsByUsername(String username);
 
-    /** 회원 상태 **/
+    /** 회원 가입 상태 **/
     UserStatus getUserStatusByUsername(String username);
 
 }

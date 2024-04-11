@@ -5,6 +5,7 @@ import com.caffeinedoctor.userservice.dto.response.oauth2.CustomOAuth2User;
 import com.caffeinedoctor.userservice.dto.response.oauth2.KakaoOAuth2Response;
 import com.caffeinedoctor.userservice.dto.response.oauth2.OAuth2Response;
 import com.caffeinedoctor.userservice.dto.response.oauth2.OAuth2UserResponseDto;
+import com.caffeinedoctor.userservice.enums.UserStatus;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -71,7 +72,7 @@ public class CustomOAuth2UserServiceImpl extends DefaultOAuth2UserService {
         // 이메일과 유저아이디로 두번 검증
         if (userExistsByEmail && userExistsByUsername) {
             //기존 회원인 경우
-            log.info("EXISTING_USER");
+            log.info(String.valueOf(userService.getUserStatusByUsername(username)));
             // 프로필 이미지, 로그인 시간 갱신
             userService.socialLogin(oAuth2Response.getEmail(), oAuth2Response.getProfileImageUrl());
 
