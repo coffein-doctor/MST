@@ -1,6 +1,7 @@
 package com.caffeinedoctor.userservice.controller;
 
 import com.caffeinedoctor.userservice.dto.request.user.UserInfoRequestDto;
+import com.caffeinedoctor.userservice.dto.response.oauth2.CustomOAuth2User;
 import com.caffeinedoctor.userservice.entitiy.User;
 import com.caffeinedoctor.userservice.enums.UserStatus;
 import com.caffeinedoctor.userservice.service.UserService;
@@ -16,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -60,14 +62,19 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "사용자 상태를 찾을 수 없음")
     })
     @GetMapping("/status")
-    public ResponseEntity<String> getUserStatus(@AuthenticationPrincipal UserDetails userDetails) {
-        // 현재 사용자 정보를 받아옴
-        String username = userDetails.getUsername();
-        System.out.println(username);
-        System.out.println(userDetails);
+    public ResponseEntity<String> getUserStatus(@AuthenticationPrincipal CustomOAuth2User oauth2User) {
+        // 인증된 사용자인지 확인
+        if (oauth2User == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
+        }
 
-        // 유저 이름을 사용하여 해당 유저의 상태 가져오기
+        // 사용자 이름 가져오기
+        String username = oauth2User.getName();
+
+        // 사용자 이름을 사용하여 상태 가져오기
         UserStatus userStatus = userService.getUserStatusByUsername(username);
+
+        // 상태가 없는 경우 404 에러 반환
         if (userStatus == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User status not found");
         }
