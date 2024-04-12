@@ -53,8 +53,8 @@ public class UserController {
     }
 
     @Operation(
-            summary = "유저의 상태",
-            description = "특정 사용자의 상태를 가져옵니다."
+            summary = "회원 가입 상태",
+            description = "특정 사용자의 회원 상태를 가져옵니다."
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공적으로 상태를 가져옴"),
