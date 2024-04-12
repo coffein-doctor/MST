@@ -9,12 +9,8 @@ import lombok.Getter;
 public class OAuth2UserResponseDto {
 
     private String role;
-    @NotBlank(message = "username(loginID) must not be blank")
     private String username;
-    @NotBlank(message = "Email must not be blank")
-    @Email(message = "Invalid email format")
     private String email;
-    @NotBlank(message = "profileImageUrl must not be blank")
     private String profileImageUrl;
 
     @Builder

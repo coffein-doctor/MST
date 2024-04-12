@@ -19,11 +19,13 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Slf4j
 public class JWTFilter extends OncePerRequestFilter {
-
+    //jwt 검증 로직
     private final JWTUtil jwtUtil;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        log.info("JWT 검증 시작");
+
         //필터 위치에 따라 OAuth2 인증을 진행하는 필터보다 JWTFilter가 앞에 존재하는 경우 에러 발생
         String requestUri = request.getRequestURI();
         //JWTFilter 내부에 if문을 통해 특정 경로 요청은 넘어가도록 수정
@@ -80,9 +82,6 @@ public class JWTFilter extends OncePerRequestFilter {
         OAuth2UserResponseDto userDto = OAuth2UserResponseDto.builder()
                 .role(role)
                 .username(username)
-//                .userType(userType)
-//                .email(oAuth2Response.getEmail())
-//                .profileImageUrl(oAuth2Response.getProfileImageUrl())
                 .build();
 
         //UserDetails에 회원 정보 객체 담기

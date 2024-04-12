@@ -16,6 +16,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -39,8 +40,9 @@ public class SecurityConfig {
 
     // 허용 주소
     private static final String[] WHITE_LIST = {
-            "/users/**",
+//            "/users/**",
             "/login/**", "/oauth2/**",
+            "/swagger-ui/index.html/**",
             "/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs", "/api-docs/**"
     };
 
@@ -55,6 +57,7 @@ public class SecurityConfig {
     @Bean
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
 
+
         //jwt를 위한 설정
         http
                 .cors(corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
@@ -64,7 +67,7 @@ public class SecurityConfig {
 
                         CorsConfiguration configuration = new CorsConfiguration();
                         // 프론트 서버 주소
-                        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
+//                        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
                         // get, post, ... 모든 요청에 허용
                         configuration.setAllowedMethods(Collections.singletonList("*"));
                         configuration.setAllowCredentials(true);
@@ -101,9 +104,6 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((authorize) -> authorize
                     .requestMatchers(WHITE_LIST).permitAll()
-                    // 모든 요청에 대해 접근 제어 -> 주어진 IP 주소로부터의 요청만을 허용 (내 IP)
-                    .requestMatchers("/**").access(
-                            new WebExpressionAuthorizationManager("hasIpAddress('127.0.0.1') or hasIpAddress('3.36.123.194')"))
                     .anyRequest().authenticated() // 위를 제외한 다른 요청은 모두 인증해야돼
 //                    .requestMatchers("/", "/oauth2/**", "/user").permitAll()
 //                    .requestMatchers(new AntPathRequestMatcher("/user", "POST")).permitAll()
@@ -112,8 +112,8 @@ public class SecurityConfig {
 
         //JWTFilter 추가
         http
-//                .addFilterAfter(new JWTFilter(jwtUtil), OAuth2LoginAuthenticationFilter.class);
-                .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
+                .addFilterAfter(new JWTFilter(jwtUtil), OAuth2LoginAuthenticationFilter.class);
+//                .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
         //oauth2 로그인
         http
