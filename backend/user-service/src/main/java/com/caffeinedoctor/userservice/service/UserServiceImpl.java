@@ -66,9 +66,9 @@ public class UserServiceImpl implements UserService {
     /** 회원가입 시 추가 정보 등록 **/
     @Override
     @Transactional // 기본: false (true면 데이터 변경이 안된다.)
-    public Long registerUserInfo(@Valid UserInfoRequestDto userDto) {
+    public Long registerUserInfo(String username, @Valid UserInfoRequestDto userDto) {
         // 이메일로 사용자를 찾습니다.
-        User user = userRepository.findByEmail(userDto.getEmail())
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
         user.updateBirth(userDto.getBirth());

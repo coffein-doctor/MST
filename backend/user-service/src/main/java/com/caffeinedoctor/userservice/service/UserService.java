@@ -4,6 +4,7 @@ import com.caffeinedoctor.userservice.dto.socialLoginDto;
 import com.caffeinedoctor.userservice.dto.request.user.UserInfoRequestDto;
 import com.caffeinedoctor.userservice.entitiy.User;
 import com.caffeinedoctor.userservice.enums.UserStatus;
+import jakarta.validation.Valid;
 
 import java.util.Optional;
 
@@ -15,7 +16,7 @@ public interface UserService {
     Long socialLogin(String userEmail, String newProfileImageUrl);
 
     /** 회원정보등록**/
-    Long registerUserInfo(UserInfoRequestDto userDto);
+    Long registerUserInfo(String username, UserInfoRequestDto userDto);
 
     /** 회원조회 **/
     Optional<User> findOne(Long userId);

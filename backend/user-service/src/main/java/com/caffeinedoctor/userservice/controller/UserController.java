@@ -2,7 +2,6 @@ package com.caffeinedoctor.userservice.controller;
 
 import com.caffeinedoctor.userservice.dto.request.user.UserInfoRequestDto;
 import com.caffeinedoctor.userservice.dto.response.oauth2.CustomOAuth2User;
-import com.caffeinedoctor.userservice.entitiy.User;
 import com.caffeinedoctor.userservice.enums.UserStatus;
 import com.caffeinedoctor.userservice.service.UserService;
 import com.caffeinedoctor.userservice.dto.GreetingDto;
@@ -10,16 +9,13 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "User", description = "User API")
@@ -39,17 +35,23 @@ public class UserController {
 //    }
     @Operation(
             summary = "회원가입",
-            description = "추가 정보를 입력하여 회원가입을 합니다."
+            description = "추가 등록 정보를 입력하여 회원가입을 합니다."
     )
     @ApiResponse(
             responseCode = "200",
             description = "회원가입에 성공하였습니다."
     )
     @PostMapping("/signup")
-    public ResponseEntity<Long> registerUserInfo(@Valid @RequestBody UserInfoRequestDto userDto) {
-        log.info(String.valueOf(userDto.getEmail()));
-        Long userId = userService.registerUserInfo(userDto);
-        return ResponseEntity.ok(userId);
+    public ResponseEntity<String> registerUserInfo(@AuthenticationPrincipal CustomOAuth2User oauth2User, @Valid @RequestBody UserInfoRequestDto userDto) {
+        // 인증된 사용자인지 확인
+        if (oauth2User == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
+        }
+        // 사용자 이름 가져오기
+        String username = oauth2User.getName();
+
+        Long userId = userService.registerUserInfo(username, userDto);
+        return ResponseEntity.ok(String.valueOf(userId));
     }
 
     @Operation(
@@ -67,18 +69,14 @@ public class UserController {
         if (oauth2User == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
         }
-
         // 사용자 이름 가져오기
         String username = oauth2User.getName();
-
         // 사용자 이름을 사용하여 상태 가져오기
         UserStatus userStatus = userService.getUserStatusByUsername(username);
-
         // 상태가 없는 경우 404 에러 반환
         if (userStatus == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User status not found");
         }
-
         return ResponseEntity.ok(userStatus.toString());
     }
 

@@ -16,10 +16,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class UserInfoRequestDto {
 
-    @NotBlank(message = "Email must not be blank")
-    @Email(message = "Invalid email format")
-    private String email;
-
     @NotBlank(message = "Nickname must not be blank")
     private String nickname;
 
