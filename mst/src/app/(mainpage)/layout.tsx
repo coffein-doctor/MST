@@ -30,7 +30,7 @@ export default function MainPageLayout({
     return true;
   };
 
-  console.log(pathname);
+
 
   return (
     <div>
