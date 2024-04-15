@@ -33,7 +33,7 @@ spring:
         registration:
           kakao:
             client-id: 4c2e4d4852cafb55e5d18db0521ecee3
-            redirect-uri: http://localhost:8081/login/oauth2/code/kakao # http://localhost:8081/login/oauth2/code/kakao
+            redirect-uri: http://3.36.123.194:8081/login/oauth2/code/kakao # http://localhost:8081/login/oauth2/code/kakao
 #            redirect-uri: {baseUrl}/login/oauth2/code/{registrationId} # http://localhost:8081/login/oauth2/code/kakao
             client-authentication-method: client_secret_post
             client-secret: NkzavTQYRPwGRFgbWHTtLxc7Zsr2Ncuf
@@ -80,7 +80,7 @@ eureka:
     fetch-registry: true
     # eureka 서버 주소에 마이크로서비스 정보 등록 (접속아이디, 비밀번호)
     service-url:
-      defaultZone: http://admin:1234mst@localhost:8761/eureka
+      defaultZone: http://admin:1234mst@3.36.123.194:8761/eureka
 
 greeting:
   message: Welcome to the MST Project.
