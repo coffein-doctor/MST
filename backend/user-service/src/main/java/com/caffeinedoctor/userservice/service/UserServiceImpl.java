@@ -74,6 +74,7 @@ public class UserServiceImpl implements UserService {
         user.updateBirth(userDto.getBirth());
         user.updateNickname(userDto.getNickname());
         user.updateGender(userDto.getGender());
+        user.updateActivityLevel(userDto.getActivityLevel());
         user.updateHeight(userDto.getHeight());
         user.updateWeight(userDto.getWeight());
         user.updateIntroduction((userDto.getIntroduction()));

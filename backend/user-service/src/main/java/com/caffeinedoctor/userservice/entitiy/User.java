@@ -2,6 +2,7 @@ package com.caffeinedoctor.userservice.entitiy;
 
 
 
+import com.caffeinedoctor.userservice.enums.ActivityLevel;
 import com.caffeinedoctor.userservice.enums.Gender;
 import com.caffeinedoctor.userservice.enums.UserStatus;
 import jakarta.persistence.*;
@@ -41,6 +42,10 @@ public class User {
     private int height;
 
     private int weight;
+
+    // 활동량 필드 추가
+    @Enumerated(EnumType.STRING)
+    private ActivityLevel activityLevel;
 
     @Column(name = "profile_image_url")
     private String profileImageUrl;
@@ -103,4 +108,8 @@ public class User {
         this.introduction = introduction;
     }
 
+    // 활동량 업데이트 메서드
+    public void updateActivityLevel(ActivityLevel activityLevel) {
+        this.activityLevel = activityLevel;
+    }
 }
