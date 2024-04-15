@@ -14,15 +14,15 @@ public class FilterConfig {
                 .route(r -> r.path("/user-service/**")
                         .filters(f -> f.addRequestHeader("user-request", "user-request-header")
                                 .addResponseHeader("user-response", "user-response-header"))
-                        .uri("http://localhost:8081"))
+                        .uri("http://3.36.123.194:8081"))
                 .route(r -> r.path("/beverage-service/**")
                         .filters(f -> f.addRequestHeader("beverage-request", "beverage-request-header")
                                 .addResponseHeader("beverage-response", "beverage-response-header"))
-                        .uri("http://localhost:8082"))
+                        .uri("http://3.36.123.194:8082"))
                 .route(r -> r.path("/community-service/**")
                         .filters(f -> f.addRequestHeader("community-request", "community-request-header")
                                 .addResponseHeader("community-response", "community-response-header"))
-                        .uri("http://localhost:8083"))
+                        .uri("http://3.36.123.194:8083"))
                 .build();
     }
 }

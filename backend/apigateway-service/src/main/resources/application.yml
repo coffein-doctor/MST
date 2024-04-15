@@ -10,7 +10,7 @@ eureka:
     fetch-registry: true
     # eureka 서버 주소에 마이크로서비스 정보 등록
     service-url:
-      defaultZone: http://admin:1234mst@localhost:8761/eureka
+      defaultZone: http://admin:1234mst@3.36.123.194:8761/eureka
 
 spring:
   application:
