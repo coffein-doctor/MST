@@ -121,11 +121,10 @@ public class OAuthServiceImpl implements OAuthService {
         }
 
         log.info(kakaoUserInfo.getKakaoAccount().getEmail());
-        log.info(kakaoUserInfo.getConnectedAt());
 
         // 이메일을 통해 회원이 존재하는지 확인 (신규인지, 기존회원인지 체크)
         boolean userExists = userService.isUserExistsByEmail(kakaoUserInfo.getKakaoAccount().getEmail());
-
+        String username = "kakao_"+kakaoUserInfo.getId();
         UserStatus userStatus = UserStatus.NEW_USER;
         if (userExists) {
             // 기존 회원으로 처리하는 로직
@@ -133,9 +132,8 @@ public class OAuthServiceImpl implements OAuthService {
         }
 
         KakaoLoginResponseDto userDto = KakaoLoginResponseDto.builder()
-                .kakaoId(kakaoUserInfo.getId())
+                .username(username)
                 .userStatus(userStatus)
-                .connectedAt(kakaoUserInfo.getConnectedAt())
                 .email(kakaoUserInfo.getKakaoAccount().getEmail())
                 .profileImageUrl(kakaoUserInfo.getKakaoAccount().getProfile().getProfileImageUrl())
                 .build();

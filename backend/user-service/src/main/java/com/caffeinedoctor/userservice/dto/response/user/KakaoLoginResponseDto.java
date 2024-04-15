@@ -10,18 +10,16 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class KakaoLoginResponseDto {
-    private long kakaoId;
+    private String username;
     @Enumerated(EnumType.STRING)
     private UserStatus userStatus;
-    private String connectedAt;
     private String email;
     private String profileImageUrl;
 
     @Builder
-    private KakaoLoginResponseDto(long kakaoId, UserStatus userStatus, String email, String connectedAt, String profileImageUrl) {
-        this.kakaoId = kakaoId;
+    private KakaoLoginResponseDto(String username, UserStatus userStatus, String email, String profileImageUrl) {
+        this.username = username;
         this.userStatus = userStatus;
-        this.connectedAt = connectedAt;
         this.email = email;
         this.profileImageUrl = profileImageUrl;
     }

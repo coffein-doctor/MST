@@ -20,11 +20,7 @@ public class OAuth2Controller {
             summary = "소셜 로그인",
             description = "소셜 로그인 페이지로 이동합니다. 현재는 '카카오 로그인'이 구현되어 있습니다."
     )
-    @ApiResponse(
-            responseCode = "200",
-            description = "소셜 로그인 페이지입니다."
-    )
-    @PostMapping("/authorization/{social}")
+    @GetMapping("/authorization/{social}")
     public ResponseEntity<String> socialLogin(@PathVariable String social) {
         // 로직은 해당 소셜 미디어에 대한 로그인 처리를 구현하면 됩니다.
         return ResponseEntity.ok(social + " 로그인을 수행해주세요");
