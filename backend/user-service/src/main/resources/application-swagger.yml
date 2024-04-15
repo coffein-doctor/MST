@@ -15,4 +15,3 @@ springdoc:
 
   # API에서 사용할 기본 미디어 유형을 application/json으로 설정한다.
   default-consumes-media-type: application/json
-  default-produces-media-type: application/json

@@ -44,8 +44,8 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         //쿠키 방식으로 토큰 전달
         response.addCookie(createCookie("Authorization", token));
         //프론트 특정 url 넣기
-        response.sendRedirect("http://localhost:3000/");
-//        response.sendRedirect("http://localhost:8081/users/welcome");
+//        response.sendRedirect("http://localhost:3000/");
+        response.sendRedirect("http://3.36.123.194:8081:8081/users/welcome");
     }
 
     //쿠키 만들기
