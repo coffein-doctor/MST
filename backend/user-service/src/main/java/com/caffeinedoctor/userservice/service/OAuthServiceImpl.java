@@ -1,6 +1,6 @@
 package com.caffeinedoctor.userservice.service;
 
-import com.caffeinedoctor.userservice.dto.enums.UserType;
+import com.caffeinedoctor.userservice.enums.UserStatus;
 import com.caffeinedoctor.userservice.dto.response.user.KakaoOAuthTokenResponseDto;
 import com.caffeinedoctor.userservice.dto.response.user.KakaoUserInfoResponseDto;
 import com.caffeinedoctor.userservice.dto.response.user.KakaoLoginResponseDto;
@@ -55,7 +55,7 @@ public class OAuthServiceImpl implements OAuthService {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
         params.add("client_id", "4c2e4d4852cafb55e5d18db0521ecee3");
-        params.add("redirect_uri", "http://localhost:8081/oauth/callback/kakao");
+        params.add("redirect_uri", "http://3.36.123.194:8081/oauth/callback/kakao");
         params.add("code", code);
 
         // HttpHeader와 HttpBody를 하나의 오브젝트에 담기 (exchange에는 HttpEntity 오브젝트를 넣어야하기 때문)
@@ -121,18 +121,22 @@ public class OAuthServiceImpl implements OAuthService {
         }
 
         log.info(kakaoUserInfo.getKakaoAccount().getEmail());
-        log.info(kakaoUserInfo.getConnectedAt());
-        // 신규인지, 기존회원인지 체크
-        UserType userType = userService.checkUserTypeByEmail(kakaoUserInfo.getKakaoAccount().getEmail());
+
+        // 이메일을 통해 회원이 존재하는지 확인 (신규인지, 기존회원인지 체크)
+        boolean userExists = userService.isUserExistsByEmail(kakaoUserInfo.getKakaoAccount().getEmail());
+        String username = "kakao_"+kakaoUserInfo.getId();
+        UserStatus userStatus = UserStatus.NEW_USER;
+        if (userExists) {
+            // 기존 회원으로 처리하는 로직
+            userStatus = UserStatus.EXISTING_USER;
+        }
 
         KakaoLoginResponseDto userDto = KakaoLoginResponseDto.builder()
-                .kakaoId(kakaoUserInfo.getId())
-                .userType(userType)
-                .connectedAt(kakaoUserInfo.getConnectedAt())
+                .username(username)
+                .userStatus(userStatus)
                 .email(kakaoUserInfo.getKakaoAccount().getEmail())
                 .profileImageUrl(kakaoUserInfo.getKakaoAccount().getProfile().getProfileImageUrl())
                 .build();
-
 
         return userDto;
     }

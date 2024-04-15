@@ -1,6 +1,6 @@
 package com.caffeinedoctor.userservice.dto.response.user;
 
-import com.caffeinedoctor.userservice.dto.enums.UserType;
+import com.caffeinedoctor.userservice.enums.UserStatus;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.Builder;
@@ -10,18 +10,16 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class KakaoLoginResponseDto {
-    private long kakaoId;
+    private String username;
     @Enumerated(EnumType.STRING)
-    private UserType userType;
-    private String connectedAt;
+    private UserStatus userStatus;
     private String email;
     private String profileImageUrl;
 
     @Builder
-    private KakaoLoginResponseDto(long kakaoId, UserType userType, String email, String connectedAt, String profileImageUrl) {
-        this.kakaoId = kakaoId;
-        this.userType = userType;
-        this.connectedAt = connectedAt;
+    private KakaoLoginResponseDto(String username, UserStatus userStatus, String email, String profileImageUrl) {
+        this.username = username;
+        this.userStatus = userStatus;
         this.email = email;
         this.profileImageUrl = profileImageUrl;
     }

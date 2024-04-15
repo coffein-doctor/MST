@@ -1,18 +1,31 @@
 package com.caffeinedoctor.userservice.service;
 
-import com.caffeinedoctor.userservice.dto.enums.UserType;
-import com.caffeinedoctor.userservice.dto.request.user.UserRequestDto;
+import com.caffeinedoctor.userservice.dto.socialLoginDto;
+import com.caffeinedoctor.userservice.dto.request.user.UserInfoRequestDto;
 import com.caffeinedoctor.userservice.entitiy.User;
+import com.caffeinedoctor.userservice.enums.UserStatus;
+import jakarta.validation.Valid;
 
 import java.util.Optional;
 
 public interface UserService {
     /** 회원가입 **/
-    Long signUp(UserRequestDto userDto);
+    Long socialLoginSignUp(socialLoginDto userDto);
+
+    /** 이미지 프로필, 로그인 시간 업데이트 **/
+    Long socialLogin(String userEmail, String newProfileImageUrl);
+
+    /** 회원정보등록**/
+    Long registerUserInfo(String username, UserInfoRequestDto userDto);
 
     /** 회원조회 **/
     Optional<User> findOne(Long userId);
 
-    /** 회원타입 **/
-    UserType checkUserTypeByEmail(String email);
+    /** 회원 찾기 **/
+    boolean isUserExistsByEmail(String email);
+    boolean isUserExistsByUsername(String username);
+
+    /** 회원 가입 상태 **/
+    UserStatus getUserStatusByUsername(String username);
+
 }
