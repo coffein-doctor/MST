@@ -55,7 +55,8 @@ public class OAuthServiceImpl implements OAuthService {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
         params.add("client_id", "4c2e4d4852cafb55e5d18db0521ecee3");
-        params.add("redirect_uri", "http://3.36.123.194:8081/oauth/callback/kakao");
+//        params.add("redirect_uri", "http://3.36.123.194:8081/oauth/callback/kakao");
+        params.add("redirect_uri", "http://localhost:8081/oauth/callback/kakao");
         params.add("code", code);
 
         // HttpHeader와 HttpBody를 하나의 오브젝트에 담기 (exchange에는 HttpEntity 오브젝트를 넣어야하기 때문)

@@ -1,4 +1,4 @@
-package com.caffeinedoctor.userservice.security;
+package com.caffeinedoctor.userservice.config;
 
 
 import com.caffeinedoctor.userservice.security.jwt.JWTFilter;
