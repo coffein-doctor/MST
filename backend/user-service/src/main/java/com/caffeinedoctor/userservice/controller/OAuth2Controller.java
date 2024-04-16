@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.*;
 public class OAuth2Controller {
 
     @Operation(
-            summary = "소셜 로그인",
-            description = "소셜 로그인 페이지로 이동합니다. 현재는 '카카오 로그인'이 구현되어 있습니다."
+            summary = "소셜 로그인 창으로 연결",
+            description = "로그인 경로에 대한 하이퍼링크를 실행하면 소셜 로그인창으로 이동합니다. 현재는 '카카오 로그인'이 구현되어 있습니다."
     )
     @GetMapping("/authorization/{social}")
-    public ResponseEntity<String> socialLogin(@PathVariable String social) {
-        // 로직은 해당 소셜 미디어에 대한 로그인 처리를 구현하면 됩니다.
-        return ResponseEntity.ok(social + " 로그인을 수행해주세요");
+    public ResponseEntity<Void> socialLogin(@PathVariable String social) {
+        // Swagger에 보여주기 위한 API로, 소셜 로그인 경로에 대한 하이퍼링크를 실행하면 소셜 로그인 창으로 이동합니다.
+        return ResponseEntity.ok().build();
     }
 }

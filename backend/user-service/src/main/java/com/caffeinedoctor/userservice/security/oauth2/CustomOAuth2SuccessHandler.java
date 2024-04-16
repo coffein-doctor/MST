@@ -27,10 +27,11 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
     // 로그인이 성공하면 동작
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        log.info("로그인 성공");
+        log.info("인증 완료! 소셜 로그인 성공");
+        log.info("쿠키에 JWT 토큰 저장 로직 수행");
         //OAuth2User
         CustomOAuth2User customUserDetails = (CustomOAuth2User) authentication.getPrincipal();
-        //username
+        //username: kakao_12345
         String username = customUserDetails.getName();
         //role
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
@@ -41,11 +42,15 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         //jwt 만들기 (유저이름, 역할, 토큰이 살아있는 시간) : 60초 * 60분 * 60시간 = 2.5일
         String token = jwtUtil.createJwt(username, role, 60*60*60L);
         log.info("JWT 토큰 생성: " + token);
+        log.info("인가 권한을 가진 JWT 단일 토큰으로 발급 완료!");
         //쿠키 방식으로 토큰 전달
         response.addCookie(createCookie("Authorization", token));
-        //프론트 특정 url 넣기
+        //프론트 특정 url 넣기 (로그인 완료 페이지, 회원가입 여부 확인 페이지)
 //        response.sendRedirect("http://localhost:3000/");
-//        response.sendRedirect("http://3.36.123.194:8081:8081/users/welcome");
+        //테스트 url
+//        response.sendRedirect("http://3.36.123.194:8081/users/welcome");
+        response.sendRedirect("http:/localhost:8081/users/welcome");
+        log.info("로그인 성공! 쿠키에 JWT 저장");
     }
 
     //쿠키 만들기
