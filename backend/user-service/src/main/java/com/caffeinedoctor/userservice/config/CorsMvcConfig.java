@@ -12,11 +12,11 @@ public class CorsMvcConfig implements WebMvcConfigurer {
         //모든 경로에 매핑
         corsRegistry.addMapping("/**")
                 .exposedHeaders("Set-Cookie") //쿠키 헤더로 전달
-                .allowedOrigins("*")
+//                .allowedOrigins("*")
                 .allowedMethods("*")
                 .allowedHeaders("*")
 //                .allowCredentials(true)
-//                .allowedOrigins("http://localhost:3000") //프론트 서버 주소만 허용
+                .allowedOrigins("http://localhost:3000") //프론트 서버 주소만 허용
         ;
     }
 }
