@@ -32,3 +32,10 @@ eureka:
 
 greeting:
   message: Welcome to the MST Project.
+
+file:
+  dir: C:\files\mst\
+
+app:
+  uri:
+    scheme: http

@@ -10,8 +10,6 @@ import com.caffeinedoctor.beverageservice.repository.BeverageBasicRepository;
 import com.caffeinedoctor.beverageservice.repository.BeverageCustomRepository;
 import com.caffeinedoctor.beverageservice.repository.BeverageRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

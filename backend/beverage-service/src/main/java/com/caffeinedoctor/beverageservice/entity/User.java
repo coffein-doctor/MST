@@ -29,7 +29,7 @@ public class User {
 
 //    @OneToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "profile")
-//    private DateFile profile;
+//    private DataFile profile;
 
     @Column
     @CreatedDate
