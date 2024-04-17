@@ -46,7 +46,7 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         //쿠키 방식으로 토큰 전달
         response.addCookie(createCookie("Authorization", token));
         //프론트 특정 url 넣기 (로그인 완료 페이지, 회원가입 여부 확인 페이지)
-        response.sendRedirect("http://localhost:3000/");
+        response.sendRedirect("http://localhost:3000/signup");
         //테스트 url
 //        response.sendRedirect("http://3.36.123.194:8081/users/welcome");
         log.info("로그인 성공! 쿠키에 JWT 저장");
