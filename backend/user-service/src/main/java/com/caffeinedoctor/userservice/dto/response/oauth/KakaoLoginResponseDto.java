@@ -1,4 +1,4 @@
-package com.caffeinedoctor.userservice.dto.response.user;
+package com.caffeinedoctor.userservice.dto.response.oauth;
 
 import com.caffeinedoctor.userservice.enums.UserStatus;
 import jakarta.persistence.EnumType;

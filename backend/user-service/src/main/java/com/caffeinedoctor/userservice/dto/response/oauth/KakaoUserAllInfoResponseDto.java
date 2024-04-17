@@ -1,4 +1,4 @@
-package com.caffeinedoctor.userservice.dto.response.user;
+package com.caffeinedoctor.userservice.dto.response.oauth;
 import lombok.Data;
 
 @Data

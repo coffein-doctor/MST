@@ -1,6 +1,6 @@
 package com.caffeinedoctor.userservice.controller;
 
-import com.caffeinedoctor.userservice.dto.response.user.KakaoLoginResponseDto;
+import com.caffeinedoctor.userservice.dto.response.oauth.KakaoLoginResponseDto;
 import com.caffeinedoctor.userservice.service.OAuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

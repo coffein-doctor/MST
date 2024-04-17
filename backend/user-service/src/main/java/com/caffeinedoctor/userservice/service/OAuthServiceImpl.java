@@ -1,9 +1,9 @@
 package com.caffeinedoctor.userservice.service;
 
 import com.caffeinedoctor.userservice.enums.UserStatus;
-import com.caffeinedoctor.userservice.dto.response.user.KakaoOAuthTokenResponseDto;
-import com.caffeinedoctor.userservice.dto.response.user.KakaoUserInfoResponseDto;
-import com.caffeinedoctor.userservice.dto.response.user.KakaoLoginResponseDto;
+import com.caffeinedoctor.userservice.dto.response.oauth.KakaoOAuthTokenResponseDto;
+import com.caffeinedoctor.userservice.dto.response.oauth.KakaoUserInfoResponseDto;
+import com.caffeinedoctor.userservice.dto.response.oauth.KakaoLoginResponseDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;

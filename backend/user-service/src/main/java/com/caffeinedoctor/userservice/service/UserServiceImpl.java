@@ -1,5 +1,6 @@
 package com.caffeinedoctor.userservice.service;
 
+import com.caffeinedoctor.userservice.dto.response.user.UserDetailsDto;
 import com.caffeinedoctor.userservice.dto.socialLoginDto;
 import com.caffeinedoctor.userservice.dto.request.user.UserInfoRequestDto;
 import com.caffeinedoctor.userservice.entitiy.User;
@@ -8,6 +9,7 @@ import com.caffeinedoctor.userservice.repository.UserRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,38 +65,84 @@ public class UserServiceImpl implements UserService {
         return user.getId();
     }
 
-    /** 회원가입 시 추가 정보 등록 **/
+    /** 회원 가입 추가 정보 등록 **/
     @Override
-    @Transactional // 기본: false (true면 데이터 변경이 안된다.)
-    public Long registerUserInfo(String username, @Valid UserInfoRequestDto userDto) {
-        // 이메일로 사용자를 찾습니다.
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+    @Transactional
+    public Long createUser(String username, UserInfoRequestDto userDto) {
+        User user = findUserByUsername(username);
+        // 사용자 정보 업데이트
+        updateUserDetails(user, userDto);
+        // 사용자 상태 업데이트 (우리 서비스에 회원 가입 완료)
+        user.updateUserStatus();
+        userRepository.save(user);
+        return user.getId();
+    }
 
+    /**
+     * 회원 정보 수정 추가 정보 등록
+     **/
+    @Override
+    @Transactional
+    public UserDetailsDto updateUser(Long userId, String username, UserInfoRequestDto userDto) {
+        User user = findUserByUsername(username);
+        // 찾은 사용자의 userId와 입력받은 userId가 일치하는지 확인합니다.
+        if (!user.getId().equals(userId)) {
+            throw new AccessDeniedException("로그인된 사용자 Id와 일치하는 사용자 Id가 아닙니다.");
+        }
+        // 사용자 정보 업데이트
+        updateUserDetails(user, userDto);
+        userRepository.save(user);
+        System.out.println("오니");
+        return userDetailsDto(user);
+    }
+
+    /** 회원 정보 디테일 dto **/
+    private UserDetailsDto userDetailsDto(User user) {
+        return UserDetailsDto.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .status(user.getStatus())
+                .nickname(user.getNickname())
+                .birth(user.getBirth())
+                .gender(user.getGender())
+                .height(user.getHeight())
+                .weight(user.getWeight())
+                .activityLevel(user.getActivityLevel())
+                .profileImageUrl(user.getProfileImageUrl())
+                .introduction(user.getIntroduction())
+                .build();
+    }
+
+    /** 추가 정보 등록 **/
+    // 사용자 정보 업데이트 로직을 별도의 메서드로 추출합니다.
+    private void updateUserDetails(User user, UserInfoRequestDto userDto) {
         user.updateBirth(userDto.getBirth());
         user.updateNickname(userDto.getNickname());
         user.updateGender(userDto.getGender());
         user.updateActivityLevel(userDto.getActivityLevel());
         user.updateHeight(userDto.getHeight());
         user.updateWeight(userDto.getWeight());
-        user.updateIntroduction((userDto.getIntroduction()));
-        // 사용자 상태 업데이트
-        user.updateUserStatus();
-
-        userRepository.save(user);
-
-        return user.getId();
+        user.updateIntroduction(userDto.getIntroduction());
     }
+
 
     /** 회원 상태: 신규 or 기존 **/
     @Override
     public UserStatus getUserStatusByUsername(String username) {
         // 유저 이름을 사용하여 해당 유저를 데이터베이스에서 조회
-        User user = userRepository.findByUsername(username)
-        .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+        User user = findUserByUsername(username);
 
         return user.getStatus();
     }
+
+    // 아이디(username)로 사용자를 찾습니다.
+    @Override
+    public User findUserByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+    }
+
 
     @Override
     // 이메일로 사용자가 존재하는지 확인

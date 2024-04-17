@@ -1,6 +1,6 @@
 package com.caffeinedoctor.userservice.service;
 
-import com.caffeinedoctor.userservice.dto.response.user.KakaoLoginResponseDto;
+import com.caffeinedoctor.userservice.dto.response.oauth.KakaoLoginResponseDto;
 
 public interface OAuthService {
 
