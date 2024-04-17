@@ -34,15 +34,15 @@ public class UserController {
 //        this.greeting = greeting;
 //    }
     @Operation(
-            summary = "회원가입",
-            description = "추가 등록 정보를 입력하여 회원가입을 합니다."
+            summary = "회원 가입을 통해 새로운 사용자 생성",
+            description = "추가 등록 정보를 입력하여 새로운 사용자를 생성합니다."
     )
     @ApiResponse(
             responseCode = "200",
             description = "회원가입에 성공하였습니다."
     )
-    @PostMapping("/signup")
-    public ResponseEntity<String> registerUserInfo(@AuthenticationPrincipal CustomOAuth2User oauth2User, @Valid @RequestBody UserInfoRequestDto userDto) {
+    @PostMapping
+    public ResponseEntity<String> createUser(@AuthenticationPrincipal CustomOAuth2User oauth2User, @Valid @RequestBody UserInfoRequestDto userDto) {
         // 인증된 사용자인지 확인
         if (oauth2User == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
@@ -55,8 +55,8 @@ public class UserController {
     }
 
     @Operation(
-            summary = "회원 가입 상태",
-            description = "특정 사용자의 회원 상태를 가져옵니다."
+            summary = "회원 가입 상태 조회",
+            description = "소셜 로그인에 성공한 현재 사용자의 회원 가입 상태를 가져옵니다."
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공적으로 상태를 가져옴"),
