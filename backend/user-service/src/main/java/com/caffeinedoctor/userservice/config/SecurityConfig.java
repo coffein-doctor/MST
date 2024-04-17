@@ -70,8 +70,8 @@ public class SecurityConfig {
                         CorsConfiguration configuration = new CorsConfiguration();
                         // 프론트 서버 주소
                         configuration.setAllowedOrigins(Collections.singletonList("http://localhost:63342"));
-                        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
-                        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:8081"));
+//                        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
+//                        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:8081"));
                         // get, post, ... 모든 요청에 허용
                         configuration.setAllowedMethods(Collections.singletonList("*"));
                         configuration.setAllowCredentials(true);
