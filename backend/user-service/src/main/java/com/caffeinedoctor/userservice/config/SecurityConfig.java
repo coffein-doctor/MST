@@ -25,6 +25,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 // 시큐리티 커스텀 config를 작성하여 특정 경로에 대해 접근을 막는다.
@@ -68,16 +69,20 @@ public class SecurityConfig {
 
                         CorsConfiguration configuration = new CorsConfiguration();
                         // 프론트 서버 주소
-//                        configuration.setAllowedOrigins(Collections.singletonList/("http://localhost:3000"));
+                        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:63342"));
+                        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
+                        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:8081"));
                         // get, post, ... 모든 요청에 허용
                         configuration.setAllowedMethods(Collections.singletonList("*"));
                         configuration.setAllowCredentials(true);
                         // 모든 헤더 값 허용
                         configuration.setAllowedHeaders(Collections.singletonList("*"));
-                        configuration.setMaxAge(3600L);
-
+                        // 쿠키의 유효 기간: 2일
+                        configuration.setMaxAge(172800L);
+                        // 노출 헤더
                         configuration.setExposedHeaders(Collections.singletonList("Set-Cookie"));
                         configuration.setExposedHeaders(Collections.singletonList("Authorization"));
+
 
                         return configuration;
                     }
@@ -88,6 +93,7 @@ public class SecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable) //From 로그인 방식 disable - OAuth2 방식
                 .httpBasic(AbstractHttpConfigurer::disable) //HTTP Basic 인증 방식 disable - OAuth2 방식
                 .csrf(AbstractHttpConfigurer::disable)  // CSRF 보안 disable - JWT 방식으로 관리
+//                .cors(AbstractHttpConfigurer::disable)  // CORS 보안 disable
                 .headers(
                         headersConfigurer ->
                                 headersConfigurer
