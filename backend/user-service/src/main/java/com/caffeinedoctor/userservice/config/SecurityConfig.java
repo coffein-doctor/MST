@@ -1,8 +1,9 @@
-package com.caffeinedoctor.userservice.security;
+package com.caffeinedoctor.userservice.config;
 
 
 import com.caffeinedoctor.userservice.security.jwt.JWTFilter;
 import com.caffeinedoctor.userservice.security.jwt.JWTUtil;
+import com.caffeinedoctor.userservice.security.oauth2.CustomOAuth2FailureHandler;
 import com.caffeinedoctor.userservice.security.oauth2.CustomOAuth2SuccessHandler;
 import com.caffeinedoctor.userservice.service.CustomOAuth2UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,12 +36,12 @@ public class SecurityConfig {
 
     private final CustomOAuth2UserServiceImpl customOAuth2UserServiceImpl;
     private final CustomOAuth2SuccessHandler customOAuth2SuccessHandler;
+    private final CustomOAuth2FailureHandler customOAuth2FailureHandler;
     private final JWTUtil jwtUtil;
     private final Environment env;
 
     // 허용 주소
     private static final String[] WHITE_LIST = {
-//            "/users/**",
             "/login/**", "/oauth2/**",
             "/swagger-ui/index.html/**",
             "/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs", "/api-docs/**"
@@ -122,6 +123,8 @@ public class SecurityConfig {
                                 .userService(customOAuth2UserServiceImpl))
                         //로그인 성공하면 jwt 만들기
                         .successHandler(customOAuth2SuccessHandler)
+                        //로그인 인증 실패 후 처리
+                        .failureHandler(customOAuth2FailureHandler)
                 );
 
         return http.build();
