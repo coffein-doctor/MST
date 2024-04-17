@@ -12,8 +12,7 @@ public class CorsMvcConfig implements WebMvcConfigurer {
         //모든 경로에 매핑
         corsRegistry.addMapping("/**")
                 .exposedHeaders("Set-Cookie") //쿠키 헤더로 전달
-//                .allowedOrigins("*")
-                .allowedOriginPatterns("*")
+                .allowedOrigins("*")
                 .allowedMethods("*")
                 .allowedHeaders("*")
 //                .allowCredentials(true)

@@ -92,6 +92,7 @@ public class UserController {
             @ApiResponse(responseCode = "401", description = "인증되지 않은 사용자입니다."),
             @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없습니다.")
     })
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/status")
     public ResponseEntity<String> getUserStatus(@AuthenticationPrincipal CustomOAuth2User oauth2User) {
         // 인증된 사용자인지 확인
