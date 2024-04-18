@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Login with Kakao</title>
+    <!-- Axios CDN 추가 -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+
+<!-- Kakao 로그인 버튼 -->
+<a href="http://localhost:8081/oauth2/authorization/kakao">Kakao로 로그인</a>
+
+<!-- Check User Status 버튼 -->
+<button onclick="checkUserStatus()">Check User Status</button>
+
+<script>
+    // Check User Status 버튼 클릭 시 요청 보내기
+    function checkUserStatus() {
+        // 토큰 값
+        var token = "\n" +
+            "eyJhbGciOiJIUzI1NiJ9.eyJjYXRlZ29yeSI6ImFjY2VzcyIsInVzZXJuYW1lIjoia2FrYW9fMzQxOTI5NjA1NiIsInJvbGUiOiJST0xFX1VTRVIiLCJpYXQiOjE3MTM0NjE2NzEsImV4cCI6MTcxMzQ2MjI3MX0.W2cvpYfQuQerLeJ0xl471SlEt3pg6-3UezJ7xtXs6AY";
+
+        // Axios를 사용하여 서버로 요청 보내기
+        axios.get('http://localhost:8081/users/status', {
+            headers: {
+                'access': token // Authorization 헤더에 토큰 값 담기
+            }
+        })
+            .then(function (response) {
+                // 서버로부터 응답 받았을 때 처리하는 부분
+                console.log("Response:", response.data);
+            })
+            .catch(function (error) {
+                // 오류 발생 시 처리하는 부분
+                console.error("Error:", error);
+            });
+    }
+</script>
+
+</body>
+</html>

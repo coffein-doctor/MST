@@ -38,6 +38,8 @@ public class SecurityConfig {
     // 허용 주소
     private static final String[] WHITE_LIST = {
             "/login/**", "/oauth2/**",
+            "/reissue",
+            // 스웨거
             "/swagger-ui/index.html/**",
             "/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs", "/api-docs/**"
     };

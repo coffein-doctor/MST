@@ -25,7 +25,8 @@ public class CorsConfig {
         // 쿠키의 유효 기간: 2일
         corsConfiguration.setMaxAge(172800L);
         // 노출 헤더
-        corsConfiguration.setExposedHeaders(Arrays.asList("Set-Cookie", "Authorization"));
+        corsConfiguration.setExposedHeaders(Arrays.asList("Set-Cookie", "refresh"));
+//        corsConfiguration.setExposedHeaders(Collections.singletonList("Set-Cookie"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfiguration);
