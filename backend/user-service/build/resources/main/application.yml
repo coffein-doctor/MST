@@ -9,45 +9,50 @@ server:
 spring:
   application:
     name: user-service
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: ${SPRING_DATASOURCE_URL}
-    url: jdbc:mysql://3.36.123.194:3306/mst?useSSL=false&serverTimezone=UTC
-    username: admin
-    password: mst@0117
-  jpa:
-    database: mysql
-    database-platform: org.hibernate.dialect.MySQLDialect
-    # 데이터베이스 스키마를 자동으로 업데이트할지 여부 (db 초기화 전략. create: 기존 테이블 삭제 후 생성)
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        # SQL 쿼리를 로그로 출력할지 여부
-        show-sql: true
-        # JPA의 구현체인 Hibernate가 동작하면서 발생한 SQL의 가독성을 높여준다.
-        format_sql: true
-  security:
-    oauth2:
-      client:
-        registration:
-          kakao:
-            client-id: 4c2e4d4852cafb55e5d18db0521ecee3
-            redirect-uri: http://3.36.123.194:8081/login/oauth2/code/kakao # http://localhost:8081/login/oauth2/code/kakao
-#            redirect-uri: http://localhost:8081/login/oauth2/code/kakao
-#            redirect-uri: {baseUrl}/login/oauth2/code/{registrationId} # http://localhost:8081/login/oauth2/code/kakao
-            client-authentication-method: client_secret_post
-            client-secret: NkzavTQYRPwGRFgbWHTtLxc7Zsr2Ncuf
-            authorization-grant-type: authorization_code
-            scope:
-              - profile_image
-              - account_email
-        provider:
-          kakao:
-            authorization-uri: https://kauth.kakao.com/oauth/authorize
-            token-uri: https://kauth.kakao.com/oauth/token
-            user-info-uri: https://kapi.kakao.com/v2/user/me
-            user-name-attribute: id
+  config:
+    import:
+      - application-oauth.yml
+      - application-datasource.yml
+      - application-secret.yml
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+##    url: ${SPRING_DATASOURCE_URL}
+#    url: jdbc:mysql://3.36.123.194:3306/mst?useSSL=false&serverTimezone=UTC
+#    username: admin
+#    password: mst@0117
+#  jpa:
+#    database: mysql
+#    database-platform: org.hibernate.dialect.MySQLDialect
+#    # 데이터베이스 스키마를 자동으로 업데이트할지 여부 (db 초기화 전략. create: 기존 테이블 삭제 후 생성)
+#    hibernate:
+#      ddl-auto: update
+#    properties:
+#      hibernate:
+#        # SQL 쿼리를 로그로 출력할지 여부
+#        show-sql: true
+#        # JPA의 구현체인 Hibernate가 동작하면서 발생한 SQL의 가독성을 높여준다.
+#        format_sql: true
+#  security:
+#    oauth2:
+#      client:
+#        registration:
+#          kakao:
+#            client-id: 4c2e4d4852cafb55e5d18db0521ecee3
+#            redirect-uri: http://3.36.123.194:8081/login/oauth2/code/kakao # http://localhost:8081/login/oauth2/code/kakao
+##            redirect-uri: http://localhost:8081/login/oauth2/code/kakao
+##            redirect-uri: {baseUrl}/login/oauth2/code/{registrationId} # http://localhost:8081/login/oauth2/code/kakao
+#            client-authentication-method: client_secret_post
+#            client-secret: NkzavTQYRPwGRFgbWHTtLxc7Zsr2Ncuf
+#            authorization-grant-type: authorization_code
+#            scope:
+#              - profile_image
+#              - account_email
+#        provider:
+#          kakao:
+#            authorization-uri: https://kauth.kakao.com/oauth/authorize
+#            token-uri: https://kauth.kakao.com/oauth/token
+#            user-info-uri: https://kapi.kakao.com/v2/user/me
+#            user-name-attribute: id
 #jwt:
 #  token:
 #    secret-key: chadoll
@@ -56,8 +61,8 @@ spring:
 #  refresh-token:
 #    expire-length: 1209600000
 
-jwt:
-  secret: dnflwlqrnlduqenddlrlackehfsjansjanrnldudnj
+#jwt:
+#  secret: dnflwlqrnlduqenddlrlackehfsjansjanrnldudnj
 
 logging:
   level:
