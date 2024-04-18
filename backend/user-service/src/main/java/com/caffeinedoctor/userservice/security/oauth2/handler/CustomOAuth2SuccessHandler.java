@@ -1,5 +1,8 @@
 package com.caffeinedoctor.userservice.security.oauth2.handler;
 
+import com.caffeinedoctor.userservice.entitiy.Refresh;
+import com.caffeinedoctor.userservice.entitiy.User;
+import com.caffeinedoctor.userservice.repository.RefreshRepository;
 import com.caffeinedoctor.userservice.security.oauth2.dto.CustomOAuth2User;
 import com.caffeinedoctor.userservice.enums.UserStatus;
 import com.caffeinedoctor.userservice.security.jwt.JWTUtil;
@@ -19,6 +22,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 
 //로그인 성공 핸들러
@@ -29,6 +33,8 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
     private final JWTUtil jwtUtil;
     private final UserService userService;
+    private final RefreshRepository refreshRepository;
+
     @Value("${FRONT_URL}")
     private String redirectFrontURL;
 
@@ -89,5 +95,18 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         cookie.setHttpOnly(true);
 
         return cookie;
+    }
+
+    private void addRefreshEntity(String username, String newRefreshToken, Long expiredMs) {
+
+        Date date = new Date(System.currentTimeMillis() + expiredMs);
+
+        Refresh refreshEntity = Refresh.builder()
+                .username(username)
+                .refreshToken(newRefreshToken)
+                .expiration(date.toString())
+                .build();
+
+        refreshRepository.save(refreshEntity);
     }
 }
