@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -53,12 +54,28 @@ public class SecurityConfig {
             "/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs", "/api-docs/**"
     };
 
+//    private static final String[] swaggerURL = {
+//            "/api/**", "/graphiql", "/graphql",
+//            "/swagger-ui/**", "/swagger-ui.html",
+//            "/v3/api-docs/**", "/api-docs/**", "/swagger-ui.html"
+//    };
+
+
+    // 스프링 시큐리티 기능 비활성화 ('인증','인가' 서비스 적용x)
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer() {
+//        return web -> web.ignoring()
+//                .requestMatchers("/error", "/favicon.ico")
+//                .requestMatchers(swaggerURL);
+//    }
+
     // 비밀번호 암호화
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder()
     {
         return new BCryptPasswordEncoder();
     }
+
 
     // 특정 경로에 대해서 보안 설정하기
     @Bean
