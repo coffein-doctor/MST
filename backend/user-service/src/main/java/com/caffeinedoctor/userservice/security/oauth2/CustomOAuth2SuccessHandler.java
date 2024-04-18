@@ -1,13 +1,16 @@
 package com.caffeinedoctor.userservice.security.oauth2;
 
 import com.caffeinedoctor.userservice.dto.response.oauth2.CustomOAuth2User;
+import com.caffeinedoctor.userservice.enums.UserStatus;
 import com.caffeinedoctor.userservice.security.jwt.JWTUtil;
+import com.caffeinedoctor.userservice.service.UserService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -23,12 +26,16 @@ import java.util.Iterator;
 public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final JWTUtil jwtUtil;
+    private final UserService userService;
+    @Value("${FRONT_URL}")
+    private String redirectFrontURL;
 
     // 로그인이 성공하면 동작
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         log.info("인증 완료! 소셜 로그인 성공");
         log.info("쿠키에 JWT 토큰 저장 로직 수행");
+
         //OAuth2User
         CustomOAuth2User customUserDetails = (CustomOAuth2User) authentication.getPrincipal();
         //username: kakao_12345
@@ -43,10 +50,20 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         String token = jwtUtil.createJwt(username, role, 60*60*60L);
         log.info("JWT 토큰 생성: " + token);
         log.info("인가 권한을 가진 JWT 단일 토큰으로 발급 완료!");
+
         //쿠키 방식으로 토큰 전달
         response.addCookie(createCookie("Authorization", token));
-        //프론트 특정 url 넣기 (로그인 완료 페이지, 회원가입 여부 확인 페이지)
-        response.sendRedirect("http://localhost:3000/signup");
+
+        // Check user status
+        UserStatus userStatus = userService.getUserStatusByUsername(username);
+        if (userStatus == UserStatus.NEW_USER) {
+            // Redirect to signup page for new users
+            response.sendRedirect(redirectFrontURL+"/signup");
+        } else {
+            // Redirect to home page for existing users
+            response.sendRedirect(redirectFrontURL+"/home");
+        }
+
         //테스트 url
 //        response.sendRedirect("http://3.36.123.194:8081/users/welcome");
         log.info("로그인 성공! 쿠키에 JWT 저장");

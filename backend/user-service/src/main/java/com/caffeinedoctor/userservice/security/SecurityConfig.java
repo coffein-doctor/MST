@@ -1,6 +1,7 @@
-package com.caffeinedoctor.userservice.config;
+package com.caffeinedoctor.userservice.security;
 
 
+import com.caffeinedoctor.userservice.config.CorsConfig;
 import com.caffeinedoctor.userservice.security.jwt.JWTFilter;
 import com.caffeinedoctor.userservice.security.jwt.JWTUtil;
 import com.caffeinedoctor.userservice.security.oauth2.CustomOAuth2FailureHandler;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
@@ -21,7 +23,9 @@ import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationF
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -38,6 +42,7 @@ public class SecurityConfig {
     private final CustomOAuth2UserServiceImpl customOAuth2UserServiceImpl;
     private final CustomOAuth2SuccessHandler customOAuth2SuccessHandler;
     private final CustomOAuth2FailureHandler customOAuth2FailureHandler;
+    private final CorsConfig corsConfig;
     private final JWTUtil jwtUtil;
     private final Environment env;
 
@@ -91,6 +96,7 @@ public class SecurityConfig {
 
         // 비활성화
         http
+//                .cors(cors -> cors.configurationSource(corsConfig.corsConfigurationSource()))
                 .formLogin(AbstractHttpConfigurer::disable) //From 로그인 방식 disable - OAuth2 방식
                 .httpBasic(AbstractHttpConfigurer::disable) //HTTP Basic 인증 방식 disable - OAuth2 방식
                 .csrf(AbstractHttpConfigurer::disable)  // CSRF 보안 disable - JWT 방식으로 관리
@@ -126,13 +132,22 @@ public class SecurityConfig {
         //oauth2 로그인
         http
                 .oauth2Login((oauth2) -> oauth2
+                        // 유저 정보 업데이트 및 유저엔티티 테이블 추가
                         .userInfoEndpoint((userInfoEndpointConfig) -> userInfoEndpointConfig
                                 .userService(customOAuth2UserServiceImpl))
-                        //로그인 성공하면 jwt 만들기
+                        // 카카오 인증 완료, 토근 생성 및 추가 사용자 정보 처리
                         .successHandler(customOAuth2SuccessHandler)
                         //로그인 인증 실패 후 처리
                         .failureHandler(customOAuth2FailureHandler)
-                );
+                )
+                // 인증 되지 않은 url 요청시 처리 프로세스
+//                .exceptionHandling(exceptionHandling -> exceptionHandling
+//                        .defaultAuthenticationEntryPointFor(
+//                                new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED),
+//                                new AntPathRequestMatcher("/**")
+//                        )
+//                )
+        ;
 
         return http.build();
     }
