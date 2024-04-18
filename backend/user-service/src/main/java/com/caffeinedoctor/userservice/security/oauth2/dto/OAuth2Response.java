@@ -1,4 +1,4 @@
-package com.caffeinedoctor.userservice.dto.response.oauth2;
+package com.caffeinedoctor.userservice.security.oauth2.dto;
 
 public interface OAuth2Response {
 

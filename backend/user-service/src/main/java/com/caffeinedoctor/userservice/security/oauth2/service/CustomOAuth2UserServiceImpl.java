@@ -1,11 +1,11 @@
-package com.caffeinedoctor.userservice.service;
+package com.caffeinedoctor.userservice.security.oauth2.service;
 
 import com.caffeinedoctor.userservice.dto.socialLoginDto;
-import com.caffeinedoctor.userservice.dto.response.oauth2.CustomOAuth2User;
-import com.caffeinedoctor.userservice.dto.response.oauth2.KakaoOAuth2Response;
-import com.caffeinedoctor.userservice.dto.response.oauth2.OAuth2Response;
-import com.caffeinedoctor.userservice.dto.response.oauth2.OAuth2UserResponseDto;
-import com.caffeinedoctor.userservice.enums.UserStatus;
+import com.caffeinedoctor.userservice.security.oauth2.dto.CustomOAuth2User;
+import com.caffeinedoctor.userservice.security.oauth2.dto.KakaoOAuth2Response;
+import com.caffeinedoctor.userservice.security.oauth2.dto.OAuth2Response;
+import com.caffeinedoctor.userservice.security.oauth2.dto.OAuth2UserResponseDto;
+import com.caffeinedoctor.userservice.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,8 +14,6 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-
-import static com.caffeinedoctor.userservice.enums.UserStatus.EXISTING_USER;
 
 @Service
 @RequiredArgsConstructor

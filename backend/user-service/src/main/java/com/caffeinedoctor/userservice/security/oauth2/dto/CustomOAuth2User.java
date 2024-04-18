@@ -1,4 +1,4 @@
-package com.caffeinedoctor.userservice.dto.response.oauth2;
+package com.caffeinedoctor.userservice.security.oauth2.dto;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

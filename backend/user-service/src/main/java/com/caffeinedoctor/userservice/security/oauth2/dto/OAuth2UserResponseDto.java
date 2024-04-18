@@ -1,7 +1,5 @@
-package com.caffeinedoctor.userservice.dto.response.oauth2;
+package com.caffeinedoctor.userservice.security.oauth2.dto;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
 

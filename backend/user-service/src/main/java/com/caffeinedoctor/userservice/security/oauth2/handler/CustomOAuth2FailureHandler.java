@@ -1,4 +1,4 @@
-package com.caffeinedoctor.userservice.security.oauth2;
+package com.caffeinedoctor.userservice.security.oauth2.handler;
 
 import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;

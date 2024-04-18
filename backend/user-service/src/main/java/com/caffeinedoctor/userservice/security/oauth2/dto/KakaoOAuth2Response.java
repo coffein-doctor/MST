@@ -1,6 +1,5 @@
-package com.caffeinedoctor.userservice.dto.response.oauth2;
+package com.caffeinedoctor.userservice.security.oauth2.dto;
 
-import com.caffeinedoctor.userservice.dto.response.oauth2.OAuth2Response;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Map;

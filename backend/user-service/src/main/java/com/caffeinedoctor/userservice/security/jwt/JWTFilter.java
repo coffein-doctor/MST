@@ -1,7 +1,7 @@
 package com.caffeinedoctor.userservice.security.jwt;
 
-import com.caffeinedoctor.userservice.dto.response.oauth2.CustomOAuth2User;
-import com.caffeinedoctor.userservice.dto.response.oauth2.OAuth2UserResponseDto;
+import com.caffeinedoctor.userservice.security.oauth2.dto.CustomOAuth2User;
+import com.caffeinedoctor.userservice.security.oauth2.dto.OAuth2UserResponseDto;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -16,6 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+//토큰 검증 (경로접근-인가 과정)
 @RequiredArgsConstructor
 @Slf4j
 public class JWTFilter extends OncePerRequestFilter {
