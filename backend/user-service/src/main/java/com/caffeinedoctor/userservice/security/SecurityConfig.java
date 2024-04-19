@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -48,20 +49,22 @@ public class SecurityConfig {
             "/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs", "/api-docs/**"
     };
 
-//    private static final String[] swaggerURL = {
-//            "/api/**", "/graphiql", "/graphql",
-//            "/swagger-ui/**", "/swagger-ui.html",
-//            "/v3/api-docs/**", "/api-docs/**", "/swagger-ui.html"
-//    };
+    private static final String[] swaggerURL = {
+            "/api/**", "/graphiql", "/graphql",
+            "/swagger-ui/**", "/swagger-ui.html",
+            "/v3/api-docs/**", "/api-docs/**", "/swagger-ui.html",
+            "/swagger-ui/index.html/**",
+            "/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs", "/api-docs/**"
+    };
 
 
     // 스프링 시큐리티 기능 비활성화 ('인증','인가' 서비스 적용x)
-//    @Bean
-//    public WebSecurityCustomizer webSecurityCustomizer() {
-//        return web -> web.ignoring()
-//                .requestMatchers("/error", "/favicon.ico")
-//                .requestMatchers(swaggerURL);
-//    }
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return web -> web.ignoring()
+                .requestMatchers("/error", "/favicon.ico")
+                .requestMatchers(swaggerURL);
+    }
 
     // 비밀번호 암호화
     @Bean

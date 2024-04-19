@@ -19,12 +19,13 @@
     function checkUserStatus() {
         // 토큰 값
         var token = "\n" +
-            "eyJhbGciOiJIUzI1NiJ9.eyJjYXRlZ29yeSI6ImFjY2VzcyIsInVzZXJuYW1lIjoia2FrYW9fMzQxOTI5NjA1NiIsInJvbGUiOiJST0xFX1VTRVIiLCJpYXQiOjE3MTM0NjE2NzEsImV4cCI6MTcxMzQ2MjI3MX0.W2cvpYfQuQerLeJ0xl471SlEt3pg6-3UezJ7xtXs6AY";
+            "\n" +
+            "eyJhbGciOiJIUzI1NiJ9.eyJjYXRlZ29yeSI6ImFjY2VzcyIsInVzZXJuYW1lIjoia2FrYW9fMzQxOTI5NjA1NiIsInJvbGUiOiJST0xFX1VTRVIiLCJpYXQiOjE3MTM1MjU5NjcsImV4cCI6MTcxMzUyNjU2N30.p-JSm0neK_O5gFSQbJQ2hg5XxDpf2Nm93cHCdbN82xM";
 
         // Axios를 사용하여 서버로 요청 보내기
-        axios.get('http://localhost:8081/users/status', {
+        axios.get('http://3.36.123.194:8081/users/status', {
             headers: {
-                'access': token // Authorization 헤더에 토큰 값 담기
+                'access': token // 헤더에 토큰 값 담기
             }
         })
             .then(function (response) {

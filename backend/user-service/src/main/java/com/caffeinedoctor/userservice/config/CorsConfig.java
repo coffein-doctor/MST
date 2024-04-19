@@ -19,7 +19,7 @@ public class CorsConfig {
         corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:63342", "http://localhost:3000", "http://localhost:8081"));
         // get, post, ... 모든 요청에 허용
         corsConfiguration.setAllowedMethods(Collections.singletonList("*"));
-        corsConfiguration.setAllowCredentials(true);
+//        corsConfiguration.setAllowCredentials(true);
         // 모든 헤더 값 허용
         corsConfiguration.setAllowedHeaders(Collections.singletonList("*"));
         // 쿠키의 유효 기간: 2일
