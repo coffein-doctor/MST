@@ -1,4 +1,4 @@
-package com.caffeinedoctor.userservice.exception;
+package com.caffeinedoctor.userservice.common.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.caffeinedoctor.userservice.exception;
+package com.caffeinedoctor.userservice.common.exception;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

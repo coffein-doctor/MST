@@ -23,6 +23,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
@@ -148,12 +151,18 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
     //refresh토큰 저장
     private void addRefreshEntity(String username, String newRefreshToken, Long expiredMs) {
 
-        Date date = new Date(System.currentTimeMillis() + expiredMs);
+//        Date newExpiration = new Date(System.currentTimeMillis() + expiredMs);
+        // 현재 시간과 만료 시간을 계산하기 위해 System.currentTimeMillis()와 expiredMs를 사용합니다.
+        LocalDateTime newExpiration = LocalDateTime.ofInstant(Instant.ofEpochMilli(System.currentTimeMillis() + expiredMs), ZoneId.systemDefault());
+        LocalDateTime Expiration = Instant.now().plusMillis(expiredMs)
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+
 
         Refresh refreshEntity = Refresh.builder()
                 .username(username)
                 .refreshToken(newRefreshToken)
-                .expiration(date.toString())
+                .expiration(newExpiration)
                 .build();
 
         refreshRepository.save(refreshEntity);

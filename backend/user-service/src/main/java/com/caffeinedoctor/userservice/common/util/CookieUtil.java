@@ -1,4 +1,4 @@
-package com.caffeinedoctor.userservice.util;
+package com.caffeinedoctor.userservice.common.util;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;

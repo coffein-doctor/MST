@@ -1,4 +1,4 @@
-package com.caffeinedoctor.userservice.exception;
+package com.caffeinedoctor.userservice.common.exception;
 
 public class ApiException extends RuntimeException {
     private ExceptionEnum error;
