@@ -56,13 +56,17 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         GrantedAuthority auth = iterator.next();
         String role = auth.getAuthority();
 
+        //1.기존의 리프레쉬 토큰 삭제
+        deleteExistingRefreshTokens(username);
 
+        //2.새로운 토큰 생성
         //토큰 2개 생성 (jwt 만들기 - 유저이름, 역할, 토큰이 살아있는 시간)
         //10분
         String access = jwtUtil.createJwt("access", username, role, 600000L);
         //24시간
         String refresh = jwtUtil.createJwt("refresh", username, role, 86400000L);
 
+        //3.새로운 리프레쉬 토큰 저장
         //Refresh 토큰 저장
         addRefreshEntity(username, refresh, 86400000L);
 
@@ -71,6 +75,7 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         // response.setHeader("access", access);
         //access 쿠키에 넣기
 //        response.addCookie(accessCreateCookie("access", access));
+
         //refresh 쿠키에 넣기
         response.addCookie(createCookie("refresh", refresh));
         //상태 코드: 200 응답 보내기
@@ -152,5 +157,10 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
                 .build();
 
         refreshRepository.save(refreshEntity);
+    }
+
+    //유저의 토큰 모두 삭제
+    private void deleteExistingRefreshTokens(String username) {
+        refreshRepository.deleteByUsername(username);
     }
 }

@@ -18,9 +18,7 @@
     // Check User Status 버튼 클릭 시 요청 보내기
     function checkUserStatus() {
         // 토큰 값
-        var token = "\n" +
-            "\n" +
-            "eyJhbGciOiJIUzI1NiJ9.eyJjYXRlZ29yeSI6ImFjY2VzcyIsInVzZXJuYW1lIjoia2FrYW9fMzQxOTI5NjA1NiIsInJvbGUiOiJST0xFX1VTRVIiLCJpYXQiOjE3MTM1MjU5NjcsImV4cCI6MTcxMzUyNjU2N30.p-JSm0neK_O5gFSQbJQ2hg5XxDpf2Nm93cHCdbN82xM";
+        var token = "eyJhbGciOiJIUzI1NiJ9.eyJjYXRlZ29yeSI6ImFjY2VzcyIsInVzZXJuYW1lIjoia2FrYW9fMzQxOTI5NjA1NiIsInJvbGUiOiJST0xFX1VTRVIiLCJpYXQiOjE3MTM1MzQ0MjAsImV4cCI6MTcxMzUzNTAyMH0.D46f00HKZd3uHe-6HkPaI8o303jIkBl1UK9OMcIqfEg";
 
         // Axios를 사용하여 서버로 요청 보내기
         axios.get('http://3.36.123.194:8081/users/status', {
