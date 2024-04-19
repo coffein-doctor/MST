@@ -66,7 +66,8 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
         //응답 설정
         //헤더에 넣기
-        response.setHeader("access", access);
+        // response.setHeader("access", access);
+        response.addCookie(accessCreateCookie("access", access));
         //쿠키에 넣기
         response.addCookie(createCookie("refresh", refresh));
         //상태 코드: 200 응답 보내기
@@ -77,9 +78,11 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         if (userStatus == UserStatus.NEW_USER) {
             // Redirect to signup page for new users
             response.sendRedirect(redirectFrontURL+"/signup");
+//            getRedirectStrategy().sendRedirect(request, response, redirectFrontURL+"/signup");
         } else {
             // Redirect to home page for existing users
             response.sendRedirect(redirectFrontURL+"/home");
+//            getRedirectStrategy().sendRedirect(request, response,redirectFrontURL+"/home");
         }
 
     }
@@ -96,6 +99,23 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         //cookie.setPath("/");
         //자바스크립트가 해당 쿠키를 가져가지 못하게 설정
         cookie.setHttpOnly(true);
+
+        return cookie;
+    }
+
+
+    private Cookie accessCreateCookie(String key, String value) {
+        //value: jwt
+        Cookie cookie = new Cookie(key, value);
+        cookie.setDomain("localhost");
+        //쿠키가 살아있을 시간
+        cookie.setMaxAge(24*60*60);
+        //https 통신에서만 사용 가능
+        //cookie.setSecure(true);
+        //쿠키 적용 범위 (전역)
+        cookie.setPath("/");
+        //자바스크립트가 해당 쿠키를 가져가지 못하게 설정
+        //cookie.setHttpOnly(true);
 
         return cookie;
     }
