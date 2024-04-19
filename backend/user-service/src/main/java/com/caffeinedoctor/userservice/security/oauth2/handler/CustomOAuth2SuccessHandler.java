@@ -153,8 +153,8 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
 //        Date newExpiration = new Date(System.currentTimeMillis() + expiredMs);
         // 현재 시간과 만료 시간을 계산하기 위해 System.currentTimeMillis()와 expiredMs를 사용합니다.
-        LocalDateTime newExpiration = LocalDateTime.ofInstant(Instant.ofEpochMilli(System.currentTimeMillis() + expiredMs), ZoneId.systemDefault());
-        LocalDateTime Expiration = Instant.now().plusMillis(expiredMs)
+//        LocalDateTime newExpiration = LocalDateTime.ofInstant(Instant.ofEpochMilli(System.currentTimeMillis() + expiredMs), ZoneId.systemDefault());
+        LocalDateTime newExpiration = Instant.now().plusMillis(expiredMs)
                 .atZone(ZoneId.systemDefault())
                 .toLocalDateTime();
 

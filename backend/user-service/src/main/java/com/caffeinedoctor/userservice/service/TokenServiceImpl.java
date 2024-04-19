@@ -13,6 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 
 @Service
@@ -123,14 +126,31 @@ public class TokenServiceImpl implements TokenService {
     }
 
     //refresh토큰 저장
+//    private void addRefreshEntity(String username, String newRefreshToken, Long expiredMs) {
+//
+//        Date date = new Date(System.currentTimeMillis() + expiredMs);
+//
+//        Refresh refreshEntity = Refresh.builder()
+//                .username(username)
+//                .refreshToken(newRefreshToken)
+//                .expiration(date.toString())
+//                .build();
+//
+//        refreshRepository.save(refreshEntity);
+//    }
+
     private void addRefreshEntity(String username, String newRefreshToken, Long expiredMs) {
 
-        Date date = new Date(System.currentTimeMillis() + expiredMs);
-
+//        Date newExpiration = new Date(System.currentTimeMillis() + expiredMs);
+        // 현재 시간과 만료 시간을 계산하기 위해 System.currentTimeMillis()와 expiredMs를 사용합니다.
+        LocalDateTime newExpiration = Instant.now().plusMillis(expiredMs)
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+        
         Refresh refreshEntity = Refresh.builder()
                 .username(username)
                 .refreshToken(newRefreshToken)
-                .expiration(date.toString())
+                .expiration(newExpiration)
                 .build();
 
         refreshRepository.save(refreshEntity);
