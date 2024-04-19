@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@Table(name = "refresh")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Refresh {
 
@@ -26,10 +27,5 @@ public class Refresh {
         this.username = username;
         this.refreshToken = refreshToken;
         this.expiration = expiration;
-    }
-
-    public void updateRefresh(String newRefresh, String newExpiration) {
-        this.refresh = newRefresh;
-        this.expiration = newExpiration;
     }
 }

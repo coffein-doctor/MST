@@ -8,8 +8,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RefreshRepository extends JpaRepository<Refresh, Long> {
 
-    Boolean existsByRefresh(String refresh);
+    Boolean existsByRefreshToken(String refresh);
 
     @Transactional
-    void deleteByRefresh(String refresh);
+    void deleteByRefreshToken(String refresh);
 }

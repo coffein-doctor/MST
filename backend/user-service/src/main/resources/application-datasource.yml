@@ -10,7 +10,7 @@ spring:
       database-platform: org.hibernate.dialect.MySQLDialect
       # 데이터베이스 스키마를 자동으로 업데이트할지 여부 (db 초기화 전략. create: 기존 테이블 삭제 후 생성)
       hibernate:
-        ddl-auto: update
+        ddl-auto: create
       properties:
         hibernate:
           # SQL 쿼리를 로그로 출력할지 여부

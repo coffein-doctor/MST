@@ -3,6 +3,7 @@ package com.caffeinedoctor.userservice.security;
 
 import com.caffeinedoctor.userservice.config.CorsConfig;
 import com.caffeinedoctor.userservice.repository.RefreshRepository;
+import com.caffeinedoctor.userservice.security.jwt.CustomLogoutFilter;
 import com.caffeinedoctor.userservice.security.jwt.JWTFilter;
 import com.caffeinedoctor.userservice.security.jwt.JWTUtil;
 import com.caffeinedoctor.userservice.security.oauth2.handler.CustomOAuth2FailureHandler;
@@ -21,6 +22,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 
 // 시큐리티 커스텀 config를 작성하여 특정 경로에 대해 접근을 막는다.
 @Configurable
@@ -32,6 +34,7 @@ public class SecurityConfig {
     private final CustomOAuth2UserServiceImpl customOAuth2UserServiceImpl;
     private final CustomOAuth2SuccessHandler customOAuth2SuccessHandler;
     private final CustomOAuth2FailureHandler customOAuth2FailureHandler;
+    private final RefreshRepository refreshRepository;
     private final CorsConfig corsConfig;
     private final JWTUtil jwtUtil;
     private final Environment env;
@@ -39,7 +42,7 @@ public class SecurityConfig {
     // 허용 주소
     private static final String[] WHITE_LIST = {
             "/login/**", "/oauth2/**",
-            "/reissue",
+            "/token/**", "/token/reissue",
             // 스웨거
             "/swagger-ui/index.html/**",
             "/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs", "/api-docs/**"
