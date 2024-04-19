@@ -1,5 +1,7 @@
 package com.caffeinedoctor.userservice.service;
 
+import com.caffeinedoctor.userservice.entitiy.Refresh;
+import com.caffeinedoctor.userservice.repository.RefreshRepository;
 import com.caffeinedoctor.userservice.security.jwt.JWTFilter;
 import com.caffeinedoctor.userservice.security.jwt.JWTUtil;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -13,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+
 @Service
 //@Transactional(readOnly = true) // (성능 최적화 - 읽기 전용에만 사용)
 @RequiredArgsConstructor // 파이널 필드만 가지고 생성사 주입 함수 만듬 (따로 작성할 필요 없다.)
@@ -20,6 +24,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class ReissueServiceImpl implements ReissueService{
     //jwt관리 및 검증 utill
     private final JWTUtil jwtUtil;
+    private final RefreshRepository refreshRepository;
+
+    //만료기간이 지난 토큰은 스케줄러를 돌려서 삭제하라.
 
     @Override
     public ResponseEntity<?> reissueToken(HttpServletRequest request, HttpServletResponse response) {
@@ -49,18 +56,32 @@ public class ReissueServiceImpl implements ReissueService{
             return new ResponseEntity<>("invalid refresh token", HttpStatus.BAD_REQUEST);
         }
 
+        log.info("refresh 토큰 DB 일치 여부 체크");
+        //DB에 저장되어 있는지 확인
+        Boolean isExist = refreshRepository.existsByRefresh(refresh);
+        if (!isExist) {
+            //response body
+            return new ResponseEntity<>("invalid refresh token", HttpStatus.BAD_REQUEST);
+        }
+
         log.info("refresh 토큰 검증 완료");
 
         // Extract username and role from refresh token
         String username = jwtUtil.getUsername(refresh);
         String role = jwtUtil.getRole(refresh);
 
-        log.info("새로운 access 토큰 생성");
+        log.info("새로운 access, refresh 토큰 생성");
         //make new JWT
         //Create new access token
         String newAccess = jwtUtil.createJwt("access", username, role, 600000L);
         //24시간
         String newRefresh = jwtUtil.createJwt("refresh", username, role, 86400000L);
+
+        log.info("새로운 refresh 토큰 갱신");
+        //Refresh 토큰 저장 DB에 기존의 Refresh 토큰 삭제 후 새 Refresh 토큰 저장
+        refreshRepository.deleteByRefresh(refresh);
+        addRefreshEntity(username, newRefresh, 86400000L);
+
 
         //response
         //Set the new access token in response header
@@ -98,5 +119,19 @@ public class ReissueServiceImpl implements ReissueService{
         cookie.setHttpOnly(true);
 
         return cookie;
+    }
+
+    //refresh토큰 저장
+    private void addRefreshEntity(String username, String newRefreshToken, Long expiredMs) {
+
+        Date date = new Date(System.currentTimeMillis() + expiredMs);
+
+        Refresh refreshEntity = Refresh.builder()
+                .username(username)
+                .refreshToken(newRefreshToken)
+                .expiration(date.toString())
+                .build();
+
+        refreshRepository.save(refreshEntity);
     }
 }

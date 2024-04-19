@@ -2,6 +2,7 @@ package com.caffeinedoctor.userservice.security;
 
 
 import com.caffeinedoctor.userservice.config.CorsConfig;
+import com.caffeinedoctor.userservice.repository.RefreshRepository;
 import com.caffeinedoctor.userservice.security.jwt.JWTFilter;
 import com.caffeinedoctor.userservice.security.jwt.JWTUtil;
 import com.caffeinedoctor.userservice.security.oauth2.handler.CustomOAuth2FailureHandler;

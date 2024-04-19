@@ -61,6 +61,9 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         //24시간
         String refresh = jwtUtil.createJwt("refresh", username, role, 86400000L);
 
+        //Refresh 토큰 저장
+        addRefreshEntity(username, refresh, 86400000L);
+
         //응답 설정
         //헤더에 넣기
         response.setHeader("access", access);
@@ -97,6 +100,7 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         return cookie;
     }
 
+    //refresh토큰 저장
     private void addRefreshEntity(String username, String newRefreshToken, Long expiredMs) {
 
         Date date = new Date(System.currentTimeMillis() + expiredMs);
