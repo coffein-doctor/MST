@@ -67,8 +67,9 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         //응답 설정
         //헤더에 넣기
         // response.setHeader("access", access);
+        //access 쿠키에 넣기
         response.addCookie(accessCreateCookie("access", access));
-        //쿠키에 넣기
+        //refresh 쿠키에 넣기
         response.addCookie(createCookie("refresh", refresh));
         //상태 코드: 200 응답 보내기
         response.setStatus(HttpStatus.OK.value());
@@ -107,7 +108,7 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
     private Cookie accessCreateCookie(String key, String value) {
         //value: jwt
         Cookie cookie = new Cookie(key, value);
-        cookie.setDomain("localhost");
+//        cookie.setDomain("localhost");
         //쿠키가 살아있을 시간
         cookie.setMaxAge(24*60*60);
         //https 통신에서만 사용 가능
