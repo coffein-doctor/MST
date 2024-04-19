@@ -19,8 +19,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
@@ -68,23 +70,40 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         //헤더에 넣기
         // response.setHeader("access", access);
         //access 쿠키에 넣기
-        response.addCookie(accessCreateCookie("access", access));
+//        response.addCookie(accessCreateCookie("access", access));
         //refresh 쿠키에 넣기
         response.addCookie(createCookie("refresh", refresh));
         //상태 코드: 200 응답 보내기
         response.setStatus(HttpStatus.OK.value());
 
         // Check user status
-        UserStatus userStatus = userService.getUserStatusByUsername(username);
-        if (userStatus == UserStatus.NEW_USER) {
-            // Redirect to signup page for new users
-            response.sendRedirect(redirectFrontURL+"/signup");
-//            getRedirectStrategy().sendRedirect(request, response, redirectFrontURL+"/signup");
-        } else {
-            // Redirect to home page for existing users
-            response.sendRedirect(redirectFrontURL+"/home");
-//            getRedirectStrategy().sendRedirect(request, response,redirectFrontURL+"/home");
-        }
+//        UserStatus userStatus = userService.getUserStatusByUsername(username);
+//        if (userStatus == UserStatus.NEW_USER) {
+//
+//            // accessToken을 쿼리스트링에 담는 url을 만들어준다.
+//            String targetUrl = UriComponentsBuilder.fromUriString(redirectFrontURL)
+//                    .queryParam("access", access)
+//                    .build()
+//                    .encode(StandardCharsets.UTF_8)
+//                    .toUriString();
+//
+//            // Redirect to signup page for new users
+//            response.sendRedirect(redirectFrontURL+"/signup");
+////            getRedirectStrategy().sendRedirect(request, response, redirectFrontURL+"/signup");
+//        } else {
+//            // Redirect to home page for existing users
+//            response.sendRedirect(redirectFrontURL+"/home");
+////            getRedirectStrategy().sendRedirect(request, response,redirectFrontURL+"/home");
+//        }
+
+        // accessToken을 쿼리스트링에 담는 url을 만들어준다.
+        String targetUrl = UriComponentsBuilder.fromUriString(redirectFrontURL)
+                .queryParam("access", access)
+                .build()
+                .encode(StandardCharsets.UTF_8)
+                .toUriString();
+        // 로그인 확인 페이지로 리다이렉트
+        getRedirectStrategy().sendRedirect(request, response, targetUrl);
 
     }
 
