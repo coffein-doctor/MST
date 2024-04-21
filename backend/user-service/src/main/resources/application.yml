@@ -4,7 +4,6 @@ server:
 #  servlet:
 #    context-path: /api/v1
 #  port: 0
-
 # 현재 프로젝트 이름 지정
 spring:
   application:
@@ -32,6 +31,8 @@ spring:
         show-sql: true
         # JPA의 구현체인 Hibernate가 동작하면서 발생한 SQL의 가독성을 높여준다.
         format_sql: true
+  jackson:
+    time-zone: Asia/Seoul
 #  security:
 #    oauth2:
 #      client:
