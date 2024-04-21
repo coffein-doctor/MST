@@ -69,6 +69,11 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         tokenService.addRefreshEntity(username, refresh, 86400000L);
 
         //응답 설정
+        // <access 토큰 설정>
+        //1.헤더에 넣기
+         response.setHeader("access", access);
+        //2.쿠키에 넣기
+        //response.addCookie(CookieUtil.createAccessCookie("access", access));
 
         // <refresh 토큰 설정>
         //쿠키에 넣기
@@ -96,20 +101,16 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
 ////            getRedirectStrategy().sendRedirect(request, response,redirectFrontURL+"/home");
 //        }
 
-        // <access 토큰 설정>
-        //1.헤더에 넣기
-        // response.setHeader("access", access);
-        //2.쿠키에 넣기
-        //response.addCookie(CookieUtil.createAccessCookie("access", access));
 
+        // <access 토큰 설정>
         //3.쿼리스트링에 담는 url을 만들어준다.
-        String targetUrl = UriComponentsBuilder.fromUriString(redirectFrontURL)
-                .queryParam("access", access)
-                .build()
-                .encode(StandardCharsets.UTF_8)
-                .toUriString();
-        // 로그인 확인 페이지로 리다이렉트
-        getRedirectStrategy().sendRedirect(request, response, targetUrl);
+//        String targetUrl = UriComponentsBuilder.fromUriString(redirectFrontURL)
+//                .queryParam("access", access)
+//                .build()
+//                .encode(StandardCharsets.UTF_8)
+//                .toUriString();
+//        // 로그인 확인 페이지로 리다이렉트
+//        getRedirectStrategy().sendRedirect(request, response, targetUrl);
 
     }
 

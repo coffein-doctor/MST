@@ -41,6 +41,11 @@ public class JWTFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
+        if (requestUri.matches("^\\/token/reissue(?:\\/.*)?$")) {
+
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         /** Access 토큰 필터 시작 **/
         log.info("Access 토큰 검증 시작");

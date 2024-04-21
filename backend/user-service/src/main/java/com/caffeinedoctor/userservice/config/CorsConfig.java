@@ -16,7 +16,7 @@ public class CorsConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         // 프론트 서버 주소들
-        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:63342", "http://localhost:3000", "http://localhost:8081"));
+        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:8081"));
         // get, post, ... 모든 요청에 허용
         corsConfiguration.setAllowedMethods(Collections.singletonList("*"));
 //        corsConfiguration.setAllowCredentials(true);
@@ -27,6 +27,7 @@ public class CorsConfig {
         // 노출 헤더
 //        corsConfiguration.setExposedHeaders(Arrays.asList("Set-Cookie", "refresh", "access"));
         corsConfiguration.setExposedHeaders(Collections.singletonList("Set-Cookie"));
+        corsConfiguration.setExposedHeaders(Collections.singletonList("access"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfiguration);

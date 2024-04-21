@@ -42,7 +42,7 @@ public class SecurityConfig {
     // 허용 주소
     private static final String[] WHITE_LIST = {
             "/login/**", "/oauth2/**",
-            "/token/**", "/token/reissue",
+            "/token/reissue",
     };
 
     private static final String[] swaggerURL = {
@@ -129,6 +129,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers(WHITE_LIST).permitAll()
+                        .requestMatchers("/token/reissue").permitAll()
                         .anyRequest().authenticated() // 위를 제외한 다른 요청은 모두 인증해야돼
 //                        .requestMatchers("/", "/oauth2/**", "/user").permitAll()
 //                        .requestMatchers(new AntPathRequestMatcher("/user", "POST")).permitAll()

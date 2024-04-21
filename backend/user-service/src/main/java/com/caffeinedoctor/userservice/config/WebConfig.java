@@ -13,9 +13,9 @@ public class WebConfig implements WebMvcConfigurer {
         corsRegistry.addMapping("/**")
                 .exposedHeaders("Set-Cookie") //쿠키 헤더로 전달
                 //프론트 주소 허용
-                .allowedOriginPatterns("*")
+//                .allowedOriginPatterns("*")
 //                .allowedOrigins("http://localhost:63342", "http://localhost:3000", "http://localhost:8081")
-//                .allowedOrigins("http://localhost:3000") //프론트 주소 허용
+                .allowedOrigins("http://localhost:3000") //프론트 주소 허용
 //                .allowedOrigins("*")
 //                .allowedMethods("*")
 //                .allowedHeaders("*")
