@@ -6,6 +6,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class ApiExceptionEntity {
-    private int code;
+    private int errorCode;
     private String message;
 }

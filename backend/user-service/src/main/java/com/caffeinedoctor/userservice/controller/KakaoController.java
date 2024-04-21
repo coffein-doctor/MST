@@ -1,7 +1,7 @@
 package com.caffeinedoctor.userservice.controller;
 
 import com.caffeinedoctor.userservice.dto.response.oauth.KakaoLoginResponseDto;
-import com.caffeinedoctor.userservice.service.OAuthService;
+import com.caffeinedoctor.userservice.service.KakaoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/oauth/callback")
 @RequiredArgsConstructor // 파이널 필드만 가지고 생성사 주입 함수 만듬 (따로 작성할 필요 없다.)
 @Slf4j
-public class OAuthController {
+public class KakaoController {
 
-    private final OAuthService kakaoOAuthService;
+    private final KakaoService kakaoService;
 
     // 카카오 로그인 인가 코드 받기
 
@@ -34,9 +34,9 @@ public class OAuthController {
 //            "사용자 정보를 이용하여 서비스에 회원가입합니다.")
     public ResponseEntity<KakaoLoginResponseDto> kakaoCallback(@RequestParam("code") String code) {
         // Kakao 토큰 요청
-        String accessToken = kakaoOAuthService.requestKakaoToken(code);
+        String accessToken = kakaoService.requestKakaoToken(code);
         // Kakao 사용자 정보 요청
-        KakaoLoginResponseDto userInfo = kakaoOAuthService.requestKakaoUserInfo(accessToken);
+        KakaoLoginResponseDto userInfo = kakaoService.requestKakaoUserInfo(accessToken);
 
         // Kakao 사용자 정보 요청의 상태 코드와 사용자 정보를 바디로 반환합니다.
         return ResponseEntity.ok(userInfo);

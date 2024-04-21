@@ -1,16 +1,12 @@
 package com.caffeinedoctor.userservice.security.oauth2.handler;
 
 import com.caffeinedoctor.userservice.common.util.CookieUtil;
-import com.caffeinedoctor.userservice.entitiy.Refresh;
-import com.caffeinedoctor.userservice.entitiy.User;
 import com.caffeinedoctor.userservice.repository.RefreshRepository;
 import com.caffeinedoctor.userservice.security.oauth2.dto.CustomOAuth2User;
-import com.caffeinedoctor.userservice.enums.UserStatus;
 import com.caffeinedoctor.userservice.security.jwt.JWTUtil;
 import com.caffeinedoctor.userservice.service.TokenService;
 import com.caffeinedoctor.userservice.service.UserService;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -25,11 +21,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Iterator;
 
 //로그인 성공 핸들러

@@ -35,7 +35,6 @@ public class SecurityConfig {
     private final CustomOAuth2UserServiceImpl customOAuth2UserServiceImpl;
     private final CustomOAuth2SuccessHandler customOAuth2SuccessHandler;
     private final CustomOAuth2FailureHandler customOAuth2FailureHandler;
-    private final RefreshRepository refreshRepository;
     private final CorsConfig corsConfig;
     private final JWTUtil jwtUtil;
     private final Environment env;
@@ -44,9 +43,6 @@ public class SecurityConfig {
     private static final String[] WHITE_LIST = {
             "/login/**", "/oauth2/**",
             "/token/**", "/token/reissue",
-            // 스웨거
-            "/swagger-ui/index.html/**",
-            "/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs", "/api-docs/**"
     };
 
     private static final String[] swaggerURL = {
@@ -132,11 +128,11 @@ public class SecurityConfig {
         //경로별 인가 작업 - URL별 권한 관리 옵션: 모든 경로에 대해 권한이 필요하게 한다.
         http
                 .authorizeHttpRequests((authorize) -> authorize
-                    .requestMatchers(WHITE_LIST).permitAll()
-                    .anyRequest().authenticated() // 위를 제외한 다른 요청은 모두 인증해야돼
-//                    .requestMatchers("/", "/oauth2/**", "/user").permitAll()
-//                    .requestMatchers(new AntPathRequestMatcher("/user", "POST")).permitAll()
-//                    .requestMatchers("/**").access(this::hasIpAddress)
+                        .requestMatchers(WHITE_LIST).permitAll()
+                        .anyRequest().authenticated() // 위를 제외한 다른 요청은 모두 인증해야돼
+//                        .requestMatchers("/", "/oauth2/**", "/user").permitAll()
+//                        .requestMatchers(new AntPathRequestMatcher("/user", "POST")).permitAll()
+//                        .requestMatchers("/**").access(this::hasIpAddress)
         );
 
         //JWTFilter 추가

@@ -12,10 +12,10 @@ public class ApiExceptionAdvice {
 
         return new ResponseEntity<>(
                 new ApiExceptionEntity(
-                        e.getError().getCode(),
+                        e.getError().getErrorCode(),
                         e.getError().getMessage()
                 ),
-                e.getError().getStatus()
+                e.getError().getHttpStatus()
         );
     }
 }

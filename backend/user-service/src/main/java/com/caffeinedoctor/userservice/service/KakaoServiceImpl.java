@@ -23,7 +23,7 @@ import org.springframework.web.client.RestTemplate;
 @Transactional(readOnly = true) // (성능 최적화 - 읽기 전용에만 사용)
 @RequiredArgsConstructor // 파이널 필드만 가지고 생성사 주입 함수 만듬 (따로 작성할 필요 없다.)
 @Slf4j
-public class OAuthServiceImpl implements OAuthService {
+public class KakaoServiceImpl implements KakaoService {
 
     private final UserService userService;
 

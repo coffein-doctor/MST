@@ -1,8 +1,6 @@
 package com.caffeinedoctor.userservice.controller;
 
-import com.caffeinedoctor.userservice.service.OAuthService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

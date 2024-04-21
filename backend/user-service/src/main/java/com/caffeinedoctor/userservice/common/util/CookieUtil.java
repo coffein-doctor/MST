@@ -65,7 +65,7 @@ public class CookieUtil {
 
     // 쿠키의 이름을 입력받아 쿠키 삭제
     public static void expireCookie(HttpServletResponse response, String cookieName) {
-        log.info(cookieName + "쿠키 삭제(만료)");
+        log.info(cookieName + " 쿠키 삭제(만료)");
         // 실제로 삭제하는 방법은 없으므로 쿠키 value를 빈 값으로 바꾸고
         // 만료 시간을 0으로 설정해 쿠키가 재생성 되자마자 만료 처리한다.
         // 브라우저는 이전 쿠키를 무시하고 새로운 쿠키를 사용한다.

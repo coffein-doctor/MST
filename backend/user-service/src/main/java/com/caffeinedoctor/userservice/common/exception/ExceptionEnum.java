@@ -25,10 +25,10 @@ public enum ExceptionEnum {
     WRONG_EMAIL_CODE_EXCEPTION(HttpStatus.BAD_REQUEST, -114, "인증 코드가 틀렸습니다."),
     MEMBER_NOT_FOUND_EXCEPTION(HttpStatus.NOT_FOUND, -115, "가입된 사용자가 아닙니다."),
     PROFILE_UPLOAD_EXCEPTION(HttpStatus.FORBIDDEN, -116, "프로필 이미지 변경에 실패했습니다."),
-
     ;
-    private final HttpStatus status;
-    private final int code;
+
+    private final HttpStatus httpStatus;
+    private final int errorCode;
     private final String message;
 
 }
