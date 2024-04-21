@@ -12,26 +12,26 @@ spring:
   config:
     import:
       - application-oauth.yml
-      - application-datasource.yml
       - application-secret.yml
-#  datasource:
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-##    url: ${SPRING_DATASOURCE_URL}
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${SPRING_DATASOURCE_URL}
 #    url: jdbc:mysql://3.36.123.194:3306/mst?useSSL=false&serverTimezone=UTC
-#    username: admin
-#    password: mst@0117
-#  jpa:
-#    database: mysql
-#    database-platform: org.hibernate.dialect.MySQLDialect
-#    # 데이터베이스 스키마를 자동으로 업데이트할지 여부 (db 초기화 전략. create: 기존 테이블 삭제 후 생성)
-#    hibernate:
-#      ddl-auto: update
-#    properties:
-#      hibernate:
-#        # SQL 쿼리를 로그로 출력할지 여부
-#        show-sql: true
-#        # JPA의 구현체인 Hibernate가 동작하면서 발생한 SQL의 가독성을 높여준다.
-#        format_sql: true
+    username: admin
+    password: ${DATASOURCE_PASSWORD}
+  #    password: mst@0117
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQLDialect
+    # 데이터베이스 스키마를 자동으로 업데이트할지 여부 (db 초기화 전략. create: 기존 테이블 삭제 후 생성)
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        # SQL 쿼리를 로그로 출력할지 여부
+        show-sql: true
+        # JPA의 구현체인 Hibernate가 동작하면서 발생한 SQL의 가독성을 높여준다.
+        format_sql: true
 #  security:
 #    oauth2:
 #      client:

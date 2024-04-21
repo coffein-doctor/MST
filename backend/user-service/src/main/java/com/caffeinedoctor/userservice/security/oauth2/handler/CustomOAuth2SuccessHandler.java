@@ -1,11 +1,13 @@
 package com.caffeinedoctor.userservice.security.oauth2.handler;
 
+import com.caffeinedoctor.userservice.common.util.CookieUtil;
 import com.caffeinedoctor.userservice.entitiy.Refresh;
 import com.caffeinedoctor.userservice.entitiy.User;
 import com.caffeinedoctor.userservice.repository.RefreshRepository;
 import com.caffeinedoctor.userservice.security.oauth2.dto.CustomOAuth2User;
 import com.caffeinedoctor.userservice.enums.UserStatus;
 import com.caffeinedoctor.userservice.security.jwt.JWTUtil;
+import com.caffeinedoctor.userservice.service.TokenService;
 import com.caffeinedoctor.userservice.service.UserService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -38,6 +40,7 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
     private final JWTUtil jwtUtil;
     private final UserService userService;
+    private final TokenService tokenService;
     private final RefreshRepository refreshRepository;
 
     @Value("${FRONT_URL}")
@@ -60,7 +63,7 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         String role = auth.getAuthority();
 
         //1.기존의 리프레쉬 토큰 삭제
-        deleteExistingRefreshTokens(username);
+        tokenService.deleteExistingRefreshTokens(username);
 
         //2.새로운 토큰 생성
         //토큰 2개 생성 (jwt 만들기 - 유저이름, 역할, 토큰이 살아있는 시간)
@@ -71,16 +74,13 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
         //3.새로운 리프레쉬 토큰 저장
         //Refresh 토큰 저장
-        addRefreshEntity(username, refresh, 86400000L);
+        tokenService.addRefreshEntity(username, refresh, 86400000L);
 
         //응답 설정
-        //헤더에 넣기
-        // response.setHeader("access", access);
-        //access 쿠키에 넣기
-//        response.addCookie(accessCreateCookie("access", access));
 
-        //refresh 쿠키에 넣기
-        response.addCookie(createCookie("refresh", refresh));
+        // <refresh 토큰 설정>
+        //쿠키에 넣기
+        response.addCookie(CookieUtil.createRefreshCookie("refresh", refresh));
         //상태 코드: 200 응답 보내기
         response.setStatus(HttpStatus.OK.value());
 
@@ -104,7 +104,13 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
 ////            getRedirectStrategy().sendRedirect(request, response,redirectFrontURL+"/home");
 //        }
 
-        // accessToken을 쿼리스트링에 담는 url을 만들어준다.
+        // <access 토큰 설정>
+        //1.헤더에 넣기
+        // response.setHeader("access", access);
+        //2.쿠키에 넣기
+        //response.addCookie(CookieUtil.createAccessCookie("access", access));
+
+        //3.쿼리스트링에 담는 url을 만들어준다.
         String targetUrl = UriComponentsBuilder.fromUriString(redirectFrontURL)
                 .queryParam("access", access)
                 .build()
@@ -115,61 +121,4 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
     }
 
-    //쿠키 만들기
-    private Cookie createCookie(String key, String value) {
-        //value: jwt
-        Cookie cookie = new Cookie(key, value);
-        //쿠키가 살아있을 시간
-        cookie.setMaxAge(24*60*60);
-        //https 통신에서만 사용 가능
-        //cookie.setSecure(true);
-        //쿠키 적용 범위 (전역)
-        //cookie.setPath("/");
-        //자바스크립트가 해당 쿠키를 가져가지 못하게 설정
-        cookie.setHttpOnly(true);
-
-        return cookie;
-    }
-
-
-    private Cookie accessCreateCookie(String key, String value) {
-        //value: jwt
-        Cookie cookie = new Cookie(key, value);
-        cookie.setDomain("localhost");
-        //쿠키가 살아있을 시간
-        cookie.setMaxAge(24*60*60);
-        //https 통신에서만 사용 가능
-        //cookie.setSecure(true);
-        //쿠키 적용 범위 (전역)
-        cookie.setPath("/");
-        //자바스크립트가 해당 쿠키를 가져가지 못하게 설정
-        //cookie.setHttpOnly(true);
-
-        return cookie;
-    }
-
-    //refresh토큰 저장
-    private void addRefreshEntity(String username, String newRefreshToken, Long expiredMs) {
-
-//        Date newExpiration = new Date(System.currentTimeMillis() + expiredMs);
-        // 현재 시간과 만료 시간을 계산하기 위해 System.currentTimeMillis()와 expiredMs를 사용합니다.
-//        LocalDateTime newExpiration = LocalDateTime.ofInstant(Instant.ofEpochMilli(System.currentTimeMillis() + expiredMs), ZoneId.systemDefault());
-        LocalDateTime newExpiration = Instant.now().plusMillis(expiredMs)
-                .atZone(ZoneId.systemDefault())
-                .toLocalDateTime();
-
-
-        Refresh refreshEntity = Refresh.builder()
-                .username(username)
-                .refreshToken(newRefreshToken)
-                .expiration(newExpiration)
-                .build();
-
-        refreshRepository.save(refreshEntity);
-    }
-
-    //유저의 토큰 모두 삭제
-    private void deleteExistingRefreshTokens(String username) {
-        refreshRepository.deleteByUsername(username);
-    }
 }

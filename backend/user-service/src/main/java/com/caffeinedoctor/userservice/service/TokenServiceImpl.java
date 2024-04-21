@@ -1,5 +1,6 @@
 package com.caffeinedoctor.userservice.service;
 
+import com.caffeinedoctor.userservice.common.util.CookieUtil;
 import com.caffeinedoctor.userservice.entitiy.Refresh;
 import com.caffeinedoctor.userservice.repository.RefreshRepository;
 import com.caffeinedoctor.userservice.security.jwt.JWTUtil;
@@ -33,7 +34,7 @@ public class TokenServiceImpl implements TokenService {
     public ResponseEntity<String> removeToken(HttpServletRequest request, HttpServletResponse response) {
 
         //get refresh token
-        String refresh = getRefreshToken(request);
+        String refresh = CookieUtil.getRefreshToken(request);
         ResponseEntity<String> verifyResult = verifyRefreshToken(refresh);
         if (!verifyResult.getStatusCode().is2xxSuccessful()) {
             return verifyResult; // 토큰 검증에 실패한 경우 해당 응답 반환
@@ -46,12 +47,10 @@ public class TokenServiceImpl implements TokenService {
         //Refresh 토큰 DB에서 제거
         refreshRepository.deleteByRefreshToken(refresh);
 
-        //Refresh 토큰 Cookie 값 0
-        Cookie cookie = new Cookie("refresh", null);
-        cookie.setMaxAge(0);
-        cookie.setPath("/");
-        //만료 쿠키로 응답
-        response.addCookie(cookie);
+        //Access 토큰 Cookie 쿠키 삭제
+        CookieUtil.expireCookie(response, "access");
+        //Refresh 토큰 Cookie 쿠키 삭제
+        CookieUtil.expireCookie(response, "refresh");
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -62,7 +61,7 @@ public class TokenServiceImpl implements TokenService {
         log.info("Refresh토큰으로 Access 토큰을 재발급 ");
 
         // Get refresh token
-        String refresh = getRefreshToken(request);
+        String refresh = CookieUtil.getRefreshToken(request);
         ResponseEntity<String> verifyResult = verifyRefreshToken(refresh);
         if (!verifyResult.getStatusCode().is2xxSuccessful()) {
             return verifyResult; // 토큰 검증에 실패한 경우 해당 응답 반환
@@ -88,41 +87,14 @@ public class TokenServiceImpl implements TokenService {
 
 
         //response
-        //Set the new access token in response header
-        response.setHeader("access", newAccess);
+        //1. Set the new access token in response header
+//        response.setHeader("access", newAccess);
+        //2. Set the new access token in response Cookie
+        response.addCookie(CookieUtil.createAccessCookie("access", newAccess));
         //쿠키로 응답
-        response.addCookie(createCookie("refresh", newRefresh));
+        response.addCookie(CookieUtil.createRefreshCookie("refresh", newRefresh));
 
         return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    // 쿠키에서 가져온다.
-    private String getRefreshToken(HttpServletRequest request) {
-        log.info("쿠키에서 refresh 토큰 찾기");
-
-        String refresh = null;
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("refresh")) {
-                    refresh = cookie.getValue();
-                    break;
-                }
-            }
-        }
-        return refresh;
-    }
-
-    //쿠키 생성 함수
-    private Cookie createCookie(String key, String value) {
-
-        Cookie cookie = new Cookie(key, value);
-        cookie.setMaxAge(24*60*60);
-        //cookie.setSecure(true);
-        //cookie.setPath("/");
-        cookie.setHttpOnly(true);
-
-        return cookie;
     }
 
     //refresh토큰 저장
@@ -139,21 +111,26 @@ public class TokenServiceImpl implements TokenService {
 //        refreshRepository.save(refreshEntity);
 //    }
 
-    private void addRefreshEntity(String username, String newRefreshToken, Long expiredMs) {
+    //refresh토큰 저장
+    public void addRefreshEntity(String username, String newRefreshToken, Long expiredMs) {
 
-//        Date newExpiration = new Date(System.currentTimeMillis() + expiredMs);
-        // 현재 시간과 만료 시간을 계산하기 위해 System.currentTimeMillis()와 expiredMs를 사용합니다.
-        LocalDateTime newExpiration = Instant.now().plusMillis(expiredMs)
-                .atZone(ZoneId.systemDefault())
-                .toLocalDateTime();
-        
+        Date date = new Date(System.currentTimeMillis() + expiredMs);
+
         Refresh refreshEntity = Refresh.builder()
                 .username(username)
                 .refreshToken(newRefreshToken)
-                .expiration(newExpiration)
+                .expiration(String.valueOf(date))
                 .build();
 
         refreshRepository.save(refreshEntity);
+    }
+
+
+
+    //유저의 토큰 모두 삭제
+    @Override
+    public void deleteExistingRefreshTokens(String username) {
+        refreshRepository.deleteByUsername(username);
     }
 
     //토큰 검증 로직
@@ -162,6 +139,7 @@ public class TokenServiceImpl implements TokenService {
 
         // 쿠키가 없을 수 있다.
         if (refresh == null) {
+            log.info("refresh token null");
             return new ResponseEntity<>("refresh token null", HttpStatus.BAD_REQUEST);
         }
         // 리프래쉬 토큰이 쿠키에 있다.
@@ -170,6 +148,7 @@ public class TokenServiceImpl implements TokenService {
         try {
             jwtUtil.isExpired(refresh);
         } catch (ExpiredJwtException e) {
+            log.info("refresh token expired");
             return new ResponseEntity<>("refresh token expired", HttpStatus.BAD_REQUEST);
         }
 
@@ -178,6 +157,7 @@ public class TokenServiceImpl implements TokenService {
         // 토큰이 refresh인지 확인 (발급시 페이로드에 명시)
         String category = jwtUtil.getCategory(refresh);
         if (!category.equals("refresh")) {
+            log.info("invalid refresh token");
             return new ResponseEntity<>("invalid refresh token", HttpStatus.BAD_REQUEST);
         }
 
@@ -185,6 +165,7 @@ public class TokenServiceImpl implements TokenService {
         //DB에 저장되어 있는지 확인
         Boolean isExist = refreshRepository.existsByRefreshToken(refresh);
         if (!isExist) {
+            log.info("invalid refresh token");
             return new ResponseEntity<>("invalid refresh token", HttpStatus.BAD_REQUEST);
         }
 

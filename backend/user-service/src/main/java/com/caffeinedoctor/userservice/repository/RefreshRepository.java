@@ -17,8 +17,6 @@ public interface RefreshRepository extends JpaRepository<Refresh, Long> {
     @Transactional
     void deleteByUsername(String username);
 
-    List<Refresh> findByExpirationBefore(LocalDateTime now);
-
 
     @Transactional
     void deleteByRefreshToken(String refresh);

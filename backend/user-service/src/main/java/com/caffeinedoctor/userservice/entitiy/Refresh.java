@@ -23,11 +23,11 @@ public class Refresh {
     @Column(name = "refresh_token")
     private String refreshToken;
 
-    private LocalDateTime expiration;
+    private String expiration;
 
     // 생성자
     @Builder
-    public Refresh(String username, String refreshToken, LocalDateTime  expiration){
+    public Refresh(String username, String refreshToken, String  expiration){
         this.username = username;
         this.refreshToken = refreshToken;
         this.expiration = expiration;
