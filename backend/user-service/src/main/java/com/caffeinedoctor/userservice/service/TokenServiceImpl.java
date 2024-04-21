@@ -149,7 +149,7 @@ public class TokenServiceImpl implements TokenService {
         //DB에 저장되어 있는지 확인
         Boolean isExist = refreshRepository.existsByRefreshToken(refresh);
         if (!isExist) {
-            log.info("잘못된 Refresh 토큰: invalid refresh token");
+            log.info("서버에 없는 잘못된 Refresh 토큰: invalid refresh token");
             return new TokenStatusDto(false, TokenProcessResult.REFRESH_TOKEN_NOT_FOUND, TokenProcessResult.REFRESH_TOKEN_NOT_FOUND.getMessage());
         }
         log.info("Refresh 토큰 검증 성공: Refresh token successfully verified.");
