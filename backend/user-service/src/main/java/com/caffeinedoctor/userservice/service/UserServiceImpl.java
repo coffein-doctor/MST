@@ -130,6 +130,18 @@ public class UserServiceImpl implements UserService {
         return userDetailsDto(user);
     }
 
+    /** 회원 완전 삭제 **/
+    @Override
+    @Transactional
+    public void deleteUser(Long userId, String username) {
+        // 유저 찾기
+        User user = findUserByUsername(username);
+        // 찾은 사용자의 userId와 입력받은 userId가 일치하는지 확인합니다.
+        verifyUserAuthentication(user, userId);
+
+        userRepository.deleteById(userId);
+    }
+
     /** 회원 상태: 신규 or 기존 **/
     @Override
     public UserStatus getUserStatusByUsername(String username) {
@@ -142,7 +154,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findUserByUsername(String username) {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new RuntimeException("해당 사용자를 찾을 수 없습니다."));
     }
 
     // 회원 조회

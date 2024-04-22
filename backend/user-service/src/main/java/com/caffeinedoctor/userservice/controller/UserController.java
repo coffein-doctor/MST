@@ -50,14 +50,14 @@ public class UserController {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "인증되지 않은 사용자입니다.",
+                    description = "사용자 인증에 실패하였습니다. 로그인이 필요합니다.",
                     content = @Content(
                             schema = @Schema(implementation = String.class)
                     )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "사용자를 찾을 수 없습니다.",
+                    description = "해당 사용자를 찾을 수 없습니다.",
                     content = @Content(
                             schema = @Schema(implementation = String.class)
                     )
@@ -86,8 +86,8 @@ public class UserController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공적으로 상태를 가져왔습니다."),
-            @ApiResponse(responseCode = "401", description = "인증되지 않은 사용자입니다."),
-            @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없습니다.")
+            @ApiResponse(responseCode = "401", description = "사용자 인증에 실패하였습니다. 로그인이 필요합니다."),
+            @ApiResponse(responseCode = "404", description = "해당 사용자를 찾을 수 없습니다.")
     })
     @GetMapping("/status")
     public ResponseEntity<String> getUserStatus(@AuthenticationPrincipal CustomOAuth2User oauth2User) {
@@ -114,7 +114,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "회원 정보 조회에 성공하였습니다.",
+                    description = "사용자 정보가 성공적으로 조회되었습니다.",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = UserDetailsDto.class)
@@ -122,27 +122,32 @@ public class UserController {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "인증되지 않은 사용자입니다.",
+                    description = "사용자 인증에 실패하였습니다. 로그인이 필요합니다.",
                     content = @Content(
                             schema = @Schema(implementation = String.class)
                     )
             ),
             @ApiResponse(
-                    responseCode = "404", description = "해당 ID의 사용자를 찾을 수 없음", content = @Content(mediaType = "application/json")),
+                    responseCode = "404",
+                    description =  "해당 사용자를 찾을 수 없습니다.",
+                    content = @Content(
+                            schema = @Schema(implementation = String.class)
+                    )
+            )
     })
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getUserDetails(@AuthenticationPrincipal CustomOAuth2User oauth2User, @PathVariable Long id) {
+    @GetMapping("/{userId}")
+    public ResponseEntity<?> getUserDetails(@AuthenticationPrincipal CustomOAuth2User oauth2User, @PathVariable Long userId) {
         // 인증된 사용자인지 확인
         if (oauth2User == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
         }
 
         try {
-            UserDetailsDto userDetailsDto = userService.getUserDetailsById(id);
+            UserDetailsDto userDetailsDto = userService.getUserDetailsById(userId);
             return ResponseEntity.ok(userDetailsDto);
-        } catch (RuntimeException ex) {
+        } catch (RuntimeException e) {
             // RuntimeException 발생 시 예외 처리
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
 
     }
@@ -183,8 +188,8 @@ public class UserController {
                     )
             )
     })
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateUserDetails(@AuthenticationPrincipal CustomOAuth2User oauth2User, @PathVariable Long id, @Valid @RequestBody UserInfoRequestDto userDto) {
+    @PutMapping("/{userId}")
+    public ResponseEntity<?> updateUserDetails(@AuthenticationPrincipal CustomOAuth2User oauth2User, @PathVariable Long userId, @Valid @RequestBody UserInfoRequestDto userDto) {
         // 인증된 사용자인지 확인
         if (oauth2User == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
@@ -192,7 +197,7 @@ public class UserController {
         // 사용자 이름 가져오기
         String username = oauth2User.getName();
         try {
-            UserDetailsDto updatedUser = userService.updateUser(id, username, userDto);
+            UserDetailsDto updatedUser = userService.updateUser(userId, username, userDto);
             return ResponseEntity.ok(updatedUser);
         } catch (AccessDeniedException e) {
             // 요청한 작업을 수행할 권한이 없을 때 발생하는 예외 처리
@@ -203,13 +208,47 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> hardDeleteUser(@AuthenticationPrincipal CustomOAuth2User oauth2User, @PathVariable Long id) {
+    /** 회원 삭제 **/
+    @Operation(
+            summary = "회원 정보 삭제",
+            description = "사용자가 성공적으로 삭제되었습니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "사용자가 성공적으로 탈퇴되었습니다."
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "사용자 인증에 실패하였습니다. 로그인이 필요합니다."
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "해당 작업을 수행할 권리가 없습니다. 로그인된 사용자 Id와 일치하는 사용자 Id가 아닙니다."
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description =  "해당 사용자를 찾을 수 없습니다."
+            )
+    })
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<String> hardDeleteUser(@AuthenticationPrincipal CustomOAuth2User oauth2User, @PathVariable Long userId) {
         // 인증된 사용자인지 확인
         if (oauth2User == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
         }
-        return null;
-    }
+        // 사용자 이름 가져오기
+        String username = oauth2User.getName();
 
+        try {
+            userService.deleteUser(userId, username);
+            return ResponseEntity.ok().body("사용자가 성공적으로 삭제되었습니다.");
+        } catch (AccessDeniedException e) {
+            // 요청한 작업을 수행할 권한이 없을 때 발생하는 예외 처리
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        } catch (RuntimeException e) {
+            // 사용자를 찾을 수 없을 때 발생하는 예외 처리
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 }
