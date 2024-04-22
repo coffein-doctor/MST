@@ -132,14 +132,19 @@ public class UserController {
             ),
     })
     @GetMapping("/{id}")
-    public ResponseEntity<?> updateUser(@AuthenticationPrincipal CustomOAuth2User oauth2User, @PathVariable Long id) {
+    public ResponseEntity<?> getUser(@AuthenticationPrincipal CustomOAuth2User oauth2User, @PathVariable Long id) {
         // 인증된 사용자인지 확인
         if (oauth2User == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
         }
-
-        UserDetailsDto userDetailsDto = userService.getUserById(id);
-        return ResponseEntity.ok(userDetailsDto);
+        
+        try {
+            UserDetailsDto userDetailsDto = userService.getUserById(id);
+            return ResponseEntity.ok(userDetailsDto);
+        } catch (RuntimeException ex) {
+            // RuntimeException 발생 시 예외 처리
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
 
     }
 

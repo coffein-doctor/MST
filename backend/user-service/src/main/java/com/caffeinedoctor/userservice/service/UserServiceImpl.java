@@ -130,7 +130,6 @@ public class UserServiceImpl implements UserService {
         User user = findUserById(userId);
 
         return userDetailsDto(user);
-
     }
 
     /** 회원 상태: 신규 or 기존 **/
