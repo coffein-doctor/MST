@@ -14,7 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "JWT", description = "JWT 관리 API")
+@Tag(name = "JWT", description = "JWT Access, Refresh 토큰 관리 API")
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -26,7 +26,7 @@ public class TokenController {
     /** Refresh로 Access 토큰 재발급 **/
     @Operation(
             summary = "Access 토큰 재발급",
-            description = "Refresh토큰으로 Access 토큰을 재발급합니다."
+            description = "Refresh 토큰으로 Access 토큰을 재발급합니다."
     )
     @ApiResponses(value = {
             @ApiResponse(

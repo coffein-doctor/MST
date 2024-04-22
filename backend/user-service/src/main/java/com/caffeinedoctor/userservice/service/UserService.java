@@ -29,5 +29,4 @@ public interface UserService {
 
     /** 회원 가입 상태 **/
     UserStatus getUserStatusByUsername(String username);
-
 }

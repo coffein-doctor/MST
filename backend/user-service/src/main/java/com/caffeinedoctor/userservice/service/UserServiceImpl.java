@@ -84,9 +84,8 @@ public class UserServiceImpl implements UserService {
     public UserDetailsDto updateUser(Long userId, String username, UserInfoRequestDto userDto) {
         User user = findUserByUsername(username);
         // 찾은 사용자의 userId와 입력받은 userId가 일치하는지 확인합니다.
-        if (!user.getId().equals(userId)) {
-            throw new AccessDeniedException("로그인된 사용자 Id와 일치하는 사용자 Id가 아닙니다.");
-        }
+        verifyUserAuthentication(user, userId);
+
         // 사용자 정보 업데이트
         updateUserDetails(user, userDto);
         userRepository.save(user);
@@ -152,6 +151,14 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new RuntimeException("해당 ID에 대한 사용자를 찾을 수 없습니다."));
     }
 
+    // 변경하려고 전달해준 유저의 Id와 값을 보낸 유저가 같은 유저인지 검증
+    private void verifyUserAuthentication(User user, Long UserId) throws AccessDeniedException {
+        // 찾은 사용자의 userId와 입력받은 userId가 일치하는지 확인합니다.
+        if (!user.getId().equals(UserId)) {
+            throw new AccessDeniedException("해당 작업을 수행할 권리가 없습니다. 로그인된 사용자 Id와 일치하는 사용자 Id가 아닙니다.");
+        }
+    }
+
     @Override
     // 이메일로 사용자가 존재하는지 확인
     public boolean isUserExistsByEmail(String email) {
@@ -163,10 +170,6 @@ public class UserServiceImpl implements UserService {
     public boolean isUserExistsByUsername(String username) {
         return userRepository.existsByUsername(username);
     }
-
-
-
-
 
     private void validateDuplicateUser(String email) {
         // 이메일 유효성 검사
