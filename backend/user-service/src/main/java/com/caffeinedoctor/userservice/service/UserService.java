@@ -20,7 +20,7 @@ public interface UserService {
     UserDetailsDto updateUser(Long userId, String username, UserInfoRequestDto userDto);
 
     /** 회원 조회 **/
-    UserDetailsDto getUserById(Long userId);
+    UserDetailsDto getUserDetailsById(Long userId);
     User findUserByUsername(String username);
 
     /** 회원 찾기 **/

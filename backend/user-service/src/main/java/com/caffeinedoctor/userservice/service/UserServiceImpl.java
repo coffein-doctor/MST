@@ -125,10 +125,9 @@ public class UserServiceImpl implements UserService {
 
     /** 회원 조회 **/
     @Override
-    public UserDetailsDto getUserById(Long userId){
+    public UserDetailsDto getUserDetailsById(Long userId){
         // 유저 ID를 사용하여 해당 유저를 데이터베이스에서 조회
         User user = findUserById(userId);
-
         return userDetailsDto(user);
     }
 
@@ -137,7 +136,6 @@ public class UserServiceImpl implements UserService {
     public UserStatus getUserStatusByUsername(String username) {
         // 유저 이름을 사용하여 해당 유저를 데이터베이스에서 조회
         User user = findUserByUsername(username);
-
         return user.getStatus();
     }
 

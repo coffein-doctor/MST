@@ -28,8 +28,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor // 파이널 필드만 가지고 생성사 주입 함수 만듬 (따로 작성할 필요 없다.)
 @Slf4j
 public class UserController {
-    private final Environment env;
-    private final GreetingDto greeting;
+
     private final UserService userService;
     // 생성자 주입
 //    @Autowired
@@ -130,16 +129,18 @@ public class UserController {
                             schema = @Schema(implementation = String.class)
                     )
             ),
+            @ApiResponse(
+                    responseCode = "404", description = "해당 ID의 사용자를 찾을 수 없음", content = @Content(mediaType = "application/json")),
     })
     @GetMapping("/{id}")
-    public ResponseEntity<?> getUser(@AuthenticationPrincipal CustomOAuth2User oauth2User, @PathVariable Long id) {
+    public ResponseEntity<?> getUserDetails(@AuthenticationPrincipal CustomOAuth2User oauth2User, @PathVariable Long id) {
         // 인증된 사용자인지 확인
         if (oauth2User == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
         }
-        
+
         try {
-            UserDetailsDto userDetailsDto = userService.getUserById(id);
+            UserDetailsDto userDetailsDto = userService.getUserDetailsById(id);
             return ResponseEntity.ok(userDetailsDto);
         } catch (RuntimeException ex) {
             // RuntimeException 발생 시 예외 처리
@@ -191,31 +192,6 @@ public class UserController {
         } catch (AccessDeniedException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("접근이 거부되었습니다.");
         }
-    }
-
-
-    ////////////////////////////////////////////////////////////////////////
-
-    // 작동 상태 체크
-    @Operation(
-            summary = "Port 번호 조회",
-            description = "User Service의 랜덤 Port 번호를 조회 합니다."
-    )
-    @GetMapping("/health_check")
-    public String status() {
-        return String.format("It's Working in User Service on PORT %s",
-                env.getProperty("local.server.port"));
-    }
-
-    @Operation(
-            summary = "Welcome",
-            description = "Welcome to the MST Project."
-    )
-    @GetMapping("/welcome")
-    public String welcome() {
-//        return env.getProperty("greeting.message");
-        return greeting.getMessage();
-
     }
 
 }
