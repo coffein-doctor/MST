@@ -26,7 +26,7 @@ public class TokenController {
     /** Refresh로 Access 토큰 재발급 **/
     @Operation(
             summary = "Access 토큰 재발급",
-            description = "Refresh 토큰으로 Access 토큰을 재발급합니다."
+            description = "Access 토큰이 만료되었을 때, Refresh 토큰을 사용하여 새로운 Access 토큰을 발급받습니다."
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -56,8 +56,8 @@ public class TokenController {
 
     /** 로그아웃으로 refresh, access 토큰 삭제 **/
     @Operation(
-            summary = "로그아웃 토큰 삭제",
-            description = "로그아웃으로 refresh 토큰과 access 토큰을 삭제합니다."
+            summary = "로그아웃 및 토큰 만료",
+            description = "사용자가 로그아웃할 때, Refresh 토큰과 Access 토큰을 만료시켜 삭제합니다."
     )
     @ApiResponses(value = {
             @ApiResponse(
