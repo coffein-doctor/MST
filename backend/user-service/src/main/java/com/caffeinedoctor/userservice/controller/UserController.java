@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -20,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "User", description = "User 관리 API")
@@ -70,15 +72,15 @@ public class UserController {
                                         @Valid @RequestBody UserInfoRequestDto userDto) {
         // 인증된 사용자인지 확인
         if (oauth2User == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("사용자 인증에 실패하였습니다. 로그인이 필요합니다.");
         }
         // 사용자 이름 가져오기
         String username = oauth2User.getName();
         try {
             Long userId = userService.createUser(username, userDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(userId);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User status not found");
+        } catch (UsernameNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
@@ -96,7 +98,7 @@ public class UserController {
     public ResponseEntity<String> getUserStatus(@AuthenticationPrincipal CustomOAuth2User oauth2User) {
         // 인증된 사용자인지 확인
         if (oauth2User == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("사용자 인증에 실패하였습니다. 로그인이 필요합니다.");
         }
         // 사용자 이름 가져오기
         String username = oauth2User.getName();
@@ -104,8 +106,8 @@ public class UserController {
             // 사용자 이름을 사용하여 상태 가져오기
             UserStatus userStatus = userService.getUserStatusByUsername(username);
             return ResponseEntity.ok(userStatus.toString());
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User status not found");
+        } catch (UsernameNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
@@ -143,13 +145,13 @@ public class UserController {
                                             @PathVariable Long userId) {
         // 인증된 사용자인지 확인
         if (oauth2User == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("사용자 인증에 실패하였습니다. 로그인이 필요합니다.");
         }
 
         try {
             UserDetailsDto userDetailsDto = userService.getUserDetailsById(userId);
             return ResponseEntity.ok(userDetailsDto);
-        } catch (RuntimeException e) {
+        } catch (EntityNotFoundException e) {
             // RuntimeException 발생 시 예외 처리
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
@@ -198,7 +200,7 @@ public class UserController {
                                                @Valid @RequestBody UserInfoRequestDto userDto) {
         // 인증된 사용자인지 확인
         if (oauth2User == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("사용자 인증에 실패하였습니다. 로그인이 필요합니다.");
         }
         // 사용자 이름 가져오기
         String username = oauth2User.getName();
@@ -208,7 +210,7 @@ public class UserController {
         } catch (AccessDeniedException e) {
             // 요청한 작업을 수행할 권한이 없을 때 발생하는 예외 처리
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
-        } catch (RuntimeException e) {
+        } catch (UsernameNotFoundException e) {
             // 사용자를 찾을 수 없을 때 발생하는 예외 처리
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
@@ -247,7 +249,7 @@ public class UserController {
                                                  @PathVariable Long userId) {
         // 인증된 사용자인지 확인
         if (oauth2User == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("인증 실패: 사용자가 로그인되어 있지 않습니다.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("사용자 인증에 실패하였습니다. 로그인이 필요합니다.");
         }
 
         try {
@@ -258,14 +260,12 @@ public class UserController {
         } catch (AccessDeniedException e) {
             // 요청한 작업을 수행할 권한이 없을 때 발생하는 예외 처리
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        } catch (UsernameNotFoundException e) {
+            // 사용자를 찾을 수 없을 때의 처리
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (RuntimeException e) {
-            if ("해당 사용자를 찾을 수 없습니다.".equals(e.getMessage())) {
-                // 사용자를 찾을 수 없을 때의 처리
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-            } else {
-                // 토큰 삭제 실패 또는 기타 RuntimeException의 처리
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-            }
+            // 토큰 삭제 실패 또는 기타 RuntimeException의 처리
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 }

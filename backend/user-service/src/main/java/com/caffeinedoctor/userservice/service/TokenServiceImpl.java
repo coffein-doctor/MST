@@ -67,11 +67,11 @@ public class TokenServiceImpl implements TokenService {
         return new TokenStatusDto(true, TokenProcessResult.TOKEN_DELETION_SUCCESS, TokenProcessResult.TOKEN_DELETION_SUCCESS.getMessage());
     }
 
-    /** Refresh토큰으로 Access 토큰을 재발급 **/
+    /** Refresh 토큰으로 Access 토큰을 재발급 **/
     @Transactional
     @Override
     public TokenStatusDto reissueToken(HttpServletRequest request, HttpServletResponse response) {
-        log.info("Refresh토큰으로 Access 토큰을 재발급 ");
+        log.info("Refresh 토큰으로 Access 토큰을 재발급 ");
 
         // Get refresh token
         String refresh = CookieUtil.getRefreshToken(request);
@@ -115,6 +115,7 @@ public class TokenServiceImpl implements TokenService {
     }
 
     //refresh토큰 저장
+    @Transactional
     @Override
     public void addRefreshEntity(String username, String newRefreshToken, Long expiredMs) {
 

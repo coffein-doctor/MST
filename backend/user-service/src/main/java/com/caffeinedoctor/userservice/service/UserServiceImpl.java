@@ -7,6 +7,7 @@ import com.caffeinedoctor.userservice.dto.request.user.UserInfoRequestDto;
 import com.caffeinedoctor.userservice.entitiy.User;
 import com.caffeinedoctor.userservice.enums.UserStatus;
 import com.caffeinedoctor.userservice.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -166,13 +168,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findUserByUsername(String username) {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("해당 사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new UsernameNotFoundException("해당 사용자를 찾을 수 없습니다."));
     }
+
 
     // 회원 조회
     private User findUserById(Long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("해당 ID에 대한 사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new EntityNotFoundException("해당 ID에 대한 사용자를 찾을 수 없습니다."));
     }
 
     // 변경하려고 전달해준 유저의 Id와 값을 보낸 유저가 같은 유저인지 검증
