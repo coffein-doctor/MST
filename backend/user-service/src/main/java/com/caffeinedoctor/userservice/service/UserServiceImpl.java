@@ -122,24 +122,24 @@ public class UserServiceImpl implements UserService {
         user.updateIntroduction(userDto.getIntroduction());
     }
 
-    /** 회원 조회 **/
-    @Override
-    public UserDetailsDto getUserDetailsById(Long userId){
-        // 유저 ID를 사용하여 해당 유저를 데이터베이스에서 조회
-        User user = findUserById(userId);
-        return userDetailsDto(user);
-    }
-
     /** 회원 완전 삭제 **/
     @Override
     @Transactional
-    public void deleteUser(Long userId, String username) {
+    public void hardDeleteUser(Long userId, String username) {
         // 유저 찾기
         User user = findUserByUsername(username);
         // 찾은 사용자의 userId와 입력받은 userId가 일치하는지 확인합니다.
         verifyUserAuthentication(user, userId);
 
         userRepository.deleteById(userId);
+    }
+
+    /** 회원 조회 **/
+    @Override
+    public UserDetailsDto getUserDetailsById(Long userId){
+        // 유저 ID를 사용하여 해당 유저를 데이터베이스에서 조회
+        User user = findUserById(userId);
+        return userDetailsDto(user);
     }
 
     /** 회원 상태: 신규 or 기존 **/

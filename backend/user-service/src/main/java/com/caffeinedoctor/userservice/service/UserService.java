@@ -20,7 +20,7 @@ public interface UserService {
     UserDetailsDto updateUser(Long userId, String username, UserInfoRequestDto userDto);
 
     /** 회원 삭제 **/
-    void deleteUser(Long userId, String username);
+    void hardDeleteUser(Long userId, String username);
 
     /** 회원 조회 **/
     UserDetailsDto getUserDetailsById(Long userId);

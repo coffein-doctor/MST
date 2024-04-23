@@ -37,8 +37,8 @@ public class UserController {
 
     /** 회원 가입 **/
     @Operation(
-            summary = "회원 가입을 통해 새로운 사용자 생성",
-            description = "추가 등록 정보를 입력하여 새로운 사용자를 생성합니다."
+            summary = "새로운 사용자 등록",
+            description = "회원 가입을 통해 새로운 사용자를 생성합니다. 추가 등록 정보를 입력해주세요."
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -109,7 +109,7 @@ public class UserController {
     /** 회원 정보 조회 **/
     @Operation(
             summary = "회원 정보 조회",
-            description = "해당 회원 id의 회원 정보를 조회합니다."
+            description = "특정 회원의 정보를 조회합니다. 회원 ID를 입력하여 해당 회원의 정보를 확인하세요."
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -155,7 +155,7 @@ public class UserController {
     /** 회원 정보 수정 **/
     @Operation(
             summary = "회원 정보 수정",
-            description = "회원 id와 수정된 정보를 받아와서 회원 정보를 수정합니다."
+            description = "회원의 정보를 수정합니다. 회원 ID와 수정된 정보를 입력하세요."
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -182,7 +182,7 @@ public class UserController {
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description =  "해당 사용자를 찾을 수 없습니다.",
+                    description = "해당 사용자를 찾을 수 없습니다.",
                     content = @Content(
                             schema = @Schema(implementation = String.class)
                     )
@@ -210,13 +210,13 @@ public class UserController {
 
     /** 회원 삭제 **/
     @Operation(
-            summary = "회원 정보 삭제",
-            description = "사용자가 성공적으로 삭제되었습니다."
+            summary = "회원 탈퇴",
+            description = "회원 ID에 해당하는 회원을 탈퇴 처리합니다. 해당 회원의 모든 정보를 삭제합니다."
     )
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "사용자가 성공적으로 탈퇴되었습니다."
+                    description = "사용자가 성공적으로 삭제되었습니다."
             ),
             @ApiResponse(
                     responseCode = "401",
@@ -241,7 +241,7 @@ public class UserController {
         String username = oauth2User.getName();
 
         try {
-            userService.deleteUser(userId, username);
+            userService.hardDeleteUser(userId, username);
             return ResponseEntity.ok().body("사용자가 성공적으로 삭제되었습니다.");
         } catch (AccessDeniedException e) {
             // 요청한 작업을 수행할 권한이 없을 때 발생하는 예외 처리
