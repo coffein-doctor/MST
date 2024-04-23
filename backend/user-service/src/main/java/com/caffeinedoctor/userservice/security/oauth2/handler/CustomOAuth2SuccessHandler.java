@@ -122,6 +122,7 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
                 .toUriString();
         // 로그인 확인 페이지로 리다이렉트
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
+        log.info(targetUrl + " 로 토큰 리다이렉트 성공!");
 
     }
 

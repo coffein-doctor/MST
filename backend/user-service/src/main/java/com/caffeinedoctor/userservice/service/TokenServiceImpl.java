@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
@@ -39,6 +40,7 @@ public class TokenServiceImpl implements TokenService {
 
     //만료기간이 지난 토큰은 스케줄러를 돌려서 삭제하라.
     /** 토큰 지우기 **/
+    @Transactional
     @Override
     public TokenStatusDto removeToken(HttpServletRequest request, HttpServletResponse response) {
 
@@ -52,8 +54,8 @@ public class TokenServiceImpl implements TokenService {
             return verifyResult; // 토큰 검증에 실패한 경우 해당 응답 반환
         }
 
-        log.info("로그아웃 진행: refresh 토큰 삭제");
-        //로그아웃 진행
+        log.info("로그아웃 또는 회원탈퇴 수행: refresh 토큰 삭제");
+        //로그아웃 또는 회원 탈퇴 수행
         //Refresh 토큰 DB에서 제거
         refreshRepository.deleteByRefreshToken(refresh);
 
@@ -66,6 +68,7 @@ public class TokenServiceImpl implements TokenService {
     }
 
     /** Refresh토큰으로 Access 토큰을 재발급 **/
+    @Transactional
     @Override
     public TokenStatusDto reissueToken(HttpServletRequest request, HttpServletResponse response) {
         log.info("Refresh토큰으로 Access 토큰을 재발급 ");
@@ -105,6 +108,8 @@ public class TokenServiceImpl implements TokenService {
         response.addCookie(CookieUtil.createAccessCookie("access", newAccess, accessCookieExpireLength));
         //쿠키로 응답
         response.addCookie(CookieUtil.createRefreshCookie("refresh", newRefresh, refreshCookieExpireLength));
+        //상태 코드: 200 응답 보내기
+        response.setStatus(HttpStatus.OK.value());
 
         return new TokenStatusDto(true, TokenProcessResult.TOKEN_REISSUE_SUCCESS, TokenProcessResult.TOKEN_REISSUE_SUCCESS.getMessage());
     }

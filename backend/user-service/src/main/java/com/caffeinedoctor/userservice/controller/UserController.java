@@ -11,6 +11,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -64,7 +66,8 @@ public class UserController {
             )
     })
     @PostMapping
-    public ResponseEntity<?> createUser(@AuthenticationPrincipal CustomOAuth2User oauth2User, @Valid @RequestBody UserInfoRequestDto userDto) {
+    public ResponseEntity<?> createUser(@AuthenticationPrincipal CustomOAuth2User oauth2User,
+                                        @Valid @RequestBody UserInfoRequestDto userDto) {
         // 인증된 사용자인지 확인
         if (oauth2User == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
@@ -136,7 +139,8 @@ public class UserController {
             )
     })
     @GetMapping("/{userId}")
-    public ResponseEntity<?> getUserDetails(@AuthenticationPrincipal CustomOAuth2User oauth2User, @PathVariable Long userId) {
+    public ResponseEntity<?> getUserDetails(@AuthenticationPrincipal CustomOAuth2User oauth2User,
+                                            @PathVariable Long userId) {
         // 인증된 사용자인지 확인
         if (oauth2User == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
@@ -189,7 +193,9 @@ public class UserController {
             )
     })
     @PutMapping("/{userId}")
-    public ResponseEntity<?> updateUserDetails(@AuthenticationPrincipal CustomOAuth2User oauth2User, @PathVariable Long userId, @Valid @RequestBody UserInfoRequestDto userDto) {
+    public ResponseEntity<?> updateUserDetails(@AuthenticationPrincipal CustomOAuth2User oauth2User,
+                                               @PathVariable Long userId,
+                                               @Valid @RequestBody UserInfoRequestDto userDto) {
         // 인증된 사용자인지 확인
         if (oauth2User == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
@@ -219,6 +225,10 @@ public class UserController {
                     description = "사용자가 성공적으로 삭제되었습니다."
             ),
             @ApiResponse(
+                    responseCode = "400",
+                    description = "Bad request. Possible reasons: refresh token null, refresh token expired, invalid refresh token"
+            ),
+            @ApiResponse(
                     responseCode = "401",
                     description = "사용자 인증에 실패하였습니다. 로그인이 필요합니다."
             ),
@@ -232,23 +242,30 @@ public class UserController {
             )
     })
     @DeleteMapping("/{userId}")
-    public ResponseEntity<String> hardDeleteUser(@AuthenticationPrincipal CustomOAuth2User oauth2User, @PathVariable Long userId) {
+    public ResponseEntity<String> hardDeleteUser(HttpServletRequest request, HttpServletResponse response,
+                                                 @AuthenticationPrincipal CustomOAuth2User oauth2User,
+                                                 @PathVariable Long userId) {
         // 인증된 사용자인지 확인
         if (oauth2User == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("인증 실패: 사용자가 로그인되어 있지 않습니다.");
         }
-        // 사용자 이름 가져오기
-        String username = oauth2User.getName();
 
         try {
-            userService.hardDeleteUser(userId, username);
+            // 사용자 이름 가져오기
+            String username = oauth2User.getName();
+            userService.hardDeleteUser(request, response, userId, username);
             return ResponseEntity.ok().body("사용자가 성공적으로 삭제되었습니다.");
         } catch (AccessDeniedException e) {
             // 요청한 작업을 수행할 권한이 없을 때 발생하는 예외 처리
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         } catch (RuntimeException e) {
-            // 사용자를 찾을 수 없을 때 발생하는 예외 처리
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            if ("해당 사용자를 찾을 수 없습니다.".equals(e.getMessage())) {
+                // 사용자를 찾을 수 없을 때의 처리
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            } else {
+                // 토큰 삭제 실패 또는 기타 RuntimeException의 처리
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            }
         }
     }
 }

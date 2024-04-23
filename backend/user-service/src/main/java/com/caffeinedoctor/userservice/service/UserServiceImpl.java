@@ -1,14 +1,18 @@
 package com.caffeinedoctor.userservice.service;
 
+import com.caffeinedoctor.userservice.dto.response.TokenStatusDto;
 import com.caffeinedoctor.userservice.dto.response.user.UserDetailsDto;
 import com.caffeinedoctor.userservice.dto.socialLoginDto;
 import com.caffeinedoctor.userservice.dto.request.user.UserInfoRequestDto;
 import com.caffeinedoctor.userservice.entitiy.User;
 import com.caffeinedoctor.userservice.enums.UserStatus;
 import com.caffeinedoctor.userservice.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +26,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final TokenService tokenService;
 
 //    @Autowired // 생성자 주입
 //    public UserServiceImpl(UserRepository userRepository) {
@@ -125,12 +130,19 @@ public class UserServiceImpl implements UserService {
     /** 회원 완전 삭제 **/
     @Override
     @Transactional
-    public void hardDeleteUser(Long userId, String username) {
+    public void hardDeleteUser(HttpServletRequest request, HttpServletResponse response, Long userId, String username) {
         // 유저 찾기
         User user = findUserByUsername(username);
         // 찾은 사용자의 userId와 입력받은 userId가 일치하는지 확인합니다.
         verifyUserAuthentication(user, userId);
 
+        // 유저와 관련된 토큰 삭제
+        TokenStatusDto tokenStatusDto = tokenService.removeToken(request, response);
+        if (!tokenStatusDto.isSuccessful()) {
+            log.error("토큰 삭제 실패: {}", tokenStatusDto.getMessage());
+            // 토큰 삭제 실패 시 예외를 throw하여 트랜잭션 롤백 유도
+            throw new RuntimeException(tokenStatusDto.getMessage());
+        }
         userRepository.deleteById(userId);
     }
 

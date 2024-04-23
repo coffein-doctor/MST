@@ -26,14 +26,14 @@ public class CustomOAuth2FailureHandler extends SimpleUrlAuthenticationFailureHa
         }
 
         // Authorization 쿠키 삭제
-        Cookie authCookie = WebUtils.getCookie(request, "Authorization");
+        Cookie authCookie = WebUtils.getCookie(request, "refresh");
         if (authCookie != null) {
             // 쿠키의 만료 시간을 0으로 설정하여 쿠키를 즉시 만료시킵니다.
             authCookie.setMaxAge(0);
             // 클라이언트에게 변경된 쿠키를 전달하여 클라이언트 측에서 해당 쿠키를 삭제하도록 합니다.
             response.addCookie(authCookie);
+            log.info("쿠키 만료 시간: " + authCookie.getMaxAge());
         }
-        log.info("쿠키 만료 시간: " + authCookie.getMaxAge());
 
         // 인증 실패에 대한 상세한 메시지 생성
         String errorMessage = "소셜 로그인에 실패했습니다. 원인: " + exception.getLocalizedMessage();
