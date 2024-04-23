@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,16 @@ public class TokenServiceImpl implements TokenService {
     //jwt관리 및 검증 utill
     private final JWTUtil jwtUtil;
     private final RefreshRepository refreshRepository;
+
+    @Value("${JWT.ACCESS-TOKEN.EXPIRE-LENGTH}")
+    private long accessTokenExpireLength;
+    @Value("${JWT.REFRESH-TOKEN.EXPIRE-LENGTH}")
+    private long refreshTokenExpireLength;
+
+    @Value("${JWT.ACCESS-TOKEN.EXPIRE-LENGTH}")
+    private int accessCookieExpireLength;
+    @Value("${JWT.REFRESH-TOKEN.EXPIRE-LENGTH}")
+    private int refreshCookieExpireLength;
 
     //만료기간이 지난 토큰은 스케줄러를 돌려서 삭제하라.
     /** 토큰 지우기 **/
@@ -76,22 +87,24 @@ public class TokenServiceImpl implements TokenService {
         log.info("새로운 access, refresh 토큰 생성");
         //make new JWT
         //Create new access token
-        String newAccess = jwtUtil.createJwt("access", username, role, 600000L);
+        String newAccess = jwtUtil.createJwt("access", username, role, accessTokenExpireLength);
         //24시간
-        String newRefresh = jwtUtil.createJwt("refresh", username, role, 86400000L);
+        String newRefresh = jwtUtil.createJwt("refresh", username, role, refreshTokenExpireLength);
 
         log.info("새로운 refresh 토큰 갱신");
         //Refresh 토큰 저장 DB에 기존의 Refresh 토큰 삭제 후 새 Refresh 토큰 저장
+        //삭제
         refreshRepository.deleteByRefreshToken(refresh);
-        addRefreshEntity(username, newRefresh, 86400000L);
+        //저장
+        addRefreshEntity(username, newRefresh, refreshTokenExpireLength);
 
         //response
         //1. Set the new access token in response header
 //        response.setHeader("access", newAccess);
         //2. Set the new access token in response Cookie
-        response.addCookie(CookieUtil.createAccessCookie("access", newAccess));
+        response.addCookie(CookieUtil.createAccessCookie("access", newAccess, accessCookieExpireLength));
         //쿠키로 응답
-        response.addCookie(CookieUtil.createRefreshCookie("refresh", newRefresh));
+        response.addCookie(CookieUtil.createRefreshCookie("refresh", newRefresh, refreshCookieExpireLength));
 
         return new TokenStatusDto(true, TokenProcessResult.TOKEN_REISSUE_SUCCESS, TokenProcessResult.TOKEN_REISSUE_SUCCESS.getMessage());
     }

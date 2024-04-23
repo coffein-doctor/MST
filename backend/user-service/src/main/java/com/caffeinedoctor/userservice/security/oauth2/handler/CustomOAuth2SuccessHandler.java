@@ -6,6 +6,7 @@ import com.caffeinedoctor.userservice.security.oauth2.dto.CustomOAuth2User;
 import com.caffeinedoctor.userservice.security.jwt.JWTUtil;
 import com.caffeinedoctor.userservice.service.TokenService;
 import com.caffeinedoctor.userservice.service.UserService;
+import com.caffeinedoctor.userservice.enums.UserStatus;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -31,12 +32,22 @@ import java.util.Iterator;
 public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final JWTUtil jwtUtil;
-    private final UserService userService;
     private final TokenService tokenService;
-    private final RefreshRepository refreshRepository;
 
     @Value("${FRONT_URL}")
     private String redirectFrontURL;
+
+    // JWT 만료 시간 Long 형
+    @Value("${JWT.ACCESS-TOKEN.EXPIRE-LENGTH}")
+    private long accessTokenExpireLength;
+    @Value("${JWT.REFRESH-TOKEN.EXPIRE-LENGTH}")
+    private long refreshTokenExpireLength;
+
+    // 쿠키 만료 시간 int형
+    @Value("${JWT.ACCESS-TOKEN.EXPIRE-LENGTH}")
+    private int accessCookieExpireLength;
+    @Value("${JWT.REFRESH-TOKEN.EXPIRE-LENGTH}")
+    private int refreshCookieExpireLength;
 
     //로그인이 성공하면 동작
     @Override
@@ -60,24 +71,24 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         //2.새로운 토큰 생성
         //토큰 2개 생성 (jwt 만들기 - 유저이름, 역할, 토큰이 살아있는 시간)
         //10분
-        String access = jwtUtil.createJwt("access", username, role, 600000L);
+        String access = jwtUtil.createJwt("access", username, role, accessTokenExpireLength);
         //24시간
-        String refresh = jwtUtil.createJwt("refresh", username, role, 86400000L);
+        String refresh = jwtUtil.createJwt("refresh", username, role, refreshTokenExpireLength);
 
         //3.새로운 리프레쉬 토큰 저장
         //Refresh 토큰 저장
-        tokenService.addRefreshEntity(username, refresh, 86400000L);
+        tokenService.addRefreshEntity(username, refresh, refreshTokenExpireLength);
 
         //응답 설정
-        // <access 토큰 설정>
+        // <access 토큰 설정> ///////////////////////////// 프론트 서버 올리면 토큰으로 변경
         //1.헤더에 넣기
-         response.setHeader("access", access);
+        //response.setHeader("access", access);
         //2.쿠키에 넣기
-        //response.addCookie(CookieUtil.createAccessCookie("access", access));
+        //response.addCookie(CookieUtil.createAccessCookie("access", access, accessCookieExpireLength));
 
         // <refresh 토큰 설정>
         //쿠키에 넣기
-        response.addCookie(CookieUtil.createRefreshCookie("refresh", refresh));
+        response.addCookie(CookieUtil.createRefreshCookie("refresh", refresh, refreshCookieExpireLength));
         //상태 코드: 200 응답 보내기
         response.setStatus(HttpStatus.OK.value());
 
@@ -104,13 +115,13 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
         // <access 토큰 설정>
         //3.쿼리스트링에 담는 url을 만들어준다.
-//        String targetUrl = UriComponentsBuilder.fromUriString(redirectFrontURL)
-//                .queryParam("access", access)
-//                .build()
-//                .encode(StandardCharsets.UTF_8)
-//                .toUriString();
-//        // 로그인 확인 페이지로 리다이렉트
-//        getRedirectStrategy().sendRedirect(request, response, targetUrl);
+        String targetUrl = UriComponentsBuilder.fromUriString(redirectFrontURL)
+                .queryParam("access", access)
+                .build()
+                .encode(StandardCharsets.UTF_8)
+                .toUriString();
+        // 로그인 확인 페이지로 리다이렉트
+        getRedirectStrategy().sendRedirect(request, response, targetUrl);
 
     }
 

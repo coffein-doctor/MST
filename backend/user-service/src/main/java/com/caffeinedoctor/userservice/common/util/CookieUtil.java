@@ -31,12 +31,12 @@ public class CookieUtil {
 
     //refresh 토큰 쿠키 생성 함수
     //쿠키 만들기
-    public static Cookie createRefreshCookie(String key, String value) {
+    public static Cookie createRefreshCookie(String key, String value, int expireLength) {
         log.info(key + "쿠키 생성");
         //value: jwt
         Cookie cookie = new Cookie(key, value);
-        //쿠키가 살아있을 시간
-        cookie.setMaxAge(24*60*60);
+        //쿠키가 살아있을 시간 (24*60*60 = 24시간)
+        cookie.setMaxAge(expireLength);
         //자바스크립트가 해당 쿠키를 가져가지 못하게 설정
         cookie.setHttpOnly(true);
         //https 통신에서만 사용 가능
@@ -47,12 +47,12 @@ public class CookieUtil {
         return cookie;
     }
 
-    public static Cookie createAccessCookie(String key, String value) {
+    public static Cookie createAccessCookie(String key, String value, int expireLength) {
         log.info(key + "쿠키 생성");
         //value: jwt
         Cookie cookie = new Cookie(key, value);
-        //쿠키가 살아있을 시간
-        cookie.setMaxAge(24*60*60);
+        //쿠키가 살아있을 시간 (60*60 = 1시간)
+        cookie.setMaxAge(expireLength);
         //쿠키 적용 범위 (전역)
         cookie.setPath("/");
         //https 통신에서만 사용 가능

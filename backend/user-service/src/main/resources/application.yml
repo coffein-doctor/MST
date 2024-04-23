@@ -14,10 +14,10 @@ spring:
       - application-secret.yml
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${SPRING_DATASOURCE_URL}
+    url: ${DATABASE.DATASOURCE.URL}
 #    url: jdbc:mysql://3.36.123.194:3306/mst?useSSL=false&serverTimezone=UTC
-    username: admin
-    password: ${DATASOURCE_PASSWORD}
+    username: ${DATABASE.DATASOURCE.USERNAME}
+    password: ${DATABASE.DATASOURCE.PASSWORD}
   #    password: mst@0117
   jpa:
     database: mysql
@@ -54,13 +54,6 @@ spring:
 #            token-uri: https://kauth.kakao.com/oauth/token
 #            user-info-uri: https://kapi.kakao.com/v2/user/me
 #            user-name-attribute: id
-#jwt:
-#  token:
-#    secret-key: chadoll
-#  access-token:
-#    expire-length: 1800000
-#  refresh-token:
-#    expire-length: 1209600000
 
 #jwt:
 #  secret: dnflwlqrnlduqenddlrlackehfsjansjanrnldudnj
