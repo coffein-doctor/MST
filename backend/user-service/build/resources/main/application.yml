@@ -80,7 +80,7 @@ eureka:
     fetch-registry: true
     # eureka 서버 주소에 마이크로서비스 정보 등록 (접속아이디, 비밀번호)
     service-url:
-      defaultZone: http://admin:1234mst@3.36.123.194:8761/eureka
+      defaultZone: http://${EUREKA.USERNAME}:${EUREKA.PASSWORD}@${EUREKA.IP}:8761/eureka
 
 greeting:
   message: Welcome to the MST Project.
