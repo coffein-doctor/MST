@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class Beverage {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -36,4 +36,31 @@ public class Beverage {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "beverage_id")
     private BeverageBasic basic;
+
+    public void setUser(User user) {
+        if (this.user != null) {
+            this.user.getBeverages().remove(this);
+        }
+
+        this.user = user;
+        this.user.getBeverages().add(this);
+    }
+
+    public void setCustom(BeverageCustom custom) {
+        if (this.custom != null) {
+            this.custom.getBeverages().remove(this);
+        }
+
+        this.custom = custom;
+        this.custom.getBeverages().add(this);
+    }
+
+    public void setBasic(BeverageBasic basic) {
+        if (this.basic != null) {
+            this.basic.getBeverages().remove(this);
+        }
+
+        this.basic = basic;
+        this.basic.getBeverages().add(this);
+    }
 }

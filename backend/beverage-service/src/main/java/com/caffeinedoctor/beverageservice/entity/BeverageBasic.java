@@ -3,6 +3,9 @@ package com.caffeinedoctor.beverageservice.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Builder
 @Setter
@@ -12,7 +15,7 @@ import lombok.*;
 public class BeverageBasic {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(length = 100, nullable = false)
@@ -32,4 +35,8 @@ public class BeverageBasic {
 
     @Column(length = 10)
     private Long sugar;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "basic", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Beverage> beverages = new ArrayList<>();
 }

@@ -6,14 +6,15 @@ import com.caffeinedoctor.beverageservice.dto.BeverageCustomInfo;
 import com.caffeinedoctor.beverageservice.dto.CustomCreateRequest;
 import com.caffeinedoctor.beverageservice.entity.BeverageBasic;
 import com.caffeinedoctor.beverageservice.entity.BeverageCustom;
+import com.caffeinedoctor.beverageservice.exception.ResourceNotFoundException;
 import com.caffeinedoctor.beverageservice.repository.BeverageBasicRepository;
 import com.caffeinedoctor.beverageservice.repository.BeverageCustomRepository;
 import com.caffeinedoctor.beverageservice.repository.BeverageRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
 
 @Service
 @Transactional(readOnly = true)
@@ -25,7 +26,11 @@ public class BeverageService {
 
     public BeverageBasicInfo basicInfo(BasicInfoRequest dto) {
         BeverageBasic beverageBasic = basicRepository.findByName(dto.getName()).orElseThrow(
-                () -> new RuntimeException("등록된 제품이 없습니다."));
+                () -> new ResourceNotFoundException("등록된 제품이 없습니다."));
+
+        if (!Objects.equals(dto.getCompany(), beverageBasic.getCompany())) {
+            throw new ResourceNotFoundException("알맞는 브랜드명을 입력해 주세요.");
+        }
 
         return new BeverageBasicInfo(beverageBasic);
     }
@@ -40,7 +45,6 @@ public class BeverageService {
                 .sugar(dto.getSugar())
                 .volume(dto.getVolume())
                 .build();
-
         customRepository.save(beverageCustom);
 
         return new BeverageCustomInfo(beverageCustom);
