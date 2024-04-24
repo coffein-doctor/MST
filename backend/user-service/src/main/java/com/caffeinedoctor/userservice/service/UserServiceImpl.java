@@ -1,15 +1,20 @@
 package com.caffeinedoctor.userservice.service;
 
+import com.caffeinedoctor.userservice.dto.response.TokenStatusDto;
 import com.caffeinedoctor.userservice.dto.response.user.UserDetailsDto;
 import com.caffeinedoctor.userservice.dto.socialLoginDto;
 import com.caffeinedoctor.userservice.dto.request.user.UserInfoRequestDto;
 import com.caffeinedoctor.userservice.entitiy.User;
 import com.caffeinedoctor.userservice.enums.UserStatus;
 import com.caffeinedoctor.userservice.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +27,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final TokenService tokenService;
 
 //    @Autowired // 생성자 주입
 //    public UserServiceImpl(UserRepository userRepository) {
@@ -78,21 +84,17 @@ public class UserServiceImpl implements UserService {
         return user.getId();
     }
 
-    /**
-     * 회원 정보 수정 추가 정보 등록
-     **/
+    /** 회원 정보 수정 추가 정보 등록 **/
     @Override
     @Transactional
     public UserDetailsDto updateUser(Long userId, String username, UserInfoRequestDto userDto) {
         User user = findUserByUsername(username);
         // 찾은 사용자의 userId와 입력받은 userId가 일치하는지 확인합니다.
-        if (!user.getId().equals(userId)) {
-            throw new AccessDeniedException("로그인된 사용자 Id와 일치하는 사용자 Id가 아닙니다.");
-        }
+        verifyUserAuthentication(user, userId);
+
         // 사용자 정보 업데이트
         updateUserDetails(user, userDto);
         userRepository.save(user);
-        System.out.println("오니");
         return userDetailsDto(user);
     }
 
@@ -126,13 +128,38 @@ public class UserServiceImpl implements UserService {
         user.updateIntroduction(userDto.getIntroduction());
     }
 
+    /** 회원 완전 삭제 **/
+    @Override
+    @Transactional
+    public void hardDeleteUser(HttpServletRequest request, HttpServletResponse response, Long userId, String username) {
+        // 유저 찾기
+        User user = findUserByUsername(username);
+        // 찾은 사용자의 userId와 입력받은 userId가 일치하는지 확인합니다.
+        verifyUserAuthentication(user, userId);
+
+        // 유저와 관련된 토큰 삭제
+        TokenStatusDto tokenStatusDto = tokenService.removeAllToken(request, response, username);
+        if (!tokenStatusDto.isSuccessful()) {
+            log.error("토큰 삭제 실패: {}", tokenStatusDto.getMessage());
+            // 토큰 삭제 실패 시 예외를 throw하여 트랜잭션 롤백 유도
+            throw new RuntimeException(tokenStatusDto.getMessage());
+        }
+        userRepository.deleteById(userId);
+    }
+
+    /** 회원 조회 **/
+    @Override
+    public UserDetailsDto getUserDetailsById(Long userId){
+        // 유저 ID를 사용하여 해당 유저를 데이터베이스에서 조회
+        User user = findUserById(userId);
+        return userDetailsDto(user);
+    }
 
     /** 회원 상태: 신규 or 기존 **/
     @Override
     public UserStatus getUserStatusByUsername(String username) {
         // 유저 이름을 사용하여 해당 유저를 데이터베이스에서 조회
         User user = findUserByUsername(username);
-
         return user.getStatus();
     }
 
@@ -140,9 +167,23 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findUserByUsername(String username) {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new UsernameNotFoundException("해당 사용자를 찾을 수 없습니다."));
     }
 
+
+    // 회원 조회
+    private User findUserById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 ID에 대한 사용자를 찾을 수 없습니다."));
+    }
+
+    // 변경하려고 전달해준 유저의 Id와 값을 보낸 유저가 같은 유저인지 검증
+    private void verifyUserAuthentication(User user, Long UserId) throws AccessDeniedException {
+        // 찾은 사용자의 userId와 입력받은 userId가 일치하는지 확인합니다.
+        if (!user.getId().equals(UserId)) {
+            throw new AccessDeniedException("해당 작업을 수행할 권리가 없습니다. 로그인된 사용자 Id와 일치하는 사용자 Id가 아닙니다.");
+        }
+    }
 
     @Override
     // 이메일로 사용자가 존재하는지 확인
@@ -155,10 +196,6 @@ public class UserServiceImpl implements UserService {
     public boolean isUserExistsByUsername(String username) {
         return userRepository.existsByUsername(username);
     }
-
-
-
-
 
     private void validateDuplicateUser(String email) {
         // 이메일 유효성 검사
@@ -202,11 +239,5 @@ public class UserServiceImpl implements UserService {
 //        }
 //    }
 
-
-    // 회원 조회
-    @Override
-    public Optional<User> findOne(Long userId) {
-        return userRepository.findById(userId);
-    }
 
 }
