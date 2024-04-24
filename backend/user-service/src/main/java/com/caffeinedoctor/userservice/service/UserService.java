@@ -5,8 +5,6 @@ import com.caffeinedoctor.userservice.dto.socialLoginDto;
 import com.caffeinedoctor.userservice.dto.request.user.UserInfoRequestDto;
 import com.caffeinedoctor.userservice.entitiy.User;
 import com.caffeinedoctor.userservice.enums.UserStatus;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 import java.util.Optional;
 
@@ -21,11 +19,8 @@ public interface UserService {
     Long createUser(String username, UserInfoRequestDto userDto);
     UserDetailsDto updateUser(Long userId, String username, UserInfoRequestDto userDto);
 
-    /** 회원 삭제 **/
-    void hardDeleteUser(HttpServletRequest request, HttpServletResponse response, Long userId, String username);
-
     /** 회원 조회 **/
-    UserDetailsDto getUserDetailsById(Long userId);
+    Optional<User> findOne(Long userId);
     User findUserByUsername(String username);
 
     /** 회원 찾기 **/
@@ -34,4 +29,5 @@ public interface UserService {
 
     /** 회원 가입 상태 **/
     UserStatus getUserStatusByUsername(String username);
+
 }
