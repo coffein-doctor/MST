@@ -54,18 +54,56 @@ public class TokenServiceImpl implements TokenService {
             return verifyResult; // 토큰 검증에 실패한 경우 해당 응답 반환
         }
 
-        log.info("로그아웃 또는 회원탈퇴 수행: refresh 토큰 삭제");
+        log.info("로그아웃: 해당 refresh 토큰 삭제");
         //로그아웃 또는 회원 탈퇴 수행
-        //Refresh 토큰 DB에서 제거
-        refreshRepository.deleteByRefreshToken(refresh);
+        expireTokenCookies(response); // 토큰 만료
+        deleteRefreshToken(refresh); // DB에서 해당 토큰 삭제
 
+        return new TokenStatusDto(true, TokenProcessResult.TOKEN_DELETION_SUCCESS, TokenProcessResult.TOKEN_DELETION_SUCCESS.getMessage());
+    }
+
+    // 토큰 만료 메서드
+    private void expireTokenCookies(HttpServletResponse response) {
+        log.info("토큰 만료");
+        log.info("Access 토큰과 Refresh 토큰 쿠키 만료 처리");
         //Access 토큰 Cookie 쿠키 삭제
         CookieUtil.expireCookie(response, "access");
         //Refresh 토큰 Cookie 쿠키 삭제
         CookieUtil.expireCookie(response, "refresh");
+    }
+
+    // DB에서 리프레시 토큰 삭제 메서드
+    private void deleteRefreshToken(String refreshToken) {
+        log.info("해당 Refresh 토큰 DB에서 삭제");
+        //Refresh 토큰 DB에서 제거
+        refreshRepository.deleteByRefreshToken(refreshToken);
+    }
+
+    /** 회원 탈퇴: 유저의 모든 토큰 지우기 **/
+    @Transactional
+    @Override
+    public TokenStatusDto removeAllToken(HttpServletRequest request, HttpServletResponse response, String username) {
+
+        //get refresh token
+        String refresh = CookieUtil.getRefreshToken(request);
+
+        //토큰 검증 로직
+        TokenStatusDto verifyResult = verifyRefreshToken(refresh);
+        if (!verifyResult.isSuccessful()) {
+            log.info("refresh 토큰 검증 실패");
+            return verifyResult; // 토큰 검증에 실패한 경우 해당 응답 반환
+        }
+
+        log.info("회원탈퇴: 모든 refresh 토큰 삭제");
+        //토큰 만료
+        expireTokenCookies(response);
+        //DB에서 모든 Refresh 토큰 삭제
+        deleteExistingRefreshTokens(username);
 
         return new TokenStatusDto(true, TokenProcessResult.TOKEN_DELETION_SUCCESS, TokenProcessResult.TOKEN_DELETION_SUCCESS.getMessage());
     }
+
+
 
     /** Refresh 토큰으로 Access 토큰을 재발급 **/
     @Transactional
@@ -114,7 +152,7 @@ public class TokenServiceImpl implements TokenService {
         return new TokenStatusDto(true, TokenProcessResult.TOKEN_REISSUE_SUCCESS, TokenProcessResult.TOKEN_REISSUE_SUCCESS.getMessage());
     }
 
-    //refresh토큰 저장
+    //refresh 토큰 저장
     @Transactional
     @Override
     public void addRefreshEntity(String username, String newRefreshToken, Long expiredMs) {
@@ -133,6 +171,7 @@ public class TokenServiceImpl implements TokenService {
     //유저의 토큰 모두 삭제
     @Override
     public void deleteExistingRefreshTokens(String username) {
+        log.info("DB에서 해당 사용자의 모든 refresh 토큰 삭제");
         refreshRepository.deleteByUsername(username);
     }
 

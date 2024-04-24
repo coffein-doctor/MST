@@ -13,7 +13,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -139,7 +138,7 @@ public class UserServiceImpl implements UserService {
         verifyUserAuthentication(user, userId);
 
         // 유저와 관련된 토큰 삭제
-        TokenStatusDto tokenStatusDto = tokenService.removeToken(request, response);
+        TokenStatusDto tokenStatusDto = tokenService.removeAllToken(request, response, username);
         if (!tokenStatusDto.isSuccessful()) {
             log.error("토큰 삭제 실패: {}", tokenStatusDto.getMessage());
             // 토큰 삭제 실패 시 예외를 throw하여 트랜잭션 롤백 유도
