@@ -11,11 +11,14 @@ eureka:
     # eureka 서버 주소에 마이크로서비스 정보 등록
     service-url:
 #      defaultZone: http://admin:mst0117@3.36.123.194:8761/eureka
-      defaultZone: http://admin:mst0117@localhost:8761/eureka
+      defaultZone: http://${EUREKA.USERNAME}:${EUREKA.PASSWORD}@${EUREKA.IP}:8761/eureka
 
 spring:
   application:
     name: apigateway-service
+  config:
+    import:
+      - application-secret.yml
   cloud:
     gateway:
       # 글로벌 필터 적용
@@ -27,38 +30,55 @@ spring:
             preLogger: true
             postLogger: true
       routes:
-        # 로그인
+        # 소셜 로그인 관련 요청
         - id: user-service
-          uri:
-            lb://USER-SERVICE
+#          uri: lb://USER-SERVICE
+          uri: http://localhost:8081
+          predicates:
+            - Path=/user-service/oauth2/authorization/**, /user-service/login/**
+          filters:
+            # 쿠키 초기화
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
+        #Acccess 토큰 재발급
+        - id: user-service
+#          uri: lb://USER-SERVICE
+          uri: http://localhost:8081
+          predicates:
+            - Path=/user-service/token/reissue
+            - Method=POST
+          filters:
+            # 쿠키 초기화
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
+        # 나머지
+        - id: user-service
+#          uri: lb://USER-SERVICE
+          uri: http://localhost:8081
           predicates:
             - Path=/user-service/**
           filters:
             # 쿠키 초기화
-#            - RemoveRequestHeader=Cookie
+            - RemoveRequestHeader=Cookie
             - RewritePath=/user-service/(?<segment>.*),/$\{segment}
-        # 회원 가입
-#        - id: user-service
-#          uri:
-#            lb://USER-SERVICE
+            - JWTAuthenticationFilter
+#        - id: beverage-service
+#          uri: lb://BEVERAGE-SERVICE
 #          predicates:
-#            - Path=/user-service/users
-#            - Method=POST
+#            - Path=/beverage-service/**
 #          filters:
 #            # 쿠키 초기화
 #            - RemoveRequestHeader=Cookie
-#            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
-#        # 나머지
-#        - id: user-service
-#          uri:
-#            lb://USER-SERVICE
+#            - RewritePath=/beverage-service/(?<segment>.*),/$\{segment}
+#        - id: community-service
+#          uri: lb://COMMUNITY-SERVICE
 #          predicates:
-#            - Path=/user-service/**
-#            - Method=GET
+#            - Path=/community-service/**
 #          filters:
-#            # 쿠키 초기화
 #            - RemoveRequestHeader=Cookie
-#            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
+#            - RewritePath=/community-service/(?<segment>.*),/$\{segment}
+
+
 #        - id: user-service
           # 어디로 이동할거니?,
           # 유레카 서버에 등록된 이름으로, 로드밸런싱 적용
@@ -77,31 +97,17 @@ spring:
 #                postLogger: true
 #            - AddRequestHeader=user-request, user-request-header # key, value 형태 {headerName: headerValue} 요청할 때
 #            - AddResponseHeader=user-response, user-response-header # header 삽입, 반환할 때
-        - id: beverage-service
-          uri: lb://BEVERAGE-SERVICE
-          predicates:
-            - Path=/beverage-service/**
-          filters:
-            - RewritePath=/beverage-service/(?<segment>.*),/$\{segment}
-            - name: CustomFilter
-            - name: LoggingFilter
-              args:
-                baseMessage: Spring Cloud Gateway LoggingFilter
-                preLogger: true
-                postLogger: true
-#            - AddRequestHeader=beverage-request, beverage-request-header # {headerName: headerValue} header 삽입, 요청할 때
-#            - AddResponseHeader=beverage-response, beverage-response-header # header 삽입, 반환할 때
-        - id: community-service
-          uri: lb://COMMUNITY-SERVICE
-          predicates:
-            - Path=/community-service/**
-          filters:
-            - RewritePath=/community-service/(?<segment>.*),/$\{segment}
-            - name: CustomFilter
-            - name: LoggingFilter
-              args:
-                baseMessage: Spring Cloud Gateway LoggingFilter
-                preLogger: true
-                postLogger: true
-#            - AddRequestHeader=community-request, community-request-header # {headerName: headerValue} header 삽입, 요청할 때
-#            - AddResponseHeader=community-response, community-response-header # header 삽입, 반환할 때
+#        - id: beverage-service
+#          uri: lb://BEVERAGE-SERVICE
+#          predicates:
+#            - Path=/beverage-service/**
+#          filters:
+#            - RewritePath=/beverage-service/(?<segment>.*),/$\{segment}
+#            - name: CustomFilter
+#            - name: LoggingFilter
+#              args:
+#                baseMessage: Spring Cloud Gateway LoggingFilter
+#                preLogger: true
+#                postLogger: true
+##            - AddRequestHeader=beverage-request, beverage-request-header # {headerName: headerValue} header 삽입, 요청할 때
+##            - AddResponseHeader=beverage-response, beverage-response-header # header 삽입, 반환할 때
