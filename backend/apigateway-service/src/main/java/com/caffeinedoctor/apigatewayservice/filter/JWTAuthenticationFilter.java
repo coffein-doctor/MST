@@ -65,13 +65,13 @@ public class JWTAuthenticationFilter extends AbstractGatewayFilterFactory<JWTAut
             // 헤더에서 JWT 토큰 가져오기
             String accessToken = exchange.getRequest().getHeaders().getFirst("access");
 
-//            // 인증 필요없는 API는 따로 처리: 필터 적용 X
-//            if (accessToken == null) {
-//                log.info("API GATEWAY JWT 인증 실패: Access 토큰 없음");
-//                // 토큰이 없는 경우, 401 Unauthorized 반환
-//                exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-//                return exchange.getResponse().setComplete();
-//            }
+            // 인증 필요없는 API는 따로 처리: 필터 적용 X
+            if (accessToken == null) {
+                log.info("API GATEWAY JWT 인증 실패: Access 토큰 없음");
+                // 토큰이 없는 경우, 401 Unauthorized 반환
+                exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+                return exchange.getResponse().setComplete();
+            }
 
 
             jwtUtil.isExpired(accessToken);

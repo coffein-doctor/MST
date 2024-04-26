@@ -155,6 +155,14 @@ public class UserServiceImpl implements UserService {
         return userDetailsDto(user);
     }
 
+    /** 회원 Id 조회 **/
+    @Override
+    public Long getUserId(String username){
+        // 유저 ID를 사용하여 해당 유저를 데이터베이스에서 조회
+        User user = findUserByUsername(username);
+        return user.getId();
+    }
+
     /** 회원 상태: 신규 or 기존 **/
     @Override
     public UserStatus getUserStatusByUsername(String username) {

@@ -84,6 +84,53 @@ public class UserController {
         }
     }
 
+
+    /** 회원 Id 조회 **/
+    @Operation(
+            summary = "회원 Id 조회",
+            description = "로그인 회원의 Id를 조회합니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "사용자 Id가 성공적으로 조회되었습니다.",
+                    content = @Content(
+                            schema = @Schema(implementation = Long.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "사용자 인증에 실패하였습니다. 로그인이 필요합니다.",
+                    content = @Content(
+                            schema = @Schema(implementation = String.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description =  "해당 사용자를 찾을 수 없습니다.",
+                    content = @Content(
+                            schema = @Schema(implementation = String.class)
+                    )
+            )
+    })
+    @GetMapping
+    public ResponseEntity<?> getUserId(@AuthenticationPrincipal CustomOAuth2User oauth2User) {
+        // 인증된 사용자인지 확인
+        if (oauth2User == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("사용자 인증에 실패하였습니다. 로그인이 필요합니다.");
+        }
+
+        try {
+            // 사용자 이름 가져오기
+            String username = oauth2User.getName();
+            Long userId = userService.getUserId(username);
+            return ResponseEntity.ok(userId);
+        } catch (EntityNotFoundException e) {
+            // RuntimeException 발생 시 예외 처리
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
     /** 회원 가입 상태 조회 **/
     @Operation(
             summary = "회원 가입 상태 조회",

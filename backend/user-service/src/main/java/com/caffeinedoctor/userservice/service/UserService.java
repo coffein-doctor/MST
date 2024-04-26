@@ -27,6 +27,8 @@ public interface UserService {
     /** 회원 조회 **/
     UserDetailsDto getUserDetailsById(Long userId);
     User findUserByUsername(String username);
+    /** 회원 Id 조회 **/
+    Long getUserId(String username);
 
     /** 회원 찾기 **/
     boolean isUserExistsByEmail(String email);
