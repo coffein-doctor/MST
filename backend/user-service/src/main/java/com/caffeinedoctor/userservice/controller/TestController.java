@@ -3,9 +3,11 @@ package com.caffeinedoctor.userservice.controller;
 import com.caffeinedoctor.userservice.dto.GreetingDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,4 +43,22 @@ public class TestController {
         return greeting.getMessage();
 
     }
+
+    @Operation(
+            summary = "API GATEWAY 필터를 통한 토큰 정보 사용",
+            description = "토큰 정보 사용하기"
+    )
+    @GetMapping("/customHeader")
+    public ResponseEntity<String> getCustomHeader(HttpServletRequest request) {
+        String username = request.getHeader("X-Username");
+
+        if (username == null || username.isEmpty()) {
+            log.error("X-Username가 없습니다.");
+            return ResponseEntity.badRequest().body("X-Username가 없습니다.");
+        } else {
+            log.debug("X-Username 정보: " + username);
+            return ResponseEntity.ok("X-Username 정보: " + username);
+        }
+    }
 }
+

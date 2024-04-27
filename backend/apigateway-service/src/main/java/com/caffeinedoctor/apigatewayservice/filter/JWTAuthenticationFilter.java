@@ -1,11 +1,13 @@
 package com.caffeinedoctor.apigatewayservice.filter;
 
+import com.caffeinedoctor.apigatewayservice.handler.JWTTokenExceptionHandler;
 import io.jsonwebtoken.MalformedJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import io.jsonwebtoken.ExpiredJwtException; // ExpiredJwtException 임포트 주의
@@ -65,42 +67,28 @@ public class JWTAuthenticationFilter extends AbstractGatewayFilterFactory<JWTAut
             // 헤더에서 JWT 토큰 가져오기
             String accessToken = exchange.getRequest().getHeaders().getFirst("access");
 
-            // 인증 필요없는 API는 따로 처리: 필터 적용 X
+            // 토큰이 null인지 확인
             if (accessToken == null) {
-                log.info("API GATEWAY JWT 인증 실패: Access 토큰 없음");
-                // 토큰이 없는 경우, 401 Unauthorized 반환
-                exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-                return exchange.getResponse().setComplete();
+                log.error("Access token is null.");
+                return null;
             }
 
+            // 유효한 토큰인지 확인합니다.
+            jwtUtil.validateToken(accessToken);
 
-            jwtUtil.isExpired(accessToken);
-            // 유효한 토큰인지 확인
-            try {
-                // 토큰 검증
-                jwtUtil.isExpired(accessToken);
-            } catch (ExpiredJwtException e) {
-                log.info("API GATEWAY JWT 인증 실패: Access 토큰 만료됨");
-                // 검증 실패 시 처리
-                exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-                return exchange.getResponse().setComplete();
-            }
-            // access 토큰인지 확인
-            String category = jwtUtil.getCategory(accessToken);
-            if (!"access".equals(category)) {
-                log.info("API GATEWAY JWT 인증 실패: Access 토큰이 아님");
-                // 검증 실패 시 처리
-                exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-                return exchange.getResponse().setComplete();
+            // 카테고리가 "access"인지 검증합니다.
+            if (!jwtUtil.getCategory(accessToken).equals("access")) {
+                log.error("Invalid or missing category in JWT token");
+                throw new MalformedJwtException("Invalid or missing category in JWT token"); // MalformedJwtException을 발생시킵니다.
             }
 
             // 추가 로직
             // username과 role 정보를 이용하여 필요한 처리를 할 수 있다.
             String username = jwtUtil.getUsername(accessToken);
             // String role = jwtUtil.getRole(accessToken);
-            // 요청 헤더에 추가하는 방법
+            // 요청 헤더에 "X-Username" 추가
             exchange.getRequest().mutate()
-                    .headers(httpHeaders -> httpHeaders.add("X-Auth-Username", username)).build();
+                    .headers(httpHeaders -> httpHeaders.add("X-Username", username)).build();
 
             log.info("API GATEWAY: Access 토큰 검증 완료");
             // 검증 성공 시, 체인을 계속 진행
@@ -109,53 +97,7 @@ public class JWTAuthenticationFilter extends AbstractGatewayFilterFactory<JWTAut
     }
     @Bean
     public ErrorWebExceptionHandler tokenValidation() {
-        return new JwtTokenExceptionHandler();
+        return new JWTTokenExceptionHandler();
     }
 
-    public class JwtTokenExceptionHandler implements ErrorWebExceptionHandler {
-
-        private String getErrorJson(int errorCode, String errorMessage) {
-            return String.format("{\"errorCode\": %d, \"errorMessage\": \"%s\"}", errorCode, errorMessage);
-        }
-
-        @Override
-        public Mono<Void> handle(ServerWebExchange exchange, Throwable ex) {
-            HttpStatus status = HttpStatus.SERVICE_UNAVAILABLE;
-            String errorMessage = "서비스가 연결되지 않았습니다.";
-            int errorCode = 503;
-
-            if (ex instanceof NullPointerException) {
-                log.error("토큰이 비어있습니다.");
-                errorCode = 401;
-                status = HttpStatus.UNAUTHORIZED;
-                errorMessage = "토큰이 비어있습니다.";
-            } else if (ex instanceof ExpiredJwtException) {
-                log.error("토큰이 만료되었습니다.");
-                errorCode = 402;
-                status = HttpStatus.PAYMENT_REQUIRED;
-                errorMessage = "토큰이 만료되었습니다.";
-            } else if (ex instanceof MalformedJwtException) {
-                log.error("JWT 토큰 구조가 잘못되었습니다.");
-                errorCode = 403;
-                status = HttpStatus.UNAUTHORIZED;
-                errorMessage = "JWT 토큰 구조가 잘못되었습니다.";
-            } else if (ex instanceof SignatureException) {
-                log.error("변조된 토큰입니다.");
-                errorCode = 404;
-                status = HttpStatus.UNAUTHORIZED;
-                errorMessage = "변조된 토큰입니다.";
-            } else if (ex instanceof UnsupportedJwtException) {
-                log.error("JWT 형식이 잘못되었습니다.");
-                errorCode = 405;
-                status = HttpStatus.UNAUTHORIZED;
-                errorMessage = "JWT 형식이 잘못되었습니다.";
-            }
-
-            exchange.getResponse().setStatusCode(status);
-            String body = String.format("{\"errorCode\": %d, \"errorMessage\": \"%s\"}", errorCode, errorMessage);
-            byte[] bytes = body.getBytes(StandardCharsets.UTF_8);
-            DataBuffer buffer = exchange.getResponse().bufferFactory().wrap(bytes);
-            return exchange.getResponse().writeWith(Mono.just(buffer));
-        }
-    }
 }
