@@ -61,7 +61,7 @@ spring:
             # 쿠키 초기화
             - RemoveRequestHeader=Cookie
             - RewritePath=/user-service/(?<segment>.*),/$\{segment}
-            - JWTAuthenticationFilter
+            - AuthorizationHeaderFilter
 #        - id: beverage-service
 #          uri: lb://BEVERAGE-SERVICE
 #          predicates:
