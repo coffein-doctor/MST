@@ -218,7 +218,7 @@ export default function SignUp() {
                   selectedGender === opt.value && selectedBtnCSS,
                   error.gender && {
                     border: "1px solid var(--default-red-color)",
-                    // color: "var(--default-red-color)",
+                    color: "var(--default-red-color)",
                   },
                 ]}
                 onClick={() => handleSelectChange("gender", opt.value)}
@@ -315,7 +315,7 @@ const activityBtnTextCSS = css`
 
 const selectedBtnCSS = css`
   color: var(--gray-color-1);
-  border: 1px solid var(--gray-color-1);
+  /* border: 1px solid var(--gray-color-1);/ */
 `;
 
 const errorMessageCSS = css`
