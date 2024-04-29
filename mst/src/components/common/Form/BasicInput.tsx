@@ -1,7 +1,7 @@
 import { BasicInputPropsType } from "@/types/inputTypes";
 import { css } from "@emotion/react";
 
-export default function Input({
+export default function BasicInput({
   id,
   name,
   cssProps,
@@ -9,18 +9,23 @@ export default function Input({
   value,
   onChange,
   placeholder,
+  error,
 }: BasicInputPropsType) {
+
   return (
-    <input
-      css={[signUpInputCSS, cssProps]}
-      id={id}
-      name={name}
-      type={type}
-      value={value}
-      onChange={onChange}
-      placeholder={placeholder}
-			autoComplete="true"
-    />
+    <>
+      <input
+        css={[signUpInputCSS, cssProps]}
+        id={id}
+        name={name}
+        type={type}
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        autoComplete="true"
+      />
+      {/* {error && <span css={errorMessageCSS}>{error}</span>} */}
+    </>
   );
 }
 
@@ -40,4 +45,8 @@ const signUpInputCSS = css`
     -webkit-appearance: none;
     margin: 0;
   }
+`;
+
+const errorMessageCSS = css`
+  color: var(--default-red-color);
 `;

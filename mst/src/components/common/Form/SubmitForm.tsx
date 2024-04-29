@@ -14,6 +14,7 @@ function SubmitForm({
   value,
   onChange,
   type,
+	error
 }: SubmitFormPropsType) {
   let wrapperPos;
 
@@ -45,6 +46,7 @@ function SubmitForm({
         value={value}
         onChange={onChange}
         // && 연산자로 수정이 안됨
+				error={error}
         cssProps={
           leftLabel && rightLabel ? css({ textAlign: "right" }) : undefined
         }
@@ -68,6 +70,7 @@ const formSetWrapperCSS = css`
   justify-content: center;
   align-items: center;
   border-radius: 15px;
+	
 `;
 
 const formSetTopWrapperCSS = css`

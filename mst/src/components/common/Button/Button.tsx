@@ -12,7 +12,6 @@ function Button({ content, onClick, type }: ButtonPropsType) {
   );
 }
 
-
 const buttonWrapperCSS = css`
   width: 100%;
   height: 55px;

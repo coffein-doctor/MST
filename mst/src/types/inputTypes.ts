@@ -8,4 +8,5 @@ export type BasicInputPropsType = {
   placeholder?: string;
   cssProps?: SerializedStyles;
   onChange?: any;
+  error?: string;
 };

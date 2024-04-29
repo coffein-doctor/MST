@@ -4,9 +4,7 @@ import NavCircleContent from "./NavCircleContent";
 import NavSquareContent from "./NavSquareContent";
 
 import { HOME, STATS, PLUS, COMMUNITY, MYPAGE } from "@/assets/svgs";
-import { useRecoilValue } from "recoil";
-import { showNavBarState } from "@/recoil/atoms/showNavBarState";
-import { usePathname } from "next/navigation";
+
 
 function Nav() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);

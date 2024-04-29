@@ -5,6 +5,8 @@ import Form from "@/components/common/Form/Form";
 import PostForm from "@/components/Community/PostForm";
 import PencilButton from "@/components/common/Button/PencilButton";
 import { useRouter } from "next/navigation";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { userIdState } from "@/recoil/atoms/userIdState";
 
 interface PostFormData {
   id: number;
@@ -53,8 +55,12 @@ const postDummyData: PostFormData[] = [
 function Community() {
   const router = useRouter();
 
+
+  const [id, setId] = useRecoilState(userIdState);
+
   return (
     <div>
+			<h1>{id}</h1>
       <div
         onClick={() => {
           console.log("Clicked");

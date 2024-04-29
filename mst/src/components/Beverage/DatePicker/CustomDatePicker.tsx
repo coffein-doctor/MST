@@ -2,7 +2,7 @@ import dayjs, { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ThemeProvider, createTheme } from "@mui/material";
 
 import { CustomDPTextField } from "./CustomDPInputTextField";
@@ -18,18 +18,44 @@ const theme = createTheme({
 // https://mui.com/x/react-date-pickers/custom-components/
 // https://mui.com/x/api/date-pickers/date-picker/#slots
 
-export default function CustomDatePicker() {
+interface CustomDatePickerProps {
+  type: string | null;
+  value: Dayjs | null;
+  handleDateChange: (date: Dayjs | null) => void;
+}
+
+export default function CustomDatePicker({
+  type,
+  value,
+  handleDateChange,
+}: CustomDatePickerProps) {
+  const [datePickerType, setDatePickerType] = useState(false);
+
+  useEffect(() => {
+    if (type === "birthday") {
+      setDatePickerType(true);
+    }
+  }, []);
+
   // locale 설정
   dayjs.locale("ko");
 
-  const [selectedDate, setSelectedDate] = useState<Dayjs | null>(dayjs());
-
-  const handleDateChange = (date: Dayjs | null) => {
-    setSelectedDate(date);
+  const datePickerCSS = {
+    width: "100%",
+    marginBottom: "12px",
+    "& .MuiOutlinedInput-root": {
+      color: "var(--default-black-color)",
+      borderRadius: "15px",
+      backgroundColor: "var(--default-white-color)",
+      height: "40px",
+    },
+    "& .MuiOutlinedInput-input": {
+      color: "var(--default-black-color)",
+      textAlign: "center",
+			fontSize: datePickerType ? "var(--font-size-h5)" : "var(--font-size-h4)",
+    },
   };
 
-  // const tempDate = dayjs(selectedDate).format("YYYY-MM_DD");
-  // console.log(tempDate);
   return (
     <ThemeProvider theme={theme}>
       <LocalizationProvider
@@ -42,12 +68,17 @@ export default function CustomDatePicker() {
       >
         <MobileDatePicker
           name="date"
-          value={selectedDate}
+          value={value}
           onChange={handleDateChange}
           format="YYYY년 MM월 DD일"
           disableFuture
           slots={{
-            textField: CustomDPTextField,
+            textField: (props) => (
+              <CustomDPTextField
+                {...props}
+                showStartAdornment={datePickerType}
+              />
+            ),
             toolbar: CustomDatePickerToolbar,
             actionBar: CustomDatePickerActionbar,
           }}
@@ -67,19 +98,3 @@ export default function CustomDatePicker() {
     </ThemeProvider>
   );
 }
-
-const datePickerCSS = {
-  width: "100%",
-  marginBottom: "12px",
-  "& .MuiOutlinedInput-root": {
-    color: "var(--default-black-color)",
-    borderRadius: "15px",
-    backgroundColor: "var(--default-white-color)",
-    height: "40px",
-  },
-  "& .MuiOutlinedInput-input": {
-    color: "var(--default-black-color)",
-    fontSize: "var(--font-size-h4)",
-    textAlign: "center",
-  },
-};

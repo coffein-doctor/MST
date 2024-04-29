@@ -4,39 +4,55 @@ import BasicTopBar from "@/components/common/TopBar/BasicTopBar";
 import SubmitForm from "@/components/common/Form/SubmitForm";
 import Button from "@/components/common/Button/Button";
 import { ChangeEvent, FormEvent, useState } from "react";
-
-interface SignUpFormData {
-  username: string;
-  height: number | "";
-  weight: number | "";
-  age: number | "";
-  gender: string;
-  activityLevel: number | "";
-}
+import CustomDatePicker from "@/components/Beverage/DatePicker/CustomDatePicker";
+import dayjs, { Dayjs } from "dayjs";
+import { SignUpFormData } from "@/types/api/apiRequestTypes";
+import { postSignUpAPI } from "@/api/user/postSignUpAPI";
+import { useRouter } from "next/navigation";
 
 const genderOptions = [
-  { id: 1, label: "남" },
-  { id: 2, label: "여" },
+  { id: 1, label: "남", value: "MALE" },
+  { id: 2, label: "여", value: "FEMALE" },
 ];
 
 const activityOptions = [
-  { id: 1, value: 1, label: "활동량이 적은 편" },
-  { id: 2, value: 2, label: "활동량이 적당한 편" },
-  { id: 3, value: 3, label: "활동량이 많은 편" },
+  { id: 1, value: "LOW", label: "활동량이 적은 편" },
+  { id: 2, value: "MEDIUM", label: "활동량이 적당한 편" },
+  { id: 3, value: "HIGH", label: "활동량이 많은 편" },
 ];
 
+type ErrorState = {
+  nickname: string;
+  birth: string;
+  gender: string;
+  activityLevel: string;
+  height: string;
+  weight: string;
+};
+
+const initialErrorState: ErrorState = {
+  nickname: "",
+  birth: "",
+  gender: "",
+  activityLevel: "",
+  height: "",
+  weight: "",
+};
+
 export default function SignUp() {
+  const router = useRouter();
   const [signUpFormData, setSignUpFormData] = useState<SignUpFormData>({
-    username: "",
-    height: "",
-    weight: "",
-    age: "",
+    nickname: "",
+    birth: "",
     gender: "",
     activityLevel: "",
+    height: "",
+    weight: "",
+    introduction: "",
   });
-
   const [selectedGender, setSelectedGender] = useState<string | null>(null);
-  const [selectedActivity, setSelectedActivity] = useState<number | null>(null);
+  const [selectedActivity, setSelectedActivity] = useState<string | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Dayjs | null>(dayjs());
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -54,7 +70,7 @@ export default function SignUp() {
     }));
   };
 
-  const handleActivityChange = (val: number) => {
+  const handleActivityChange = (val: string) => {
     setSelectedActivity(val);
     setSignUpFormData((prev) => ({
       ...prev,
@@ -62,13 +78,63 @@ export default function SignUp() {
     }));
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleDateChange = (date: Dayjs | null) => {
+    setSelectedDate(date);
+    let newDate = dayjs(date).format("YYYY-MM-DD");
+    setSignUpFormData((prev) => ({
+      ...prev,
+      birth: newDate,
+    }));
+  };
+
+  // 에러체크
+  const [error, setError] = useState(initialErrorState);
+  console.log(error);
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const errors: ErrorState = {
+      nickname:
+        signUpFormData.nickname.trim() === "" ? "닉네임을 입력해주세요." : "",
+      birth: signUpFormData.birth.trim() === "" ? "나이를 입력해주세요." : "",
+      gender: signUpFormData.gender.trim() === "" ? "성별을 선택해주세요." : "",
+      activityLevel:
+        signUpFormData.activityLevel.trim() === ""
+          ? "활동 수준을 선택해주세요."
+          : "",
+      height: signUpFormData.height === "" ? "키를 입력해주세요" : "",
+      weight: signUpFormData.height === "" ? "몸무게를 입력해주세요" : "",
+    };
+
+    const checkError = Object.values(errors).some((e) => e !== "");
+
+    if (checkError) {
+      setError(errors);
+      return;
+    }
+
+    try {
+      const response = await postSignUpAPI({ body: signUpFormData });
+      alert("가입이 완료되었습니다");
+
+      setSignUpFormData({
+        nickname: "",
+        birth: "",
+        gender: "",
+        activityLevel: "",
+        height: "",
+        weight: "",
+        introduction: "",
+      });
+      router.push("/home");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   console.log(signUpFormData);
 
-  // console.log(selectedGender)
   return (
     <div css={signUpWrapperCSS}>
       <BasicTopBar content="회원 가입" />
@@ -76,9 +142,10 @@ export default function SignUp() {
         <div css={signUpFormCSS}>
           <SubmitForm
             leftLabel="닉네임"
-            id="username"
-            value={signUpFormData.username}
+            id="nickname"
+            value={signUpFormData.nickname}
             onChange={handleChange}
+            error={error.nickname}
           />
           <SubmitForm
             position="top"
@@ -88,24 +155,22 @@ export default function SignUp() {
             id="height"
             value={signUpFormData.height}
             onChange={handleChange}
+            error={error.height}
           />
           <SubmitForm
-            position="middle"
+            position="bottom"
             leftLabel="몸무게"
             rightLabel="kg"
             type="number"
             id="weight"
             value={signUpFormData.weight}
             onChange={handleChange}
+            error={error.weight}
           />
-          <SubmitForm
-            position="bottom"
-            leftLabel="나이"
-            rightLabel="살"
-            type="number"
-            id="age"
-            value={signUpFormData.age}
-            onChange={handleChange}
+          <CustomDatePicker
+            type="birthday"
+            value={selectedDate}
+            handleDateChange={handleDateChange}
           />
           <div css={genderBtnWrapperCSS}>
             {genderOptions.map((opt) => (
@@ -113,9 +178,9 @@ export default function SignUp() {
                 key={opt.id}
                 css={[
                   genderBtnCSS,
-                  selectedGender === opt.label && selectedBtnCSS,
+                  selectedGender === opt.value && selectedBtnCSS,
                 ]}
-                onClick={() => handleGenderChange(opt.label)}
+                onClick={() => handleGenderChange(opt.value)}
               >
                 {opt.label}
               </div>
@@ -137,7 +202,7 @@ export default function SignUp() {
           </div>
         </div>
       </form>
-      <Button content="가입하기" />
+      <Button content="가입하기" onClick={handleSubmit} />
     </div>
   );
 }

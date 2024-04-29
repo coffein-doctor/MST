@@ -14,7 +14,5 @@ export default function SignUpLayout({
 }
 
 const contentWrapperCSS = css`
-  overflow-x: hidden;
-  overflow-y: hidden;
   margin: 0 20px;
 `;
