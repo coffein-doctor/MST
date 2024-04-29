@@ -9,6 +9,8 @@ import dayjs, { Dayjs } from "dayjs";
 import { SignUpFormData } from "@/types/api/apiRequestTypes";
 import { postSignUpAPI } from "@/api/user/postSignUpAPI";
 import { useRouter } from "next/navigation";
+import { ErrorStateType, ValidationConfigType } from "@/types/validationTypes";
+import validateFormData from "@/utils/validateFormData";
 
 const genderOptions = [
   { id: 1, label: "남", value: "MALE" },
@@ -21,11 +23,17 @@ const activityOptions = [
   { id: 3, value: "HIGH", label: "활동량이 많은 편" },
 ];
 
-type ErrorState = {
-  [key: string]: string;
+const initialSignUpFormData: SignUpFormData = {
+  nickname: "",
+  birth: "",
+  gender: "",
+  activityLevel: "",
+  height: "",
+  weight: "",
+  introduction: "",
 };
 
-const initialErrorState: ErrorState = {
+const initialErrorState: ErrorStateType = {
   nickname: "",
   birth: "",
   gender: "",
@@ -34,17 +42,39 @@ const initialErrorState: ErrorState = {
   weight: "",
 };
 
+const signUpValidationConfig: Record<string, ValidationConfigType> = {
+  nickname: {
+    required: true,
+    maxLength: 8,
+    errorMessage: "닉네임은 최대 8자까지만 입력할 수 있습니다.",
+  },
+  height: {
+    required: true,
+    errorMessage: "키를 입력해주세요.",
+  },
+  weight: {
+    required: true,
+    errorMessage: "몸무게를 입력해주세요.",
+  },
+  birth: {
+    required: true,
+    errorMessage: "생일을 입력해주세요.",
+  },
+  gender: {
+    required: true,
+    errorMessage: "성별을 선택해주세요.",
+  },
+  activityLevel: {
+    required: true,
+    errorMessage: "활동량을 선택해주세요.",
+  },
+};
+
 export default function SignUp() {
   const router = useRouter();
-  const [signUpFormData, setSignUpFormData] = useState<SignUpFormData>({
-    nickname: "",
-    birth: "",
-    gender: "",
-    activityLevel: "",
-    height: "",
-    weight: "",
-    introduction: "",
-  });
+  const [signUpFormData, setSignUpFormData] = useState<SignUpFormData>(
+    initialSignUpFormData
+  );
   const [selectedGender, setSelectedGender] = useState<string | null>(null);
   const [selectedActivity, setSelectedActivity] = useState<string | null>(null);
   const [selectedDate, setSelectedDate] = useState<Dayjs | null>(dayjs());
@@ -52,7 +82,7 @@ export default function SignUp() {
   const [error, setError] = useState(initialErrorState);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     setSignUpFormData((prev) => ({
       ...prev,
@@ -65,23 +95,18 @@ export default function SignUp() {
     setErrorMessage("");
   };
 
-  const handleGenderChange = (val: string) => {
-    setSelectedGender(val);
+  const handleSelectChange = (key: string, val: string) => {
+    if (key === "gender") {
+      setSelectedGender(val);
+    }
+    if (key === "activityLevel") {
+      setSelectedActivity(val);
+    }
     setSignUpFormData((prev) => ({
       ...prev,
-      gender: val,
+      [key]: val,
     }));
-    setError({ gender: "" });
-    setErrorMessage("");
-  };
-
-  const handleActivityChange = (val: string) => {
-    setSelectedActivity(val);
-    setSignUpFormData((prev) => ({
-      ...prev,
-      activityLevel: val,
-    }));
-    setError({ activityLevel: "" });
+    setError((prev) => ({ ...prev, [key]: "" }));
     setErrorMessage("");
   };
 
@@ -92,32 +117,15 @@ export default function SignUp() {
       ...prev,
       birth: newDate,
     }));
+    setError((prev) => ({ ...prev, birth: "" }));
+    setErrorMessage("");
   };
-
-  // 에러체크
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const errors: ErrorState = {
-      nickname:
-        signUpFormData.nickname.trim() === ""
-          ? "닉네임을 입력해주세요."
-          : signUpFormData.nickname.trim().length > 8
-          ? "닉네임은 최대 8자까지만 입력할 수 있습니다."
-          : "",
-      height: signUpFormData.height === "" ? "키를 입력해주세요" : "",
-      weight: signUpFormData.weight === "" ? "몸무게를 입력해주세요" : "",
-      birth: signUpFormData.birth.trim() === "" ? "생일을 입력해주세요." : "",
-      gender: signUpFormData.gender.trim() === "" ? "성별을 선택해주세요." : "",
-      activityLevel:
-        signUpFormData.activityLevel.trim() === ""
-          ? "활동량을 선택해주세요."
-          : "",
-    };
-
-    // ERROR 순서 지정
-    const checkErrors: string[] = [
+    // 에러체크
+    const checkErrorOrder: string[] = [
       "nickname",
       "height",
       "weight",
@@ -126,24 +134,26 @@ export default function SignUp() {
       "activityLevel",
     ];
 
-    for (const checkKey of checkErrors) {
-      let errorMessage = "";
-      if (errors[checkKey] != "") {
-        errorMessage = errors[checkKey];
-        setErrorMessage(errorMessage);
-        break;
-      }
-    }
-    const firstError = Object.keys(errors).find((key) => errors[key] !== "");
+    const error: ErrorStateType = validateFormData(
+      // 검증config
+      signUpValidationConfig,
+      // data
+      signUpFormData,
+      // 검증의 순서
+      checkErrorOrder
+    );
 
-    if (firstError) {
-      setError({ [firstError]: errors[firstError] });
+    if (error) {
+      const [firstErrorKey, firstError] = Object.entries(error)[0];
+      setError({ [firstErrorKey]: firstError });
+      setErrorMessage(firstError);
       return;
     }
+
     // API
     try {
       const response = await postSignUpAPI({ body: signUpFormData });
-      // 대체 기능 필요
+      // 대체 기능 필요(모달 등)
       alert("가입이 완료되었습니다");
 
       setSignUpFormData({
@@ -170,7 +180,7 @@ export default function SignUp() {
             leftLabel="닉네임"
             id="nickname"
             value={signUpFormData.nickname}
-            onChange={handleChange}
+            onChange={handleInputChange}
             error={error.nickname}
           />
           <SubmitForm
@@ -180,7 +190,7 @@ export default function SignUp() {
             type="number"
             id="height"
             value={signUpFormData.height}
-            onChange={handleChange}
+            onChange={handleInputChange}
             error={error.height}
           />
           <SubmitForm
@@ -190,14 +200,14 @@ export default function SignUp() {
             type="number"
             id="weight"
             value={signUpFormData.weight}
-            onChange={handleChange}
+            onChange={handleInputChange}
             error={error.weight}
           />
           <CustomDatePicker
             type="birthday"
             value={selectedDate}
             handleDateChange={handleDateChange}
-						error={error.birth}
+            error={error.birth}
           />
           <div css={genderBtnWrapperCSS}>
             {genderOptions.map((opt) => (
@@ -211,7 +221,7 @@ export default function SignUp() {
                     // color: "var(--default-red-color)",
                   },
                 ]}
-                onClick={() => handleGenderChange(opt.value)}
+                onClick={() => handleSelectChange("gender", opt.value)}
               >
                 {opt.label}
               </div>
@@ -229,7 +239,7 @@ export default function SignUp() {
                     color: "var(--default-red-color)",
                   },
                 ]}
-                onClick={() => handleActivityChange(opt.value)}
+                onClick={() => handleSelectChange("activityLevel", opt.value)}
               >
                 <div css={activityBtnTextCSS}>{opt.label}</div>
               </div>
@@ -304,8 +314,8 @@ const activityBtnTextCSS = css`
 `;
 
 const selectedBtnCSS = css`
-  color: var(--default-water-color);
-  border: 1px solid var(--default-water-color);
+  color: var(--gray-color-1);
+  border: 1px solid var(--gray-color-1);
 `;
 
 const errorMessageCSS = css`
