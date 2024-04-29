@@ -22,12 +22,7 @@ const activityOptions = [
 ];
 
 type ErrorState = {
-  nickname: string;
-  birth: string;
-  gender: string;
-  activityLevel: string;
-  height: string;
-  weight: string;
+  [key: string]: string;
 };
 
 const initialErrorState: ErrorState = {
@@ -53,6 +48,9 @@ export default function SignUp() {
   const [selectedGender, setSelectedGender] = useState<string | null>(null);
   const [selectedActivity, setSelectedActivity] = useState<string | null>(null);
   const [selectedDate, setSelectedDate] = useState<Dayjs | null>(dayjs());
+  // ERROR
+  const [error, setError] = useState(initialErrorState);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -60,6 +58,11 @@ export default function SignUp() {
       ...prev,
       [id]: value,
     }));
+    setError((prev) => ({
+      ...prev,
+      [id]: "",
+    }));
+    setErrorMessage("");
   };
 
   const handleGenderChange = (val: string) => {
@@ -68,6 +71,8 @@ export default function SignUp() {
       ...prev,
       gender: val,
     }));
+    setError({ gender: "" });
+    setErrorMessage("");
   };
 
   const handleActivityChange = (val: string) => {
@@ -76,6 +81,8 @@ export default function SignUp() {
       ...prev,
       activityLevel: val,
     }));
+    setError({ activityLevel: "" });
+    setErrorMessage("");
   };
 
   const handleDateChange = (date: Dayjs | null) => {
@@ -88,34 +95,55 @@ export default function SignUp() {
   };
 
   // 에러체크
-  const [error, setError] = useState(initialErrorState);
-  console.log(error);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const errors: ErrorState = {
       nickname:
-        signUpFormData.nickname.trim() === "" ? "닉네임을 입력해주세요." : "",
-      birth: signUpFormData.birth.trim() === "" ? "나이를 입력해주세요." : "",
+        signUpFormData.nickname.trim() === ""
+          ? "닉네임을 입력해주세요."
+          : signUpFormData.nickname.trim().length > 8
+          ? "닉네임은 최대 8자까지만 입력할 수 있습니다."
+          : "",
+      height: signUpFormData.height === "" ? "키를 입력해주세요" : "",
+      weight: signUpFormData.weight === "" ? "몸무게를 입력해주세요" : "",
+      birth: signUpFormData.birth.trim() === "" ? "생일을 입력해주세요." : "",
       gender: signUpFormData.gender.trim() === "" ? "성별을 선택해주세요." : "",
       activityLevel:
         signUpFormData.activityLevel.trim() === ""
-          ? "활동 수준을 선택해주세요."
+          ? "활동량을 선택해주세요."
           : "",
-      height: signUpFormData.height === "" ? "키를 입력해주세요" : "",
-      weight: signUpFormData.height === "" ? "몸무게를 입력해주세요" : "",
     };
 
-    const checkError = Object.values(errors).some((e) => e !== "");
+    // ERROR 순서 지정
+    const checkErrors: string[] = [
+      "nickname",
+      "height",
+      "weight",
+      "birth",
+      "gender",
+      "activityLevel",
+    ];
 
-    if (checkError) {
-      setError(errors);
+    for (const checkKey of checkErrors) {
+      let errorMessage = "";
+      if (errors[checkKey] != "") {
+        errorMessage = errors[checkKey];
+        setErrorMessage(errorMessage);
+        break;
+      }
+    }
+    const firstError = Object.keys(errors).find((key) => errors[key] !== "");
+
+    if (firstError) {
+      setError({ [firstError]: errors[firstError] });
       return;
     }
-
+    // API
     try {
       const response = await postSignUpAPI({ body: signUpFormData });
+      // 대체 기능 필요
       alert("가입이 완료되었습니다");
 
       setSignUpFormData({
@@ -132,8 +160,6 @@ export default function SignUp() {
       console.log(error);
     }
   };
-
-  console.log(signUpFormData);
 
   return (
     <div css={signUpWrapperCSS}>
@@ -171,6 +197,7 @@ export default function SignUp() {
             type="birthday"
             value={selectedDate}
             handleDateChange={handleDateChange}
+						error={error.birth}
           />
           <div css={genderBtnWrapperCSS}>
             {genderOptions.map((opt) => (
@@ -179,6 +206,10 @@ export default function SignUp() {
                 css={[
                   genderBtnCSS,
                   selectedGender === opt.value && selectedBtnCSS,
+                  error.gender && {
+                    border: "1px solid var(--default-red-color)",
+                    // color: "var(--default-red-color)",
+                  },
                 ]}
                 onClick={() => handleGenderChange(opt.value)}
               >
@@ -193,6 +224,10 @@ export default function SignUp() {
                 css={[
                   activityBtnCSS,
                   selectedActivity === opt.value && selectedBtnCSS,
+                  error.activityLevel && {
+                    border: "1px solid var(--default-red-color)",
+                    color: "var(--default-red-color)",
+                  },
                 ]}
                 onClick={() => handleActivityChange(opt.value)}
               >
@@ -200,8 +235,10 @@ export default function SignUp() {
               </div>
             ))}
           </div>
+          <div css={errorMessageCSS}>{errorMessage}</div>
         </div>
       </form>
+
       <Button content="가입하기" onClick={handleSubmit} />
     </div>
   );
@@ -269,4 +306,10 @@ const activityBtnTextCSS = css`
 const selectedBtnCSS = css`
   color: var(--default-water-color);
   border: 1px solid var(--default-water-color);
+`;
+
+const errorMessageCSS = css`
+  color: var(--default-red-color);
+  margin-top: 20px;
+  padding-left: 5px;
 `;

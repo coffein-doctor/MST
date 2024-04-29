@@ -14,7 +14,7 @@ function SubmitForm({
   value,
   onChange,
   type,
-	error
+  error,
 }: SubmitFormPropsType) {
   let wrapperPos;
 
@@ -31,11 +31,21 @@ function SubmitForm({
     default:
       wrapperPos = formSetWrapperCSS;
   }
-
   return (
-    <div css={wrapperPos}>
+    <div
+      css={[
+        wrapperPos,
+        error && { border: "1px solid var(--default-red-color)" },
+      ]}
+    >
       {leftLabel && (
-        <label htmlFor={id || ""} css={inputLabelLeftWrapperCSS}>
+        <label
+          htmlFor={id || ""}
+          css={[
+            inputLabelLeftWrapperCSS,
+            error && { color: "var(--default-red-color)" },
+          ]}
+        >
           {leftLabel}
         </label>
       )}
@@ -46,14 +56,20 @@ function SubmitForm({
         value={value}
         onChange={onChange}
         // && 연산자로 수정이 안됨
-				error={error}
+        error={error}
         cssProps={
           leftLabel && rightLabel ? css({ textAlign: "right" }) : undefined
         }
       />
 
       {rightLabel && (
-        <label htmlFor={id || ""} css={inputLabelRightWrapperCSS}>
+        <label
+          htmlFor={id || ""}
+          css={[
+            inputLabelRightWrapperCSS,
+            error && { color: "var(--default-red-color)" },
+          ]}
+        >
           {rightLabel}
         </label>
       )}
@@ -70,13 +86,13 @@ const formSetWrapperCSS = css`
   justify-content: center;
   align-items: center;
   border-radius: 15px;
-	
 `;
 
 const formSetTopWrapperCSS = css`
   ${formSetWrapperCSS}
   border-radius: 15px 15px 0px 0px;
   margin-top: 10px;
+	/* border-bottom: none; */
 `;
 
 const formSetMiddleWrapperCSS = css`

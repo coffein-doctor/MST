@@ -15,5 +15,5 @@ export type SubmitFormPropsType = {
   value?: string | number;
   onChange?: any;
   type?: "string" | "number";
-  error?: string;
+  error?: string ;
 };

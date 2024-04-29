@@ -5,7 +5,7 @@ import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import { useEffect, useState } from "react";
 import { ThemeProvider, createTheme } from "@mui/material";
 
-import { CustomDPTextField } from "./CustomDPInputTextField";
+import { CustomDPTextField } from "./CustomDPTextField";
 import CustomDatePickerToolbar from "./CustomDPToolbar";
 import CustomDatePickerActionbar from "./CustomDPActionbar";
 import "dayjs/locale/ko";
@@ -21,12 +21,14 @@ const theme = createTheme({
 interface CustomDatePickerProps {
   type: string | null;
   value: Dayjs | null;
+  error: string;
   handleDateChange: (date: Dayjs | null) => void;
 }
 
 export default function CustomDatePicker({
   type,
   value,
+  error,
   handleDateChange,
 }: CustomDatePickerProps) {
   const [datePickerType, setDatePickerType] = useState(false);
@@ -35,7 +37,7 @@ export default function CustomDatePicker({
     if (type === "birthday") {
       setDatePickerType(true);
     }
-  }, []);
+  }, [type]);
 
   // locale 설정
   dayjs.locale("ko");
@@ -43,16 +45,20 @@ export default function CustomDatePicker({
   const datePickerCSS = {
     width: "100%",
     marginBottom: "12px",
+		"& .MuiOutlinedInput":{
+
+		},
     "& .MuiOutlinedInput-root": {
       color: "var(--default-black-color)",
       borderRadius: "15px",
+      outline: error && "1px solid var(--default-red-color)",
       backgroundColor: "var(--default-white-color)",
       height: "40px",
     },
     "& .MuiOutlinedInput-input": {
       color: "var(--default-black-color)",
       textAlign: "center",
-			fontSize: datePickerType ? "var(--font-size-h5)" : "var(--font-size-h4)",
+      fontSize: datePickerType ? "var(--font-size-h5)" : "var(--font-size-h4)",
     },
   };
 
@@ -76,6 +82,7 @@ export default function CustomDatePicker({
             textField: (props) => (
               <CustomDPTextField
                 {...props}
+								errorType={error}
                 showStartAdornment={datePickerType}
               />
             ),
