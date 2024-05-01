@@ -92,7 +92,7 @@ const formSetTopWrapperCSS = css`
   ${formSetWrapperCSS}
   border-radius: 15px 15px 0px 0px;
   margin-top: 10px;
-	/* border-bottom: none; */
+  /* border-bottom: none; */
 `;
 
 const formSetMiddleWrapperCSS = css`

@@ -7,7 +7,6 @@ interface ShakeOnErrorProps {
 }
 export default function ShakeOnError({ isError, children }: ShakeOnErrorProps) {
   const [isShaking, setIsShaking] = useState(false);
-  console.log(isShaking, "?");
 
   useEffect(() => {
     if (isError) {

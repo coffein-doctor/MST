@@ -5,5 +5,7 @@ export type ErrorStateType = {
 export type ValidationConfigType = {
   required: boolean;
   maxLength?: number;
-  errorMessage: string;
+
+  errorMessage?: string ;
+  emptyMessage?: string ;
 };

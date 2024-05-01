@@ -20,7 +20,7 @@ export default function validateFormData<T>(
 
     if (config.required && value === "") {
       // 비어있는 경우 판단
-      errors[key] = config.errorMessage;
+      errors[key] = config.emptyMessage || "";
       // 바로 return함으로써 오류 하나만 반영(삭제시 여러개 반영 가능)
       return errors;
     } else if (
@@ -29,7 +29,7 @@ export default function validateFormData<T>(
       config.maxLength !== undefined &&
       value.length > config.maxLength
     ) {
-      errors[key] = config.errorMessage;
+      errors[key] = config.errorMessage || "";
       // 바로 return함으로써 오류 하나만 반영(삭제시 여러개 반영 가능)
       return errors;
     }

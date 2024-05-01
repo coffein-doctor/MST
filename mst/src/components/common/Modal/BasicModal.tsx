@@ -1,11 +1,7 @@
 import React from "react";
 import Button from "../Button/Button";
 import { css } from "@emotion/react";
-
-type ModalPropsType = {
-  content: string;
-  onClick: any;
-};
+import { ModalPropsType } from "@/types/modalTypes";
 
 export default function BasicModal({ content, onClick }: ModalPropsType) {
   return (

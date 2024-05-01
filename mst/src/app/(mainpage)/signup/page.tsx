@@ -11,7 +11,6 @@ import { postSignUpAPI } from "@/api/user/postSignUpAPI";
 import { useRouter } from "next/navigation";
 import { ErrorStateType, ValidationConfigType } from "@/types/validationTypes";
 import validateFormData from "@/utils/validateFormData";
-import ShakeOnError from "@/components/common/Form/ShakeOnError";
 import BasicModal from "@/components/common/Modal/BasicModal";
 
 const genderOptions = [
@@ -48,44 +47,48 @@ const signUpValidationConfig: Record<string, ValidationConfigType> = {
   nickname: {
     required: true,
     maxLength: 8,
+    emptyMessage: "닉네임을 입력해주세요",
     errorMessage: "닉네임은 최대 8자까지만 입력할 수 있습니다.",
   },
   height: {
     required: true,
-    errorMessage: "키를 입력해주세요.",
+    emptyMessage: "키를 입력해주세요.",
   },
   weight: {
     required: true,
-    errorMessage: "몸무게를 입력해주세요.",
+    emptyMessage: "몸무게를 입력해주세요.",
   },
   birth: {
     required: true,
-    errorMessage: "생일을 입력해주세요.",
+    emptyMessage: "생일을 입력해주세요.",
   },
   gender: {
     required: true,
-    errorMessage: "성별을 선택해주세요.",
+    emptyMessage: "성별을 선택해주세요.",
   },
   activityLevel: {
     required: true,
-    errorMessage: "활동량을 선택해주세요.",
+    emptyMessage: "활동량을 선택해주세요.",
   },
 };
 
 export default function SignUp() {
   const router = useRouter();
+  // TOTAL
   const [signUpFormData, setSignUpFormData] = useState<SignUpFormData>(
     initialSignUpFormData
   );
+  // SELECT 관리
   const [selectedGender, setSelectedGender] = useState<string | null>(null);
   const [selectedActivity, setSelectedActivity] = useState<string | null>(null);
   const [selectedDate, setSelectedDate] = useState<Dayjs | null>(dayjs());
-  // ERROR
-  const [error, setError] = useState(initialErrorState);
+  // ERROR 관리
+  const [error, setError] = useState<ErrorStateType>(initialErrorState);
   const [errorMessage, setErrorMessage] = useState("");
   // Modal
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // inputBtn(nickname, height, weight)관련 Change
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     setSignUpFormData((prev) => ({
@@ -99,6 +102,7 @@ export default function SignUp() {
     setErrorMessage("");
   };
 
+  // selectBtn(gender, activityLevel)관련 Change
   const handleSelectChange = (key: string, val: string) => {
     if (key === "gender") {
       setSelectedGender(val);
@@ -114,6 +118,7 @@ export default function SignUp() {
     setErrorMessage("");
   };
 
+  // Date Change
   const handleDateChange = (date: Dayjs | null) => {
     setSelectedDate(date);
     let newDate = dayjs(date).format("YYYY-MM-DD");
@@ -125,10 +130,11 @@ export default function SignUp() {
     setErrorMessage("");
   };
 
+  // Form 제출
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // ERROR
+    // ERROR 순서 정의(하나씩 반영되므로)
     const checkErrorOrder: string[] = [
       "nickname",
       "height",
@@ -138,18 +144,18 @@ export default function SignUp() {
       "activityLevel",
     ];
 
-    const error: ErrorStateType = validateFormData(
-      // 검증config
+    const formError: ErrorStateType = validateFormData(
       signUpValidationConfig,
-      // data
       signUpFormData,
-      // 검증의 순서
       checkErrorOrder
     );
 
-    if (error) {
-      const [firstErrorKey, firstError] = Object.entries(error)[0];
-      setError({ [firstErrorKey]: firstError });
+    if (Object.keys(formError).length > 0) {
+      const [firstErrorKey, firstError] = Object.entries(formError)[0];
+      setError((prev) => ({
+        ...prev,
+        [firstErrorKey]: firstError,
+      }));
       setErrorMessage(firstError);
       return;
     }
@@ -157,18 +163,10 @@ export default function SignUp() {
     // API
     try {
       const response = await postSignUpAPI({ body: signUpFormData });
-
+      // modal open
       setIsModalOpen(true);
-
-      setSignUpFormData({
-        nickname: "",
-        birth: "",
-        gender: "",
-        activityLevel: "",
-        height: "",
-        weight: "",
-        introduction: "",
-      });
+      // Form 데이터 초기화
+      setSignUpFormData(initialSignUpFormData);
     } catch (error) {
       console.log(error);
     }
@@ -191,7 +189,6 @@ export default function SignUp() {
             onChange={handleInputChange}
             error={error.nickname}
           />
-
           <SubmitForm
             position="top"
             leftLabel="키"
@@ -257,7 +254,9 @@ export default function SignUp() {
           <div css={errorMessageCSS}>{errorMessage}</div>
         </div>
       </form>
+      {/* 가입 Btn */}
       <Button content="가입하기" onClick={handleSubmit} />
+      {/* SignUp 확인모달 */}
       {isModalOpen && (
         <BasicModal
           content="회원가입이 완료되었습니다."
@@ -329,7 +328,6 @@ const activityBtnTextCSS = css`
 
 const selectedBtnCSS = css`
   color: var(--gray-color-1);
-  /* border: 1px solid var(--gray-color-1);/ */
 `;
 
 const errorMessageCSS = css`
