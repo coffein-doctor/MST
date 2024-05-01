@@ -11,6 +11,7 @@ import CustomDatePicker from "@/components/Beverage/DatePicker/CustomDatePicker"
 import { ChangeEvent, useState } from "react";
 import SelectDropDown from "@/components/Beverage/SelectDropdown";
 import BasicInput from "@/components/common/Form/BasicInput";
+import BasicTopBar from "@/components/common/TopBar/BasicTopBar";
 
 const testOptions = [
   { value: "톨사이즈" },
@@ -46,6 +47,7 @@ function BeverageDetail({ params: { id } }: BeverageParams) {
   };
   return (
     <div>
+			<BasicTopBar content="음료 등록"/>
       {/* 상단 Detail */}
       <div css={detailWrapperCSS}>
         <div css={detailTitleWrapperCSS}>

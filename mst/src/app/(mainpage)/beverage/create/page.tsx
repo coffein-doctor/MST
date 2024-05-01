@@ -7,6 +7,7 @@ import CustomDatePicker from "@/components/Beverage/DatePicker/CustomDatePicker"
 import RatingForm from "@/components/Beverage/RatingForm";
 import Button from "@/components/common/Button/Button";
 import BasicHR from "@/components/Beverage/BasicHR";
+import BasicTopBar from "@/components/common/TopBar/BasicTopBar";
 
 function BeverageCreate() {
   const [formData, setFormData] = useState({
@@ -41,6 +42,7 @@ function BeverageCreate() {
 
   return (
     <div>
+			<BasicTopBar content="음료 등록"/>
       <form>
         {/* 이름/제조사 */}
         <SubmitForm

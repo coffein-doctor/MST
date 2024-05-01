@@ -6,6 +6,7 @@ import CustomTimePicker from "@/components/Beverage/TimePicker/CustomTimePicker"
 import SubmitForm from "@/components/common/Form/SubmitForm";
 import { ChangeEvent, useState } from "react";
 import WaterAmountButtons from "@/components/Beverage/WaterAmountButtons";
+import BasicTopBar from "@/components/common/TopBar/BasicTopBar";
 
 function WaterCreate() {
   const [waterAmount, setWaterAmount] = useState(0);
@@ -23,6 +24,7 @@ function WaterCreate() {
 
   return (
     <div>
+      <BasicTopBar content="물" />
       <form>
         <div css={waterAmountWrapperCSS}>
           <div css={waterContentTitleCSS}>섭취량</div>
@@ -64,7 +66,6 @@ const waterContentTitleCSS = css`
   text-align: center;
   margin-bottom: 20px;
 `;
-
 
 const timeDatePickerWrapperCSS = css`
   margin-bottom: 103px;

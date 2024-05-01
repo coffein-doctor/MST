@@ -93,10 +93,10 @@ const fixedWaterBtnWrapperCSS = css`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 10px;
 `;
 const fixedWaterBtnCSS = css`
   flex-grow: 1;
-  margin: 0 10px;
   min-width: 90px;
   height: 180px;
   background-color: var(--default-white-color);

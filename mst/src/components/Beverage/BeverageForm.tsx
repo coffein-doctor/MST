@@ -1,21 +1,26 @@
 import { EMPTYHEART, FULLHEART } from "@/assets/svgs";
 import { css } from "@emotion/react";
 import { useState } from "react";
+import Form from "../common/Form/Form";
 
 interface BeverageContentProps {
+  id: number;
   registNum: number;
   name: string;
   company: string;
   liked: boolean;
   toggleLiked: () => void;
+  toBeverageDetail: (id: number) => void;
 }
 
 function BeverageForm({
+  id,
   registNum,
   name,
   company,
   liked,
   toggleLiked,
+  toBeverageDetail,
 }: BeverageContentProps) {
   const [isLiked, setIsLiked] = useState(liked);
 
@@ -56,18 +61,27 @@ function BeverageForm({
     background-color: ${pillColor};
   `;
   return (
-    <div>
-      <div css={beverageContentWrapperCSS}>
-        <div css={registNumPillWrapperCSS}>
-          <div css={registNumPillContentCSS}>{registNumText}</div>
-        </div>
-        <div onClick={handleToggleLiked}>
-          {isLiked ? FULLHEART : EMPTYHEART}
-        </div>
-      </div>
-      <div css={beverageNameCSS}>{name}</div>
-      <div css={beverageCompanyCSS}>{company}</div>
-    </div>
+    <>
+      <Form
+        onClick={() => toBeverageDetail(id)}
+        cssProps={favBevWrapperCSS}
+        shadow
+        content={
+          <div>
+            <div css={beverageContentWrapperCSS}>
+              <div css={registNumPillWrapperCSS}>
+                <div css={registNumPillContentCSS}>{registNumText}</div>
+              </div>
+              <div onClick={handleToggleLiked}>
+                {isLiked ? FULLHEART : EMPTYHEART}
+              </div>
+            </div>
+            <div css={beverageNameCSS}>{name}</div>
+            <div css={beverageCompanyCSS}>{company}</div>
+          </div>
+        }
+      />
+    </>
   );
 }
 
@@ -91,4 +105,7 @@ const beverageCompanyCSS = css`
   font-size: var(--font-size-h6);
 `;
 
+const favBevWrapperCSS = css`
+  margin-bottom: 13px;
+`;
 export default BeverageForm;

@@ -1,12 +1,10 @@
 "use client";
-import Form from "@/components/common/Form/Form";
 import { css } from "@emotion/react";
 import BeverageForm from "@/components/Beverage/BeverageForm";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import PencilButton from "@/components/common/Button/PencilButton";
 import SearchTopBar from "@/components/common/TopBar/SearchTopBar";
-
 
 interface FormData {
   id: number;
@@ -59,12 +57,15 @@ function Beverage() {
     setData(filteredData);
   };
 
-  // 좋아요 배열 반환
+  const toBeverageDetail = (id: number) => {
+    router.push(`beverage/${id}`);
+  };
+
   return (
     <div>
       {/* 상단바 */}
-			<SearchTopBar/>
-      <div css={emptyTopBarCSS}></div>
+      <SearchTopBar />
+      <div css={emptyTopBarCSS} />
       {/* 결과 */}
       <div css={resultWrapperCSS}>
         <div css={favBevSubTitleCSS}>즐겨찾기</div>
@@ -74,29 +75,24 @@ function Beverage() {
           </div>
         ) : (
           data.map((item) => (
-            <Form
-              cssProps={favBevWrapperCSS}
-              shadow={true}
+            <BeverageForm
               key={item?.id}
-              content={
-                <BeverageForm
-                  registNum={item.registNum}
-                  name={item.name}
-                  company={item.company}
-                  liked={item.liked}
-                  toggleLiked={() => toggleLiked(item.id)}
-                />
-              }
+              id={item?.id}
+              registNum={item?.registNum}
+              name={item?.name}
+              company={item?.company}
+              liked={item?.liked}
+              toggleLiked={() => toggleLiked(item?.id)}
+              toBeverageDetail={() => toBeverageDetail(item?.id)}
             />
           ))
         )}
       </div>
       {/* 작성버튼 */}
-			<PencilButton/>
+      <PencilButton />
     </div>
   );
 }
-
 
 // emptyTopBar
 const emptyTopBarCSS = css`
@@ -104,7 +100,6 @@ const emptyTopBarCSS = css`
 `;
 
 // FavBeverage
-
 const resultWrapperCSS = css`
   padding: 20px 0px;
 `;
@@ -127,10 +122,6 @@ const emptyFavTextWrapperCSS = css`
 const emptyFavTextCSS = css`
   color: var(--gray-color-3);
   font-size: var(--font-size-h6);
-`;
-
-const favBevWrapperCSS = css`
-  margin-bottom: 13px;
 `;
 
 export default Beverage;
