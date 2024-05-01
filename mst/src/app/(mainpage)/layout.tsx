@@ -12,12 +12,10 @@ export default function MainPageLayout({
 }) {
   const pathname = usePathname();
 
-  // community/123
-  // community/create
-
-  // community/feed
-  // community
   const shouldRenderNav = () => {
+    if (pathname.startsWith("/signup")) {
+      return false;
+    }
     if (pathname.startsWith("/beverage")) {
       return false;
     }
@@ -29,8 +27,6 @@ export default function MainPageLayout({
     }
     return true;
   };
-
-  console.log(pathname);
 
   return (
     <div>

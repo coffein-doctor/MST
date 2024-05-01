@@ -3,6 +3,7 @@ import React from "react";
 import { css } from "@emotion/react";
 import { LEFTARROW, SEARCH } from "@/assets/svgs";
 import { useRouter } from "next/navigation";
+import BasicInput from "@/components/common/Form/BasicInput";
 
 function SearchTopBar() {
   const router = useRouter();
@@ -15,11 +16,11 @@ function SearchTopBar() {
         <div css={searchIconWrapperCSS}>
           <div>{SEARCH}</div>
         </div>
-        <input
-          css={searchInputCSS}
+        <BasicInput
+          id="search"
+          name="search"
           type="text"
           placeholder="검색어를 입력해주세요"
-          autoFocus
         />
       </div>
     </div>
@@ -57,15 +58,5 @@ const searchIconWrapperCSS = css`
   height: 19px;
 `;
 
-const searchInputCSS = css`
-  border: none;
-  outline: none;
-  background-color: transparent;
-  flex: 1 0 auto;
-  font-size: var(--font-size-h5);
 
-  &::placeholder {
-    font-size: var(--font-size-h5);
-  }
-`;
 export default SearchTopBar;

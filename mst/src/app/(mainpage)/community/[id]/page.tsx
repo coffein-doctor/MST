@@ -7,6 +7,7 @@ import BrownCircle from "../../../../assets/png/BrownCircle.png";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import getFormattedTimestamp from "@/utils/getFormattedTimeStamp";
+import BasicInput from "@/components/common/Form/BasicInput";
 
 interface CommunityParams {
   params: { id: number };
@@ -152,13 +153,15 @@ export default function PostDetail({ params: { id } }: CommunityParams) {
       {/* 댓글 입력창 */}
       <div css={commentInputWrapperCSS}>
         <Image src={BrownCircle} alt="프로필사진" css={profileImgCSS} />
-        <input
-          css={amountInputContentCSS}
+        <BasicInput
+          id="content"
+          name="content"
           placeholder={
             ![...commentStates.values()].some((state) => state === true)
               ? "댓글을 입력해주세요"
               : "대댓글을 입력해주세요"
           }
+          cssProps={inputPlaceholderStyle}
         />
         <button css={commentBtnWrapperCSS}>{CHAT}</button>
       </div>
@@ -271,6 +274,12 @@ const amountInputContentCSS = css`
   font-size: var(--font-size-h5);
   &::placeholder {
     font-size: var(--font-size-h5);
+    color: var(--gray-color-4);
+  }
+`;
+
+const inputPlaceholderStyle = css`
+  &::placeholder {
     color: var(--gray-color-4);
   }
 `;

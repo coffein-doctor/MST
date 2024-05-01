@@ -1,22 +1,21 @@
 import { css } from "@emotion/react";
 import React from "react";
-interface SubmitFormProps {
-  id?: string;
-  children: React.ReactNode;
-  position?: "top" | "middle" | "bottom";
-  leftLabel?: string;
-  rightLabel?: string;
-}
+import BasicInput from "./BasicInput";
+import { SubmitFormPropsType } from "@/types/formTypes";
+
 // default, 상, 중, 하 position 모양 지정
 // label(L/R) 유무 지정
 // 내부에 input
-function SubmitFormWrapper({
+function SubmitForm({
   id,
-  children,
   position,
   leftLabel,
   rightLabel,
-}: SubmitFormProps) {
+  value,
+  onChange,
+  type,
+  error,
+}: SubmitFormPropsType) {
   let wrapperPos;
 
   switch (position) {
@@ -32,17 +31,45 @@ function SubmitFormWrapper({
     default:
       wrapperPos = formSetWrapperCSS;
   }
-
   return (
-    <div css={wrapperPos}>
+    <div
+      css={[
+        wrapperPos,
+        error && { border: "1px solid var(--default-red-color)" },
+      ]}
+    >
       {leftLabel && (
-        <label htmlFor={id || ""} css={inputLabelLeftWrapperCSS}>
+        <label
+          htmlFor={id || ""}
+          css={[
+            inputLabelLeftWrapperCSS,
+            error && { color: "var(--default-red-color)" },
+          ]}
+        >
           {leftLabel}
         </label>
       )}
-      {children}
+      <BasicInput
+        id={id}
+        name={id}
+        type={type}
+        value={value}
+        onChange={onChange}
+        // && 연산자로 수정이 안됨
+        error={error}
+        cssProps={
+          leftLabel && rightLabel ? css({ textAlign: "right" }) : undefined
+        }
+      />
+
       {rightLabel && (
-        <label htmlFor={id || ""} css={inputLabelRightWrapperCSS}>
+        <label
+          htmlFor={id || ""}
+          css={[
+            inputLabelRightWrapperCSS,
+            error && { color: "var(--default-red-color)" },
+          ]}
+        >
           {rightLabel}
         </label>
       )}
@@ -59,18 +86,13 @@ const formSetWrapperCSS = css`
   justify-content: center;
   align-items: center;
   border-radius: 15px;
-
-  input[type="number"]::-webkit-inner-spin-button,
-  input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
 `;
 
 const formSetTopWrapperCSS = css`
   ${formSetWrapperCSS}
   border-radius: 15px 15px 0px 0px;
   margin-top: 10px;
+  /* border-bottom: none; */
 `;
 
 const formSetMiddleWrapperCSS = css`
@@ -100,4 +122,4 @@ const inputLabelRightWrapperCSS = css`
   margin-left: 5px;
 `;
 
-export default SubmitFormWrapper;
+export default SubmitForm;
