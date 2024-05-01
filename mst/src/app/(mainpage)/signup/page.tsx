@@ -11,6 +11,8 @@ import { postSignUpAPI } from "@/api/user/postSignUpAPI";
 import { useRouter } from "next/navigation";
 import { ErrorStateType, ValidationConfigType } from "@/types/validationTypes";
 import validateFormData from "@/utils/validateFormData";
+import ShakeOnError from "@/components/common/Form/ShakeOnError";
+import BasicModal from "@/components/common/Modal/BasicModal";
 
 const genderOptions = [
   { id: 1, label: "남", value: "MALE" },
@@ -81,6 +83,8 @@ export default function SignUp() {
   // ERROR
   const [error, setError] = useState(initialErrorState);
   const [errorMessage, setErrorMessage] = useState("");
+  // Modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -124,7 +128,7 @@ export default function SignUp() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // 에러체크
+    // ERROR
     const checkErrorOrder: string[] = [
       "nickname",
       "height",
@@ -153,8 +157,8 @@ export default function SignUp() {
     // API
     try {
       const response = await postSignUpAPI({ body: signUpFormData });
-      // 대체 기능 필요(모달 등)
-      alert("가입이 완료되었습니다");
+
+      setIsModalOpen(true);
 
       setSignUpFormData({
         nickname: "",
@@ -165,10 +169,14 @@ export default function SignUp() {
         weight: "",
         introduction: "",
       });
-      router.push("/home");
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleModal = () => {
+    setIsModalOpen(false);
+    router.push("/home");
   };
 
   return (
@@ -183,6 +191,7 @@ export default function SignUp() {
             onChange={handleInputChange}
             error={error.nickname}
           />
+
           <SubmitForm
             position="top"
             leftLabel="키"
@@ -248,8 +257,13 @@ export default function SignUp() {
           <div css={errorMessageCSS}>{errorMessage}</div>
         </div>
       </form>
-
       <Button content="가입하기" onClick={handleSubmit} />
+      {isModalOpen && (
+        <BasicModal
+          content="회원가입이 완료되었습니다."
+          onClick={handleModal}
+        />
+      )}
     </div>
   );
 }
@@ -319,6 +333,8 @@ const selectedBtnCSS = css`
 `;
 
 const errorMessageCSS = css`
+  font-size: var(--font-size-h6);
+  font-weight: var(--font-weight-semibold);
   color: var(--default-red-color);
   margin-top: 20px;
   padding-left: 5px;
