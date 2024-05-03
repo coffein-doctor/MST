@@ -6,7 +6,7 @@ spring:
     name: community-service
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://3.36.123.194:3308/mst?useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://${DOMAIN}:3308/mst?useSSL=false&serverTimezone=UTC
     username: admin
     password: mst@0117
   jpa:
@@ -28,7 +28,9 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://admin:mst0117@3.36.123.194:8761/eureka
+      defaultZone: http://admin:mst0117@${DOMAIN}:8761/eureka
 
 greeting:
   message: Welcome to the MST Project.
+
+DOMAIN: masyeotta.site
