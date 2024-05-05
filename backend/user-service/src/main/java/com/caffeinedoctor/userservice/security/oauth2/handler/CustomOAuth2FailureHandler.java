@@ -36,7 +36,8 @@ public class CustomOAuth2FailureHandler extends SimpleUrlAuthenticationFailureHa
         }
 
         // 인증 실패에 대한 상세한 메시지 생성
-        String errorMessage = "소셜 로그인에 실패했습니다. 원인: " + exception.getLocalizedMessage();
+//        String errorMessage = "소셜 로그인에 실패했습니다. 원인: " + exception.getLocalizedMessage();
+        String errorMessage = "error: " + exception.getLocalizedMessage();
 
         // 실패 메시지와 함께 리다이렉션할 URI 생성
         String redirectUri = UriComponentsBuilder.fromUriString("http://localhost:3000/")

@@ -31,27 +31,27 @@ spring:
             postLogger: true
       routes:
         # 소셜 로그인 관련 요청
-        - id: user-service
+#        - id: user-service
+##          uri: lb://USER-SERVICE
+#          uri: http://localhost:8081
+#          predicates:
+#            - Path=/user-service/oauth2/authorization/**, /user-service/login/**, /user-service/swagger-ui/**, /user-service/v3/api-docs/swagger-config
+#          filters:
+#            # 쿠키 초기화
+#            - RemoveRequestHeader=Cookie
+#            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
+#        #Acccess 토큰 재발급
+#        - id: user-service
 #          uri: lb://USER-SERVICE
-          uri: http://localhost:8081
-          predicates:
-            - Path=/user-service/oauth2/authorization/**, /user-service/login/**
-          filters:
-            # 쿠키 초기화
-            - RemoveRequestHeader=Cookie
-            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
-        #Acccess 토큰 재발급
-        - id: user-service
-#          uri: lb://USER-SERVICE
-          uri: http://localhost:8081
-          predicates:
-            - Path=/user-service/token/reissue
-            - Method=POST
-          filters:
-            # 쿠키 초기화
-            - RemoveRequestHeader=Cookie
-            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
-        # 나머지
+##          uri: http://localhost:8081
+#          predicates:
+#            - Path=/user-service/token/reissue
+#            - Method=POST
+#          filters:
+#            # 쿠키 초기화
+#            - RemoveRequestHeader=Cookie
+#            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
+        #  내부에서 하니까 안할래
         - id: user-service
 #          uri: lb://USER-SERVICE
           uri: http://localhost:8081
@@ -59,24 +59,25 @@ spring:
             - Path=/user-service/**
           filters:
             # 쿠키 초기화
-            - RemoveRequestHeader=Cookie
+#            - RemoveRequestHeader=Cookie
             - RewritePath=/user-service/(?<segment>.*),/$\{segment}
-            - AuthorizationHeaderFilter
-#        - id: beverage-service
-#          uri: lb://BEVERAGE-SERVICE
-#          predicates:
-#            - Path=/beverage-service/**
-#          filters:
-#            # 쿠키 초기화
+        - id: beverage-service
+          uri: lb://BEVERAGE-SERVICE
+          predicates:
+            - Path=/beverage-service/**
+          filters:
+            # 쿠키 초기화
 #            - RemoveRequestHeader=Cookie
-#            - RewritePath=/beverage-service/(?<segment>.*),/$\{segment}
-#        - id: community-service
-#          uri: lb://COMMUNITY-SERVICE
-#          predicates:
-#            - Path=/community-service/**
-#          filters:
+            - RewritePath=/beverage-service/(?<segment>.*),/$\{segment}
+#            - AuthorizationHeaderFilter
+        - id: community-service
+          uri: lb://COMMUNITY-SERVICE
+          predicates:
+            - Path=/community-service/**
+          filters:
 #            - RemoveRequestHeader=Cookie
-#            - RewritePath=/community-service/(?<segment>.*),/$\{segment}
+            - RewritePath=/community-service/(?<segment>.*),/$\{segment}
+#            - AuthorizationHeaderFilter
 
 
 #        - id: user-service

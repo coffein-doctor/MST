@@ -30,36 +30,43 @@ spring:
             preLogger: true
             postLogger: true
       routes:
+        - id: user-service-swagger
+#          uri: http://localhost:8081
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/swagger-ui.html, /user-service/v3/api-docs/**"
+          filters:
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
         # 소셜 로그인 관련 요청
-#        - id: user-service
-#          uri: lb://USER-SERVICE
-##          uri: http://localhost:8081
-#          predicates:
-#            - Path=/user-service/oauth2/authorization/**, /user-service/login/**, /user-service/swagger-ui/**
-#          filters:
-#            # 쿠키 초기화
-#            - RemoveRequestHeader=Cookie
-#            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
-#        #Acccess 토큰 재발급
-#        - id: user-service
-#          uri: lb://USER-SERVICE
-##          uri: http://localhost:8081
-#          predicates:
-#            - Path=/user-service/token/reissue
-#            - Method=POST
-#          filters:
-#            # 쿠키 초기화
-#            - RemoveRequestHeader=Cookie
-#            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
-        #  내부에서 하니까 안할래
         - id: user-service
           uri: lb://USER-SERVICE
 #          uri: http://localhost:8081
           predicates:
+            - Path=/user-service/oauth2/authorization/**, /user-service/login/**
+          filters:
+            # 쿠키 초기화
+#            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
+        #Acccess 토큰 재발급
+        - id: user-service
+          uri: lb://USER-SERVICE
+#          uri: http://localhost:8081
+          predicates:
+            - Path=/user-service/token/reissue
+            - Method=POST
+          filters:
+            # 쿠키 초기화
+#            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
+        #  나머지
+        - id: user-service
+#          uri: lb://USER-SERVICE
+          uri: http://localhost:8081
+          predicates:
             - Path=/user-service/**
           filters:
             # 쿠키 초기화
-            - RemoveRequestHeader=Cookie
+#            - RemoveRequestHeader=Cookie
             - RewritePath=/user-service/(?<segment>.*),/$\{segment}
         - id: beverage-service
           uri: lb://BEVERAGE-SERVICE
@@ -67,7 +74,7 @@ spring:
             - Path=/beverage-service/**
           filters:
             # 쿠키 초기화
-            - RemoveRequestHeader=Cookie
+#            - RemoveRequestHeader=Cookie
             - RewritePath=/beverage-service/(?<segment>.*),/$\{segment}
 #            - AuthorizationHeaderFilter
         - id: community-service
@@ -75,7 +82,7 @@ spring:
           predicates:
             - Path=/community-service/**
           filters:
-            - RemoveRequestHeader=Cookie
+#            - RemoveRequestHeader=Cookie
             - RewritePath=/community-service/(?<segment>.*),/$\{segment}
 #            - AuthorizationHeaderFilter
 
