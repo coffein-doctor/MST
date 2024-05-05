@@ -31,27 +31,27 @@ spring:
             postLogger: true
       routes:
         # 소셜 로그인 관련 요청
-        - id: user-service
-          uri: lb://USER-SERVICE
-#          uri: http://localhost:8081
-          predicates:
-            - Path=/user-service/oauth2/authorization/**, /user-service/login/**, /user-service/swagger-ui/**
-          filters:
-            # 쿠키 초기화
-            - RemoveRequestHeader=Cookie
-            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
-        #Acccess 토큰 재발급
-        - id: user-service
-          uri: lb://USER-SERVICE
-#          uri: http://localhost:8081
-          predicates:
-            - Path=/user-service/token/reissue
-            - Method=POST
-          filters:
-            # 쿠키 초기화
-            - RemoveRequestHeader=Cookie
-            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
-        # 나머지
+#        - id: user-service
+#          uri: lb://USER-SERVICE
+##          uri: http://localhost:8081
+#          predicates:
+#            - Path=/user-service/oauth2/authorization/**, /user-service/login/**, /user-service/swagger-ui/**
+#          filters:
+#            # 쿠키 초기화
+#            - RemoveRequestHeader=Cookie
+#            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
+#        #Acccess 토큰 재발급
+#        - id: user-service
+#          uri: lb://USER-SERVICE
+##          uri: http://localhost:8081
+#          predicates:
+#            - Path=/user-service/token/reissue
+#            - Method=POST
+#          filters:
+#            # 쿠키 초기화
+#            - RemoveRequestHeader=Cookie
+#            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
+        #  내부에서 하니까 안할래
         - id: user-service
           uri: lb://USER-SERVICE
 #          uri: http://localhost:8081
@@ -61,7 +61,6 @@ spring:
             # 쿠키 초기화
             - RemoveRequestHeader=Cookie
             - RewritePath=/user-service/(?<segment>.*),/$\{segment}
-            - AuthorizationHeaderFilter
         - id: beverage-service
           uri: lb://BEVERAGE-SERVICE
           predicates:
