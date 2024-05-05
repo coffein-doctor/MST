@@ -70,7 +70,7 @@ spring:
             # 쿠키 초기화
             - RemoveRequestHeader=Cookie
             - RewritePath=/beverage-service/(?<segment>.*),/$\{segment}
-            - AuthorizationHeaderFilter
+#            - AuthorizationHeaderFilter
         - id: community-service
           uri: lb://COMMUNITY-SERVICE
           predicates:
@@ -78,7 +78,7 @@ spring:
           filters:
             - RemoveRequestHeader=Cookie
             - RewritePath=/community-service/(?<segment>.*),/$\{segment}
-            - AuthorizationHeaderFilter
+#            - AuthorizationHeaderFilter
 
 
 #        - id: user-service
