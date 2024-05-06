@@ -12,30 +12,29 @@ import org.springframework.context.annotation.Configuration;
                 version = "v1"))
 @Configuration
 public class SwaggerConfig {
-
-    @Bean
-    public GroupedOpenApi userServiceApi() {
-        return GroupedOpenApi.builder()
-                .group("user-service")
-                .pathsToMatch("/user-service/**")
-//                .pathsToMatch("/users/**", "/token/**", "/oauth2/**")
-                .build();
-    }
-
-    @Bean
-    public GroupedOpenApi beverageServiceApi() {
-        return GroupedOpenApi.builder()
-                .group("beverage-service")
-                .pathsToMatch("/beverage-service/**")
-                .build();
-    }
-
-    @Bean
-    public GroupedOpenApi communityServiceApi() {
-        return GroupedOpenApi.builder()
-                .group("community-service")
-                .pathsToMatch("/community-service/**")
-                .build();
-    }
+//
+//    @Bean
+//    public GroupedOpenApi userServiceApi() {
+//        return GroupedOpenApi.builder()
+//                .group("user-service")
+//                .pathsToMatch("/user-service/**")
+//                .build();
+//    }
+//
+//    @Bean
+//    public GroupedOpenApi beverageServiceApi() {
+//        return GroupedOpenApi.builder()
+//                .group("beverage-service")
+//                .pathsToMatch("/beverage-service/**")
+//                .build();
+//    }
+//
+//    @Bean
+//    public GroupedOpenApi communityServiceApi() {
+//        return GroupedOpenApi.builder()
+//                .group("community-service")
+//                .pathsToMatch("/community-service/**")
+//                .build();
+//    }
 
 }

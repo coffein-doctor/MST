@@ -55,6 +55,12 @@ spring:
 #            - RemoveRequestHeader=Cookie
             - RewritePath=/user-service/(?<segment>.*),/$\{segment}
             - AuthorizationHeaderFilter
+
+        - id: beverage-service-swagger
+#          uri: http://localhost:8082
+          uri: lb://BEVERAGE-SERVICE
+          predicates:
+            - Path=/beverage-service/swagger-ui/**, /beverage-service/v3/**
         - id: beverage-service
           uri: lb://BEVERAGE-SERVICE
           predicates:
@@ -64,6 +70,12 @@ spring:
 #            - RemoveRequestHeader=Cookie
             - RewritePath=/beverage-service/(?<segment>.*),/$\{segment}
 #            - AuthorizationHeaderFilter
+
+        - id: community-service-swagger
+#          uri: http://localhost:8083
+          uri: lb://COMMUNITY-SERVICE
+          predicates:
+            - Path=/community-service/swagger-ui/**, /community-service/v3/**
         - id: community-service
           uri: lb://COMMUNITY-SERVICE
           predicates:
@@ -106,3 +118,23 @@ spring:
 #                postLogger: true
 ##            - AddRequestHeader=beverage-request, beverage-request-header # {headerName: headerValue} header 삽입, 요청할 때
 ##            - AddResponseHeader=beverage-response, beverage-response-header # header 삽입, 반환할 때
+
+#springdoc:
+#  api-docs:
+#    enabled: true
+#    groups:
+#      enabled: true
+#  swagger-ui:
+#    enabled: true
+#    path: /swagger-ui/index.html
+#    config-url: /v3/api-docs/swagger-config
+#    urls:
+#      #      - url: /v3/api-docs
+#      #        name: API Gateway Service
+#      #        primaryName: API Gateway Service
+#      - url: /user-service/v3/api-docs
+#        name: user-service
+#      - url: /beverage-service/v3/api-docs
+#        name: beverage-service
+#      - url: /community-service/v3/api-docs
+#        name: community-service
