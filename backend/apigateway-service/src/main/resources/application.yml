@@ -26,9 +26,9 @@ spring:
 #          uri: http://localhost:8081
           uri: lb://USER-SERVICE
           predicates:
-            - Path=/user-service/swagger-ui.html, /user-service/v3/api-docs/**"
+            - Path=/user-service/swagger-ui/**, /user-service/v3/**
           filters:
-            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
         # 소셜 로그인 관련 요청
         - id: user-service
           uri: lb://USER-SERVICE
