@@ -23,8 +23,8 @@ spring:
     gateway:
       routes:
         - id: user-service-swagger
-          uri: http://localhost:8081
-#          uri: lb://USER-SERVICE
+#          uri: http://localhost:8081
+          uri: lb://USER-SERVICE
           predicates:
             - Path=/user-service/swagger-ui/**, /user-service/v3/**
         # 소셜 로그인 관련 요청
