@@ -21,62 +21,69 @@ spring:
       - application-secret.yml
   cloud:
     gateway:
-      # 글로벌 필터 적용
-      default-filters:
-        - name: GlobalFilter # 가장 처음 시작, 가장 마지막 종료
-          # 전달하고자 하는 파라미터
-          args:
-            baseMessage: Spring Cloud Gateway GlobalFilter
-            preLogger: true
-            postLogger: true
       routes:
+        - id: user-service-swagger
+          uri: http://localhost:8081
+#          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/swagger-ui/**, /user-service/v3/**
         # 소셜 로그인 관련 요청
         - id: user-service
-#          uri: lb://USER-SERVICE
-          uri: http://localhost:8081
+          uri: lb://USER-SERVICE
+#          uri: http://localhost:8081
           predicates:
             - Path=/user-service/oauth2/authorization/**, /user-service/login/**
           filters:
-            # 쿠키 초기화
-            - RemoveRequestHeader=Cookie
             - RewritePath=/user-service/(?<segment>.*),/$\{segment}
         #Acccess 토큰 재발급
         - id: user-service
-#          uri: lb://USER-SERVICE
-          uri: http://localhost:8081
+          uri: lb://USER-SERVICE
+#          uri: http://localhost:8081
           predicates:
             - Path=/user-service/token/reissue
             - Method=POST
           filters:
-            # 쿠키 초기화
-            - RemoveRequestHeader=Cookie
             - RewritePath=/user-service/(?<segment>.*),/$\{segment}
-        # 나머지
+        #  나머지
         - id: user-service
-#          uri: lb://USER-SERVICE
-          uri: http://localhost:8081
+          uri: lb://USER-SERVICE
+#          uri: http://localhost:8081
           predicates:
             - Path=/user-service/**
           filters:
             # 쿠키 초기화
-            - RemoveRequestHeader=Cookie
+#            - RemoveRequestHeader=Cookie
             - RewritePath=/user-service/(?<segment>.*),/$\{segment}
             - AuthorizationHeaderFilter
-#        - id: beverage-service
-#          uri: lb://BEVERAGE-SERVICE
-#          predicates:
-#            - Path=/beverage-service/**
-#          filters:
-#            # 쿠키 초기화
+
+        - id: beverage-service-swagger
+          uri: http://localhost:8082
+          #          uri: lb://BEVERAGE-SERVICE
+          predicates:
+            - Path=/beverage-service/swagger-ui/**, /beverage-service/v3/**
+        - id: beverage-service
+          uri: lb://BEVERAGE-SERVICE
+          predicates:
+            - Path=/beverage-service/**
+          filters:
+            # 쿠키 초기화
 #            - RemoveRequestHeader=Cookie
-#            - RewritePath=/beverage-service/(?<segment>.*),/$\{segment}
-#        - id: community-service
-#          uri: lb://COMMUNITY-SERVICE
-#          predicates:
-#            - Path=/community-service/**
-#          filters:
+            - RewritePath=/beverage-service/(?<segment>.*),/$\{segment}
+#            - AuthorizationHeaderFilter
+
+        - id: community-service-swagger
+          uri: http://localhost:8083
+          #          uri: lb://COMMUNITY-SERVICE
+          predicates:
+            - Path=/community-service/swagger-ui/**, /community-service/v3/**
+        - id: community-service
+          uri: lb://COMMUNITY-SERVICE
+          predicates:
+            - Path=/community-service/**
+          filters:
 #            - RemoveRequestHeader=Cookie
-#            - RewritePath=/community-service/(?<segment>.*),/$\{segment}
+            - RewritePath=/community-service/(?<segment>.*),/$\{segment}
+#            - AuthorizationHeaderFilter
 
 
 #        - id: user-service
@@ -111,3 +118,23 @@ spring:
 #                postLogger: true
 ##            - AddRequestHeader=beverage-request, beverage-request-header # {headerName: headerValue} header 삽입, 요청할 때
 ##            - AddResponseHeader=beverage-response, beverage-response-header # header 삽입, 반환할 때
+
+#springdoc:
+#  api-docs:
+#    enabled: true
+#    groups:
+#      enabled: true
+#  swagger-ui:
+#    enabled: true
+#    path: /swagger-ui/index.html
+#    config-url: /v3/api-docs/swagger-config
+#    urls:
+#      #      - url: /v3/api-docs
+#      #        name: API Gateway Service
+#      #        primaryName: API Gateway Service
+#      - url: /user-service/v3/api-docs
+#        name: user-service
+#      - url: /beverage-service/v3/api-docs
+#        name: beverage-service
+#      - url: /community-service/v3/api-docs
+#        name: community-service
