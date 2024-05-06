@@ -21,37 +21,34 @@ spring:
       - application-secret.yml
   cloud:
     gateway:
-      # 글로벌 필터 적용
-      default-filters:
-        - name: GlobalFilter # 가장 처음 시작, 가장 마지막 종료
-          # 전달하고자 하는 파라미터
-          args:
-            baseMessage: Spring Cloud Gateway GlobalFilter
-            preLogger: true
-            postLogger: true
       routes:
-        # 소셜 로그인 관련 요청
-#        - id: user-service
-##          uri: lb://USER-SERVICE
-#          uri: http://localhost:8081
-#          predicates:
-#            - Path=/user-service/oauth2/authorization/**, /user-service/login/**, /user-service/swagger-ui/**, /user-service/v3/api-docs/swagger-config
-#          filters:
-#            # 쿠키 초기화
-#            - RemoveRequestHeader=Cookie
-#            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
-#        #Acccess 토큰 재발급
-#        - id: user-service
+        - id: user-service-swagger
+          uri: http://localhost:8081
 #          uri: lb://USER-SERVICE
-##          uri: http://localhost:8081
-#          predicates:
-#            - Path=/user-service/token/reissue
-#            - Method=POST
-#          filters:
-#            # 쿠키 초기화
+          predicates:
+            - Path=/user-service/swagger-ui.html, /user-service/v3/api-docs/**"
+          filters:
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+        # 소셜 로그인 관련 요청
+        - id: user-service
+#          uri: lb://USER-SERVICE
+          uri: http://localhost:8081
+          predicates:
+            - Path=/user-service/oauth2/authorization/**, /user-service/login/**
+          filters:
+            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
+        #Acccess 토큰 재발급
+        - id: user-service
+#          uri: lb://USER-SERVICE
+          uri: http://localhost:8081
+          predicates:
+            - Path=/user-service/token/reissue
+            - Method=POST
+          filters:
+            # 쿠키 초기화
 #            - RemoveRequestHeader=Cookie
-#            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
-        #  내부에서 하니까 안할래
+            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
+        #  나머지
         - id: user-service
 #          uri: lb://USER-SERVICE
           uri: http://localhost:8081
@@ -61,6 +58,7 @@ spring:
             # 쿠키 초기화
 #            - RemoveRequestHeader=Cookie
             - RewritePath=/user-service/(?<segment>.*),/$\{segment}
+            - AuthorizationHeaderFilter
         - id: beverage-service
           uri: lb://BEVERAGE-SERVICE
           predicates:
