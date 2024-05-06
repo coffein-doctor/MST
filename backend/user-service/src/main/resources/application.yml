@@ -84,3 +84,14 @@ eureka:
 
 greeting:
   message: Welcome to the MST Project.
+
+springdoc:
+  api-docs:
+    path: /user-service/v3/api-docs
+  swagger-ui:
+    path: /user-service/swagger-ui.html
+
+openapi:
+  service:
+    # API Gateway 포트
+    url: http://${DOMAIN}:8000
