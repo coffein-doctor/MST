@@ -5,20 +5,23 @@ import NavSquareContent from "./NavSquareContent";
 
 import { HOME, STATS, PLUS, COMMUNITY, MYPAGE } from "@/assets/svgs";
 
-
 function Nav() {
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [windowWidth, setWindowWidth] = useState(0);
 
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };
 
-    window.addEventListener("resize", handleResize);
+    // 클라이언트 측에서만 이벤트 리스너를 추가합니다.
+    if (typeof window !== "undefined") {
+      setWindowWidth(window.innerWidth);
+      window.addEventListener("resize", handleResize);
 
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
+      return () => {
+        window.removeEventListener("resize", handleResize);
+      };
+    }
   }, []);
 
   return (

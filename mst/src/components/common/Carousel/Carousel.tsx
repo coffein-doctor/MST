@@ -95,7 +95,7 @@ const Carousel = ({ carouselList }: Props) => {
 
             return (
               <li key={key} css={carouselItem}>
-                {/* <img src={image} alt="carousel-img" /> */}
+                <Image src={image} alt="carousel-img" />
               </li>
             );
           })}

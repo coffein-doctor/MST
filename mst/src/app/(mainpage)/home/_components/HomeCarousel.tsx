@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Carousel from "react-material-ui-carousel";
 
 interface Item {
-  item: string;
+  name: string;
   description: string;
 }
 
