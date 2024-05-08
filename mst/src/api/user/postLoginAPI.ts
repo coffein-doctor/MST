@@ -13,9 +13,10 @@ type responseType = {
 };
 
 export const postLoginAPI = async (param: string) => {
+
   try {
     const response: responseType = await defaultInstance.post(
-      `/oauth2/authorization/${param}`
+      `/user-service/oauth2/authorization/${param}`
     );
     return response.data;
   } catch (error) {

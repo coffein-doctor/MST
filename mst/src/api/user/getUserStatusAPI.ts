@@ -8,7 +8,8 @@ type responseType = {
 
 export const getUserStatusAPI = async () => {
   try {
-    const response: responseType = await tokenInstance.get(`/users/status`);
+		console.log()
+    const response: responseType = await tokenInstance.get(`/user-service/users/status`);
     return response.data;
   } catch (error) {
     console.log("error: ", error);

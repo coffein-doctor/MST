@@ -3,12 +3,7 @@
 import Form from "@/components/common/Form/Form";
 import HomeFormContent from "@/components/Home/HomeFormContent";
 
-import HomeCarousel from "./_components/HomeCarousel";
-import useUserId from "@/hooks/useUserId";
-
 function Home() {
-  const userId = useUserId();
-  console.log("userID", userId);
 
   const items = [
     {
@@ -28,7 +23,7 @@ function Home() {
   return (
     <div>
       <Form content={<HomeFormContent />} />
-      <HomeCarousel items={items} />
+      {/* <HomeCarousel items={items} /> */}
     </div>
   );
 }

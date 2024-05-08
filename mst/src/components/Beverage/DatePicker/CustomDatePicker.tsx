@@ -19,7 +19,7 @@ const theme = createTheme({
 // https://mui.com/x/api/date-pickers/date-picker/#slots
 
 interface CustomDatePickerProps {
-  type: string | null;
+  type?: "birthday";
   value: Dayjs | null;
   error: string;
   handleDateChange: (date: Dayjs | null) => void;

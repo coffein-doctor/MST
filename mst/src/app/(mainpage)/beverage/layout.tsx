@@ -1,17 +1,18 @@
 "use client";
-import { showNavBarState } from "@/recoil/atoms/userIdState";
-import { useSetRecoilState } from "recoil";
-export default function CommunitySelectBarLayout({
+import BasicTopBar from "@/components/common/TopBar/BasicTopBar";
+import { css } from "@emotion/react";
+export default function BeverageLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  // const setShowNavbar = useSetRecoilState(showNavBarState);
-  // setShowNavbar(false);
-
   return (
     <>
-      <div>{children}</div>
+      <div css={contentWrapperCSS}>{children}</div>
     </>
   );
 }
+
+const contentWrapperCSS = css`
+  margin: 0 20px;
+`;
