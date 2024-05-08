@@ -3,7 +3,7 @@
 FROM node:20.11.0-alpine AS builder
 
 # Set the working directory to /app
-WORKDIR /app
+WORKDIR /
 
 # Copy the package.json and package-lock.json files to the container
 # package.json, package-lock.json을 워킹 디렉토리에 복사
