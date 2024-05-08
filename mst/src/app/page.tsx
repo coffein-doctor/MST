@@ -15,6 +15,8 @@ export default function Login() {
   const handleLogin = async () => {
     router.push(`${baseUrl}/user-service/oauth2/authorization/kakao`);
 
+  };
+  const getUserStatus = async () => {
     const status = await getUserStatusAPI();
     if (status === "NEW_USER") {
       router.push("/signup");
@@ -22,24 +24,7 @@ export default function Login() {
       router.push("/home");
     }
   };
-
-  useEffect(() => {
-		// router 이동시 받아온 status로 이동처리
-    const getUserStatus = async () => {
-      try {
-        const status = await getUserStatusAPI();
-        console.log(status, "STATUS");
-        if (status === "NEW_USER") {
-          router.push("/signup");
-        } else {
-          router.push("/home");
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getUserStatus();
-  }, [router]);
+	getUserStatus()
 
   return (
     <div css={loginWrapperCSS}>

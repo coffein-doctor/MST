@@ -9,13 +9,14 @@ const fixedWaterValue = [
 
 interface WaterAmountButtonsProps {
   waterAmount: number;
-  handleWaterAmountBtnClick: (val: number) => void;
+  onSelect: (val: number) => void;
 }
 
 export default function WaterAmountButtons({
   waterAmount,
-  handleWaterAmountBtnClick,
+  onSelect,
 }: WaterAmountButtonsProps) {
+  const selectedColor = "var(--gray-color-1)";
   return (
     <div css={fixedWaterBtnWrapperCSS}>
       {fixedWaterValue.map((item, idx) => (
@@ -24,15 +25,12 @@ export default function WaterAmountButtons({
           css={[
             fixedWaterBtnCSS,
             item.value === waterAmount && {
-              color: "var(--default-water-color)",
-              border: "1px solid var(--default-water-color)",
+              color: "var(--gray-color-1)",
+              border: "1px solid var(--gray-color-1)",
             },
           ]}
         >
-          <div
-            css={btnPictureWrapperCSS}
-            onClick={() => handleWaterAmountBtnClick(item.value)}
-          >
+          <div css={btnPictureWrapperCSS} onClick={() => onSelect(item.value)}>
             <div
               css={[
                 btnPictureCSS,
@@ -46,7 +44,7 @@ export default function WaterAmountButtons({
                 <PAPERCUP
                   color={
                     item.value === waterAmount
-                      ? "var(--default-water-color)"
+                      ? selectedColor
                       : "var(--gray-color-4)"
                   }
                 />
@@ -55,7 +53,7 @@ export default function WaterAmountButtons({
                 <MUGCUP
                   color={
                     item.value === waterAmount
-                      ? "var(--default-water-color)"
+                      ? selectedColor
                       : "var(--gray-color-4)"
                   }
                 />
@@ -64,7 +62,7 @@ export default function WaterAmountButtons({
                 <PLASTICBOTTLE
                   color={
                     item.value === waterAmount
-                      ? "var(--default-water-color)"
+                      ? selectedColor
                       : "var(--gray-color-4)"
                   }
                 />
@@ -75,7 +73,7 @@ export default function WaterAmountButtons({
             css={[
               waterBtnContentWrapperCSS,
               item.value === waterAmount && {
-                color: "var(--default-water-color)",
+                color: selectedColor,
               },
             ]}
           >

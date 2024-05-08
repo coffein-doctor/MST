@@ -11,36 +11,43 @@ import { ChangeEvent, useEffect, useState } from "react";
 import SelectDropDown from "@/components/Beverage/SelectDropdown";
 import BasicInput from "@/components/common/Form/BasicInput";
 import BasicTopBar from "@/components/common/TopBar/BasicTopBar";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 
-const testOptions = [
-  { value: "톨사이즈" },
-  { value: "그란데사이즈" },
-  { value: "라지사이즈" },
-  { value: "톨사이즈" },
-  { value: "그란데사이즈그란데사이즈그란데사이즈" },
-  { value: "그란데사이즈" },
-  { value: "라지사이즈" },
-  { value: "톨사이즈" },
-  { value: "그란데사이즈" },
-  { value: "라지사이즈" },
-  { value: "톨사이즈" },
-];
+// const testOptions = [
+//   { value: "톨사이즈" },
+//   { value: "그란데사이즈" },
+//   { value: "라지사이즈" },
+//   { value: "톨사이즈" },
+//   { value: "그란데사이즈그란데사이즈그란데사이즈" },
+// ];
+
+// 근데 여기에 size별 양이 있어야함....다시 key-value?
+const testOptions = ["톨사이즈", "그란데", "라지"];
 interface BeverageParams {
   params: { id: string };
 }
 
 export type BeverageByIdFormData = {
+  volume: number | "";
+  created_date: string;
+  // careted_time: string
+};
+
+const initialBeverageByIdFormData: BeverageByIdFormData = {
+  volume: "",
+  created_date: "",
+};
+
+type BeverageDetailData = {
   name: string;
   company: string;
   caffeine: number | "";
   sugar: number | "";
   volume: number | "";
   size: string;
-  // created_time: dayjs;
 };
 
-const initialBeverageByIdFormData: BeverageByIdFormData = {
+const initialBeverageDetailData: BeverageDetailData = {
   name: "",
   company: "",
   caffeine: "",
@@ -50,12 +57,24 @@ const initialBeverageByIdFormData: BeverageByIdFormData = {
 };
 
 function BeverageDetail({ params: { id } }: BeverageParams) {
+  const [beverageDetailData, setBeverageDetailData] = useState(
+    initialBeverageDetailData
+  );
+
   const [beverageByIdFormData, setBeverageByIdFormData] = useState(
     initialBeverageByIdFormData
   );
 
   // SIZE
-  const [sizeOption, setSizeOption] = useState();
+  const [sizeOptionList, setSizeOptionList] = useState<string[]>([]);
+
+  const handleOptionSelect = (opt: string) => {
+    setBeverageByIdFormData((prev) => ({
+      ...prev,
+      // size가 아니라....전체 양 계산
+      size: opt,
+    }));
+  };
 
   // AMOUNT
   const [amount, setAmount] = useState(1);
@@ -63,47 +82,70 @@ function BeverageDetail({ params: { id } }: BeverageParams) {
   const handleDecrease = () => {
     setAmount((prev) => (prev - 0.5 >= 0 ? prev - 0.5 : 0));
   };
-
   const handleIncrease = () => {
     setAmount((prev) => (prev + 0.5 < 10 ? prev + 0.5 : 10));
   };
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const newValue = parseFloat(e.target.value);
+  const handleAmountChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = parseFloat(e.target.value);
+    const roundedValue = Math.round(value * 100) / 100;
+    const newValue = Math.min(Math.max(roundedValue, 0), 10);
+    // 입력부터 2자리수이상이면 사라지게 하는 로직 필요
     setAmount(newValue);
+    // 전체계산한값
+    let calculatedAmount = newValue;
+    setBeverageByIdFormData((prev) => ({
+      ...prev,
+      size: calculatedAmount,
+    }));
+  };
+
+  // DATE
+  const [selectedDate, setSelectedDate] = useState<Dayjs | null>(dayjs());
+
+  const handleDateChange = (date: Dayjs | null) => {
+    setSelectedDate(date);
+    let newDate = dayjs(date).format("YYYY-MM-DD");
+    setBeverageByIdFormData((prev) => ({
+      ...prev,
+      created_date: newDate,
+    }));
   };
 
   // SUBMIT
 
+  // https://soobing.github.io/react/server-rendering-and-react-query/
+  // https://xionwcfm.tistory.com/339#google_vignette
+
   // 기본정보 get
   useEffect(() => {
-    // 내가 해결해야할거 : SSR조기 렌더링
-		// https://www.youtube.com/watch?v=GgvE5fkIs9o
-		// https://soobing.github.io/react/server-rendering-and-react-query/
-		// https://xionwcfm.tistory.com/339#google_vignette
-    // size어떻게 할거임?
-    // created_date, time이 없음
-    const tempRenderingData = {
+    // 현재 정해진거
+    // List로 전체([톨: {caffeine이 얼마, 당이 얼마, 양이 얼마}, 그란데:{}~]) 받아와서
+    // 0번째 사이즈의 성분을 기본값으로 하고,
+    // 사이즈가 바뀔 때 마다 성분도 변화를 준다
+
+    const mockData = {
       name: "카페라떼",
       company: "스타벅스",
       caffeine: 100,
       sugar: 20,
       volume: 250,
       size: "",
-      // size: ["톨사이즈", "그란데사이즈", "라지사이즈"],
     };
-    setBeverageByIdFormData(tempRenderingData);
+    setBeverageDetailData(mockData);
+    setSizeOptionList(testOptions);
   }, []);
+
   return (
     <div>
       <BasicTopBar content="음료 등록" />
-      {/* 상단 Detail */}
+      {/* -----------------------상단 Detail------------------------ */}
       <div css={detailWrapperCSS}>
         <div css={detailTitleWrapperCSS}>
-          <div css={detailTitleCSS}>{beverageByIdFormData.name}</div>
+          <div css={detailTitleCSS}>{beverageDetailData.name}</div>
           <div>{EMPTYHEART}</div>
         </div>
-        <div css={detailManufacturerCSS}>{beverageByIdFormData.company}</div>
+        <div css={detailManufacturerCSS}>{beverageDetailData.company}</div>
         <div css={detailImgWrapperCSS}>
           <div css={imageWrapperCSS}>
             <Image
@@ -115,7 +157,7 @@ function BeverageDetail({ params: { id } }: BeverageParams) {
             <span css={detailImgTextWrapper}>
               <div css={detailTextTitleCSS}>카페인</div>
               <div css={detailTextAmountCSS}>
-                {beverageByIdFormData.caffeine}mg
+                {beverageDetailData.caffeine}mg
               </div>
             </span>
           </div>
@@ -123,18 +165,21 @@ function BeverageDetail({ params: { id } }: BeverageParams) {
             <Image src={OrangeCircle} alt="sugar" css={detailImgCSS} priority />
             <span css={detailImgTextWrapper}>
               <div css={detailTextTitleCSS}>당</div>
-              <div css={detailTextAmountCSS}>{beverageByIdFormData.sugar}g</div>
+              <div css={detailTextAmountCSS}>{beverageDetailData.sugar}g</div>
             </span>
           </div>
         </div>
       </div>
       <hr css={hrCSS} />
-      {/* FORM */}
+      {/* -------------------- FORM --------------------*/}
       <form>
         <div css={amountWrapperCSS}>
           <div css={contentTitleCSS}>섭취량</div>
           {/* DropDown */}
-          <SelectDropDown options={testOptions} />
+          <SelectDropDown
+            optionList={sizeOptionList}
+            onSelect={handleOptionSelect}
+          />
           <br css={emptyCSS} />
           <div css={inputWrapperCSS}>
             <div css={plusMinusBtnCSS} onClick={handleDecrease}>
@@ -144,7 +189,7 @@ function BeverageDetail({ params: { id } }: BeverageParams) {
               id="amount"
               name="amount"
               value={amount}
-              onChange={handleChange}
+              onChange={handleAmountChange}
               type="number"
               cssProps={css({
                 textAlign: "center",
@@ -158,7 +203,10 @@ function BeverageDetail({ params: { id } }: BeverageParams) {
         </div>
         <div css={amountWrapperCSS}>
           <div css={contentTitleCSS}>섭취시간</div>
-          {/* <CustomDatePicker /> */}
+          <CustomDatePicker
+            value={selectedDate}
+            handleDateChange={handleDateChange}
+          />
           <CustomTimePicker />
         </div>
         <Button content="추가하기" />

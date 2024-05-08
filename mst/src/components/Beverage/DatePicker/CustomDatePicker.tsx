@@ -21,7 +21,7 @@ const theme = createTheme({
 interface CustomDatePickerProps {
   type?: "birthday";
   value: Dayjs | null;
-  error: string;
+  error?: string;
   handleDateChange: (date: Dayjs | null) => void;
 }
 

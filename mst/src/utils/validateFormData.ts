@@ -18,10 +18,11 @@ export default function validateFormData<T>(
       value = value.trim();
     }
 
+    // 바로 return함으로써 오류 하나만 반영(삭제시 여러개 반영 가능)
     if (config.required && value === "") {
+    
       // 비어있는 경우 판단
       errors[key] = config.emptyMessage || "";
-      // 바로 return함으로써 오류 하나만 반영(삭제시 여러개 반영 가능)
       return errors;
     } else if (
       // maxLength판단
@@ -29,8 +30,16 @@ export default function validateFormData<T>(
       config.maxLength !== undefined &&
       value.length > config.maxLength
     ) {
+    
       errors[key] = config.errorMessage || "";
-      // 바로 return함으로써 오류 하나만 반영(삭제시 여러개 반영 가능)
+      return errors;
+    } else if (
+      // minValue 초과 입력 판단
+      typeof value === "number" &&
+      config.minValue !== undefined &&
+      value <= config.minValue
+    ) {
+      errors[key] = config.errorMessage || "";
       return errors;
     }
   }

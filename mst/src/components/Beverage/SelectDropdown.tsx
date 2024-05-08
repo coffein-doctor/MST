@@ -3,24 +3,35 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowDropDownIcon } from "@mui/x-date-pickers";
 
 export interface OptionsProps {
-  options: Option[];
+  optionList: string[];
+  onSelect: (option: string) => void;
 }
 
-export interface Option {
-  value: string;
-}
+export default function SelectDropDown({ optionList, onSelect }: OptionsProps) {
+  // SELECT OPTION
+  const [selectedOption, setSelectedOption] = useState("");
 
-export default function SelectDropDown({ options }: OptionsProps) {
-  const [selectedOption, setSelectedOption] = useState<Option>(options[0]);
+  // DROPDOWN OPEN/CLOSE
   const [isOpen, setIsOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // 초기값 update
+    if (optionList.length > 0) {
+      setSelectedOption(optionList[0]);
+    }
+  }, [optionList]);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleOptionClick = (item: Option) => {
+  const handleOptionClick = (item: string) => {
+    // 현재 Dropdown 값 update
     setSelectedOption(item);
+    // 상위 formdata 값 update
+    onSelect(item);
+    // 선택시 DropDown 닫기
     setIsOpen(false);
   };
 
@@ -48,7 +59,7 @@ export default function SelectDropDown({ options }: OptionsProps) {
   return (
     <div css={selectWrapperCSS} onClick={toggleDropdown} ref={wrapperRef}>
       <div css={selectInputWrapperCSS}>
-        {selectedOption ? selectedOption.value : "사이즈가 없습니다"}
+        {optionList.length !== 0 ? selectedOption : "사이즈가 없습니다"}
       </div>
       {isOpen ? (
         <ArrowDropDownIcon
@@ -59,13 +70,13 @@ export default function SelectDropDown({ options }: OptionsProps) {
       )}
       {isOpen && (
         <ul css={optionWrapperCSS}>
-          {options.map((option, idx) => (
+          {optionList.map((option, idx) => (
             <li
               css={optionContentCSS}
               key={idx}
               onClick={() => handleOptionClick(option)}
             >
-              {option.value}
+              {option}
             </li>
           ))}
         </ul>
