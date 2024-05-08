@@ -13,7 +13,7 @@ type responseType = {
 export const postSignUpAPI = async ({ body }: bodyType) => {
   try {
     const response: responseType = await tokenInstance.post(
-      `/users`,
+      `user-service/users`,
       body
     );
 

@@ -46,7 +46,7 @@ function WaterCreate() {
         <div css={timeDatePickerWrapperCSS}>
           <div css={waterContentTitleCSS}>섭취시간</div>
           <div>
-            <CustomDatePicker />
+            {/* <CustomDatePicker /> */}
             <CustomTimePicker />
           </div>
         </div>

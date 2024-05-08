@@ -1,5 +1,6 @@
 import { TouchEventHandler, useEffect, useRef, useState } from "react";
 import { css } from "@emotion/react";
+import Image from "next/image";
 
 interface Props {
   carouselList: string[];
@@ -94,7 +95,7 @@ const Carousel = ({ carouselList }: Props) => {
 
             return (
               <li key={key} css={carouselItem}>
-                <img src={image} alt="carousel-img" />
+                {/* <img src={image} alt="carousel-img" /> */}
               </li>
             );
           })}

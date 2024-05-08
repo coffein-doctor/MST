@@ -31,7 +31,7 @@ export default function MainPageLayout({
   return (
     <div>
       <div css={contentWrapperCSS}>{children}</div>
-      {shouldRenderNav() && <Nav />}
+      {/* {shouldRenderNav() && <Nav />} */}
     </div>
   );
 }

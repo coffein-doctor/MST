@@ -12,7 +12,7 @@ import BasicTopBar from "@/components/common/TopBar/BasicTopBar";
 function BeverageCreate() {
   const [formData, setFormData] = useState({
     name: "",
-    manufacturer: "",
+    company: "",
     caffeine: "",
     sugar: "",
     intake: "",
@@ -55,8 +55,8 @@ function BeverageCreate() {
         <SubmitForm
           position="bottom"
           leftLabel="제조사"
-          id="manufacturer"
-          value={formData.manufacturer}
+          id="company"
+          value={formData.company}
           onChange={handleInputChange}
         />
         {/* 카페인/당/섭취량 */}
@@ -89,7 +89,7 @@ function BeverageCreate() {
         />
         {/* 날짜/시간 */}
         <div css={timeDatePickerWrapperCSS}>
-          <CustomDatePicker />
+          {/* <CustomDatePicker /> */}
           <CustomTimePicker />
         </div>
         <BasicHR />

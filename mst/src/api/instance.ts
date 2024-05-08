@@ -1,8 +1,9 @@
 import axios from "axios";
 import { getCookie, removeCookie } from "./cookie";
 
+
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-const tempAccessToken = localStorage.getItem("access");
+const accessToken = getCookie("access")
 
 // 인증이 필요 없는 기본 요청
 export const defaultInstance = axios.create({
@@ -15,7 +16,7 @@ export const tokenInstance = axios.create({
   baseURL: baseUrl,
   // 임시로 추가
   headers: {
-    access: tempAccessToken,
+    access: accessToken,
   },
 });
 
