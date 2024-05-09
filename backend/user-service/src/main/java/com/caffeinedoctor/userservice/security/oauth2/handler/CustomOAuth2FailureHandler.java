@@ -3,6 +3,7 @@ package com.caffeinedoctor.userservice.security.oauth2.handler;
 import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,9 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Slf4j
 public class CustomOAuth2FailureHandler extends SimpleUrlAuthenticationFailureHandler {
+
+    @Value("${FRONT_URL}")
+    private String redirectFrontURL;
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
@@ -40,7 +44,7 @@ public class CustomOAuth2FailureHandler extends SimpleUrlAuthenticationFailureHa
         String errorMessage = "error: " + exception.getLocalizedMessage();
 
         // 실패 메시지와 함께 리다이렉션할 URI 생성
-        String redirectUri = UriComponentsBuilder.fromUriString("http://localhost:3000/")
+        String redirectUri = UriComponentsBuilder.fromUriString(redirectFrontURL+"/")
                 .queryParam("error", errorMessage)
                 .build().toUriString();
 

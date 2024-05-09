@@ -82,9 +82,9 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         //응답 설정
         // <access 토큰 설정> ///////////////////////////// 프론트 서버 올리면 토큰으로 변경
         //1.헤더에 넣기
-        //response.setHeader("access", access);
+        response.setHeader("access", access);
         //2.쿠키에 넣기
-        //response.addCookie(CookieUtil.createAccessCookie("access", access, accessCookieExpireLength));
+        response.addCookie(CookieUtil.createAccessCookie("access", access, accessCookieExpireLength));
 
         // <refresh 토큰 설정>
         //쿠키에 넣기
@@ -92,7 +92,7 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         //상태 코드: 200 응답 보내기
         response.setStatus(HttpStatus.OK.value());
 
-        // Check user status
+        // Check user status - 회원 여부에 따라 적절한 프론트 주소로 Redirect 시키기
 //        UserStatus userStatus = userService.getUserStatusByUsername(username);
 //        if (userStatus == UserStatus.NEW_USER) {
 //
@@ -115,14 +115,14 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
         // <access 토큰 설정>
         //3.쿼리스트링에 담는 url을 만들어준다.
-        String targetUrl = UriComponentsBuilder.fromUriString(redirectFrontURL)
-                .queryParam("access", access)
-                .build()
-                .encode(StandardCharsets.UTF_8)
-                .toUriString();
+//        String targetUrl = UriComponentsBuilder.fromUriString(redirectFrontURL)
+//                .queryParam("access", access)
+//                .build()
+//                .encode(StandardCharsets.UTF_8)
+//                .toUriString();
         // 로그인 확인 페이지로 리다이렉트
-        getRedirectStrategy().sendRedirect(request, response, targetUrl);
-        log.info(targetUrl + " 로 토큰 리다이렉트 성공!");
+//        getRedirectStrategy().sendRedirect(request, response, targetUrl);
+//        log.info(targetUrl + " 로 토큰 리다이렉트 성공!");
 
     }
 
