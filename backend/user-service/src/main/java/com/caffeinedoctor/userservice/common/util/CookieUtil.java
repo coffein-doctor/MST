@@ -40,10 +40,10 @@ public class CookieUtil {
         cookie.setMaxAge(expireLength);
         //자바스크립트가 해당 쿠키를 가져가지 못하게 설정
         cookie.setHttpOnly(true);
+        //쿠키 적용 범위 (user-service)
+        cookie.setPath("/user-service/");
         //https 통신에서만 사용 가능
         //cookie.setSecure(true);
-        //쿠키 적용 범위 (전역)
-        //cookie.setPath("/");
 
         return cookie;
     }
