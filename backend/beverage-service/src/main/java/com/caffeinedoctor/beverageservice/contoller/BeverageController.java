@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class BeverageController {
     private final BeverageService beverageService;
 
-    @Operation(summary = "음료 조회")
+    @Operation(summary = "음료 상세 조회")
     @GetMapping("/beverage")
     public ResponseEntity<ApiResponse<BeverageBasicInfo>> basicInfo(@RequestBody BasicInfoRequest dto){
         BeverageBasicInfo beverageBasicInfo = beverageService.basicInfo(dto);

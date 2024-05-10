@@ -5,6 +5,8 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Builder
@@ -36,6 +38,9 @@ public class Beverage {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "beverage_id")
     private BeverageBasic basic;
+
+    @OneToMany(mappedBy = "beverage", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Feed> feeds = new ArrayList<>();
 
     public void setUser(User user) {
         if (this.user != null) {
