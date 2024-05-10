@@ -2,37 +2,21 @@
 import { css } from "@emotion/react";
 import Image from "next/image";
 import KakaoLoginBtn from "@/assets/png/kakao_login_large_wide.png";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import TempLogo from "@/assets/png/TempLogo.png";
 import Loading from "@/components/common/Loading/Loading";
 import { getUserStatusAPI } from "@/api/user/getUserStatusAPI";
 import { useEffect } from "react";
+import { getCookie } from "@/api/cookie";
 
 export default function Login() {
-  // const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-  // const router = useRouter();
-  // console.log(`${baseUrl}/user-service/oauth2/authorization/kakao`);
-
-  // const handleLogin = async () => {
-  //   router.push(`${baseUrl}/user-service/oauth2/authorization/kakao`);
-  // };
-  // const getUserStatus = async () => {
-  //   const status = await getUserStatusAPI();
-  //   if (status === "NEW_USER") {
-  //     router.push("/signup");
-  //   } else {
-  //     router.push("/home");
-  //   }
-  // };
-  // getUserStatus();
-
-	const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const router = useRouter();
 
   const handleLogin = async () => {
     router.push(`/user-service/oauth2/authorization/kakao`);
 
     const status = await getUserStatusAPI();
+		
     if (status === "NEW_USER") {
       router.push("/signup");
     } else {
@@ -40,25 +24,20 @@ export default function Login() {
     }
   };
 
-  // useEffect(() => {
-	// 	// router 이동시 받아온 status로 이동처리
-  //   const getUserStatus = async () => {
-  //     try {
-  //       const status = await getUserStatusAPI();
-  //       console.log(status, "STATUS");
-  //       if (status === "NEW_USER") {
-  //         router.push("/signup");
-  //       } else {
-  //         router.push("/home");
-  //       }
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-  //   getUserStatus();
-  // }, [router]);
-
-
+  useEffect(() => {
+    const accessToken = getCookie("access");
+    if (accessToken) {
+      const getUserStatus = async () => {
+        const status = await getUserStatusAPI();
+        if (status === "NEW_USER") {
+          router.push("/signup");
+        } else {
+          router.push("/home");
+        }
+      };
+      getUserStatus();
+    }
+  }, [router]);
 
   return (
     <div css={loginWrapperCSS}>
