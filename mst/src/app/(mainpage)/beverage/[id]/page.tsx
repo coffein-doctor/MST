@@ -207,7 +207,7 @@ function BeverageDetail({ params: { id } }: BeverageParams) {
             value={selectedDate}
             handleDateChange={handleDateChange}
           />
-          <CustomTimePicker />
+          {/* <CustomTimePicker /> */}
         </div>
         <Button content="추가하기" />
       </form>

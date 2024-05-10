@@ -90,7 +90,7 @@ function BeverageCreate() {
         {/* 날짜/시간 */}
         <div css={timeDatePickerWrapperCSS}>
           {/* <CustomDatePicker /> */}
-          <CustomTimePicker />
+          {/* <CustomTimePicker /> */}
         </div>
         <BasicHR />
         {/* 평가 */}

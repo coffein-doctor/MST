@@ -1,14 +1,14 @@
 "use client";
 import { css } from "@emotion/react";
+import { ChangeEvent, useEffect, useState } from "react";
+import dayjs, { Dayjs } from "dayjs";
+import { ErrorStateType, ValidationConfigType } from "@/types/validationTypes";
 import Button from "@/components/common/Button/Button";
 import CustomDatePicker from "@/components/Beverage/DatePicker/CustomDatePicker";
 import CustomTimePicker from "@/components/Beverage/TimePicker/CustomTimePicker";
 import SubmitForm from "@/components/common/Form/SubmitForm";
-import { ChangeEvent, useEffect, useState } from "react";
 import WaterAmountButtons from "@/components/Beverage/WaterAmountButtons";
 import BasicTopBar from "@/components/common/TopBar/BasicTopBar";
-import dayjs, { Dayjs } from "dayjs";
-import { ErrorStateType, ValidationConfigType } from "@/types/validationTypes";
 import validateFormData from "@/utils/validateFormData";
 
 interface WaterFormData {
@@ -37,6 +37,12 @@ const waterValidationConfig: Record<string, ValidationConfigType> = {
     emptyMessage: "섭취한 시간을 입력해주세요.",
   },
 };
+const initialErrorState: ErrorStateType = {
+  userId: "",
+  amount: "",
+  createdDate: "",
+  createdTime: "",
+};
 
 const initialWaterFormData: WaterFormData = {
   userId: "",
@@ -53,7 +59,7 @@ function WaterCreate() {
   const [waterAmount, setWaterAmount] = useState(0);
   const [selectedDate, setSelectedDate] = useState<Dayjs | null>(dayjs());
   const [selectedTime, setSelectedTime] = useState<Dayjs | null>(dayjs());
-  const [error, setError] = useState<ErrorStateType>();
+  const [error, setError] = useState<ErrorStateType>(initialErrorState);
   const [errorMessage, setErrorMessage] = useState("");
 
   // btn 색깔 관리, btn값 formdata 반영
@@ -67,12 +73,14 @@ function WaterCreate() {
 
   // waterAmount관리
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const newValue = parseInt(e.target.value);
-    setWaterAmount(newValue);
-    setWaterFormData((prev) => ({
-      ...prev,
-      amount: newValue,
-    }));
+    if (!isNaN) {
+      const newValue = parseInt(e.target.value);
+      setWaterAmount(newValue);
+      setWaterFormData((prev) => ({
+        ...prev,
+        amount: newValue,
+      }));
+    }
   };
 
   // DATE
