@@ -1,5 +1,4 @@
 "use client";
-import BasicTopBar from "@/components/common/TopBar/BasicTopBar";
 import { css } from "@emotion/react";
 export default function BeverageLayout({
   children,

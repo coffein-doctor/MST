@@ -9,11 +9,28 @@ import { getUserStatusAPI } from "@/api/user/getUserStatusAPI";
 import { useEffect } from "react";
 
 export default function Login() {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  // const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  // const router = useRouter();
+  // console.log(`${baseUrl}/user-service/oauth2/authorization/kakao`);
+
+  // const handleLogin = async () => {
+  //   router.push(`${baseUrl}/user-service/oauth2/authorization/kakao`);
+  // };
+  // const getUserStatus = async () => {
+  //   const status = await getUserStatusAPI();
+  //   if (status === "NEW_USER") {
+  //     router.push("/signup");
+  //   } else {
+  //     router.push("/home");
+  //   }
+  // };
+  // getUserStatus();
+
+	const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const router = useRouter();
 
   const handleLogin = async () => {
-    router.push(`${baseUrl}/user-service/oauth2/authorization/kakao`);
+    router.push(`/user-service/oauth2/authorization/kakao`);
 
     const status = await getUserStatusAPI();
     if (status === "NEW_USER") {
@@ -23,23 +40,25 @@ export default function Login() {
     }
   };
 
-  useEffect(() => {
-		// router 이동시 받아온 status로 이동처리
-    const getUserStatus = async () => {
-      try {
-        const status = await getUserStatusAPI();
-        console.log(status, "STATUS");
-        if (status === "NEW_USER") {
-          router.push("/signup");
-        } else {
-          router.push("/home");
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getUserStatus();
-  }, [router]);
+  // useEffect(() => {
+	// 	// router 이동시 받아온 status로 이동처리
+  //   const getUserStatus = async () => {
+  //     try {
+  //       const status = await getUserStatusAPI();
+  //       console.log(status, "STATUS");
+  //       if (status === "NEW_USER") {
+  //         router.push("/signup");
+  //       } else {
+  //         router.push("/home");
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  //   getUserStatus();
+  // }, [router]);
+
+
 
   return (
     <div css={loginWrapperCSS}>

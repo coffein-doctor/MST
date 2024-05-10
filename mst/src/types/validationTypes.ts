@@ -4,8 +4,12 @@ export type ErrorStateType = {
 
 export type ValidationConfigType = {
   required: boolean;
-  maxLength?: number;
 
-  errorMessage?: string ;
-  emptyMessage?: string ;
+  // 조건
+  maxLength?: number;
+  minValue?: number;
+
+  // 메시지
+  errorMessage?: string;
+  emptyMessage?: string;
 };

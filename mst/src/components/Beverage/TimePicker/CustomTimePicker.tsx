@@ -3,10 +3,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { css } from "@emotion/react";
 
-import {
-  ThemeProvider,
-  createTheme,
-} from "@mui/material";
+import { ThemeProvider, createTheme } from "@mui/material";
 import dayjs, { Dayjs } from "dayjs";
 import CustomDigitalClock from "./CustomDigitalClock";
 import { ArrowDropDownIcon } from "@mui/x-date-pickers";
@@ -17,10 +14,22 @@ const theme = createTheme({
   },
 });
 
-export default function CustomTimePicker() {
-  // 5분단위로 무조건 바꾸는 게 필요한가?
+interface CustomTimePickerProps {
+  value: Dayjs | null;
+  error?: string;
+  handleTimeChange: (time: Dayjs | null) => void;
+}
 
-  const [selectedTime, setSelectedTime] = useState<Dayjs | null>(dayjs());
+export default function CustomTimePicker({
+  value,
+  handleTimeChange,
+}: CustomTimePickerProps) {
+  // 5분단위로 무조건 바꾸는 게 필요한가?
+  const formattedTime = value
+    ?.format("A hh:mm")
+    .replace("AM", "오전")
+    .replace("PM", "오후");
+
   const [isOpen, setIsOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
 
@@ -28,9 +37,6 @@ export default function CustomTimePicker() {
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
-  };
-  const handleTimeChange = (date: Dayjs | null) => {
-    setSelectedTime(date);
   };
 
   useEffect(() => {
@@ -56,12 +62,14 @@ export default function CustomTimePicker() {
 
   return (
     <ThemeProvider theme={theme}>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
         <div css={dropDownWrapperCSS} ref={wrapperRef}>
           <div css={selectInputWrapperCSS} onClick={toggleDropdown}>
-            <div></div>
-            {selectedTime
-              ? selectedTime.format("A hh:mm")
+            {value
+              ? value
+                  .format("A hh:mm")
+                  .replace("AM", "오전")
+                  .replace("PM", "오후")
               : "설정된 시간이 없습니다"}
           </div>
           {isOpen ? (
@@ -74,7 +82,7 @@ export default function CustomTimePicker() {
           {isOpen && (
             <div css={optionWrapperCSS} id={id}>
               <CustomDigitalClock
-                selectedTime={selectedTime}
+                selectedTime={value}
                 onChange={handleTimeChange}
               />
             </div>
