@@ -1,5 +1,6 @@
 package com.caffeinedoctor.userservice.service;
 
+import com.caffeinedoctor.userservice.dto.response.FollowResponseDto;
 import com.caffeinedoctor.userservice.entitiy.Follow;
 import com.caffeinedoctor.userservice.entitiy.User;
 import com.caffeinedoctor.userservice.repository.FollowRepository;
@@ -21,7 +22,7 @@ public class FollowServiceImpl implements FollowService {
 
     @Transactional
     @Override
-    public Follow createFollow(Long followerId, Long followingId) {
+    public FollowResponseDto createFollow(Long followerId, Long followingId) {
         // followerId는 팔로우하는 사용자의 ID, followingId는 팔로우되는 사용자의 ID
         // 팔로워 사용자를 찾음
         User follower = userRepository.findById(followerId)
@@ -31,15 +32,26 @@ public class FollowServiceImpl implements FollowService {
         User following = userRepository.findById(followingId)
                 .orElseThrow(() -> new EntityNotFoundException("Following not found"));
 
+        // 중복 체크: 이미 팔로우 관계가 존재하는지 확인
+        boolean exists = followRepository.existsByFollowerAndFollowing(follower, following);
+        if (exists) {
+            throw new IllegalStateException("Follow relationship already exists.");
+        }
+
         // 팔로우 엔티티 생성
         Follow follow = Follow.builder()
                 .follower(follower)
                 .following(following)
                 .build();
 
-        // 팔로우 관계 저장
-        return followRepository.save(follow);
+        followRepository.save(follow);
 
+        // 팔로우 관계 저장
+        return FollowResponseDto.builder()
+                .followId(follow.getId())
+                .followerId(followerId)
+                .followingId(followingId)
+                .build();
     }
 
 

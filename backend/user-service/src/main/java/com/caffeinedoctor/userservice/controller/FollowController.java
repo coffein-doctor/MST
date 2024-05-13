@@ -1,5 +1,6 @@
 package com.caffeinedoctor.userservice.controller;
 
+import com.caffeinedoctor.userservice.dto.response.FollowResponseDto;
 import com.caffeinedoctor.userservice.entitiy.Follow;
 import com.caffeinedoctor.userservice.service.FollowServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,7 +37,8 @@ public class FollowController {
                     responseCode = "200",
                     description = "팔로우에 성공하였습니다.",
                     content = @Content(
-                            schema = @Schema(implementation = Follow.class) // Follow 클래스가 API 응답에 사용됨
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = FollowResponseDto.class) // FollowResponseDto가 API 응답에 사용됨
                     )
             ),
             @ApiResponse(
@@ -59,6 +61,13 @@ public class FollowController {
                     content = @Content(
                             schema = @Schema(implementation = String.class)
                     )
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "이미 팔로우 관계가 존재합니다.",
+                    content = @Content(
+                            schema = @Schema(implementation = String.class)
+                    )
             )
     })
     @PostMapping("/{followerId}/{followingId}")
@@ -68,11 +77,14 @@ public class FollowController {
     ) {
         try {
             // followerId는 팔로우하는 사용자의 ID이고, followingId는 팔로우되는 사용자의 ID
-            Follow follow = followService.createFollow(followerId, followingId);
-            return ResponseEntity.ok(follow);
+            FollowResponseDto followDto = followService.createFollow(followerId, followingId);
+            return ResponseEntity.ok(followDto);
         } catch (EntityNotFoundException ex) {
             // EntityNotFoundException의 경우, 존재하지 않는 엔티티 참조를 알려주는 404 상태 코드 반환
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        } catch (IllegalStateException ex) {
+            // 팔로우 관계가 이미 존재하는 경우, 409 상태 코드 반환
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
         }
     }
 }
