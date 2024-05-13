@@ -7,14 +7,14 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 @Getter
-public class FollowResponseDto {
+public class FollowDto {
     private Long followId;
     private Long followerId;
     private Long followingId;
     private LocalDateTime createdAt;
 
     @Builder
-    public FollowResponseDto(Long followId, Long followerId, Long followingId) {
+    public FollowDto(Long followId, Long followerId, Long followingId) {
         this.followId = followId;
         this.followerId = followerId;
         this.followingId = followingId;

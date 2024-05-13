@@ -1,6 +1,7 @@
 package com.caffeinedoctor.userservice.service;
 
 import com.caffeinedoctor.userservice.dto.response.TokenStatusDto;
+import com.caffeinedoctor.userservice.dto.response.user.SearchUserInfoDto;
 import com.caffeinedoctor.userservice.dto.response.user.UserDetailsDto;
 import com.caffeinedoctor.userservice.dto.socialLoginDto;
 import com.caffeinedoctor.userservice.dto.request.user.UserInfoRequestDto;
@@ -95,13 +96,13 @@ public class UserServiceImpl implements UserService {
         // 사용자 정보 업데이트
         updateUserDetails(user, userDto);
         userRepository.save(user);
-        return userDetailsDto(user);
+        return createUserDetailsDto(user);
     }
 
     /** 회원 정보 디테일 dto **/
-    private UserDetailsDto userDetailsDto(User user) {
+    private UserDetailsDto createUserDetailsDto(User user) {
         return UserDetailsDto.builder()
-                .id(user.getId())
+                .userId(user.getId())
                 .username(user.getUsername())
                 .email(user.getEmail())
                 .status(user.getStatus())
@@ -152,7 +153,19 @@ public class UserServiceImpl implements UserService {
     public UserDetailsDto getUserDetailsById(Long userId){
         // 유저 ID를 사용하여 해당 유저를 데이터베이스에서 조회
         User user = findUserById(userId);
-        return userDetailsDto(user);
+        return createUserDetailsDto(user);
+    }
+
+    /** 회원 검색 **/
+    public SearchUserInfoDto searchUserByNickname(String nickname) {
+        User user = findUserByNickname(nickname);
+
+        return SearchUserInfoDto.builder()
+                .userId(user.getId())
+                .nickname(user.getNickname())
+                .profileImageUrl(user.getProfileImageUrl())
+                .introduction(user.getIntroduction())
+                .build();
     }
 
     /** 회원 Id 조회 **/
@@ -178,12 +191,17 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UsernameNotFoundException("해당 사용자를 찾을 수 없습니다."));
     }
 
+    private User findUserByNickname(String nickname) {
+        return userRepository.findByNickname(nickname)
+                .orElseThrow(() -> new EntityNotFoundException("User with nickname " + nickname + " not found"));
+    }
 
     // 회원 조회
     @Override
     public User findUserById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 ID에 대한 사용자를 찾을 수 없습니다."));
+
     }
 
     // 변경하려고 전달해준 유저의 Id와 값을 보낸 유저가 같은 유저인지 검증
@@ -211,14 +229,5 @@ public class UserServiceImpl implements UserService {
         // 닉네임 유효성 검사
         return userRepository.existsByNickname(nickname);
     }
-
-    private void validateDuplicateUser(String email) {
-        // 이메일 유효성 검사
-        Optional<User> user = userRepository.findByEmail(email);
-        if (user.isPresent()) {
-            throw new IllegalStateException("이미 존재하는 회원 이메일입니다.");
-        }
-    }
-
 
 }

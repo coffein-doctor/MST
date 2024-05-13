@@ -1,7 +1,6 @@
 package com.caffeinedoctor.userservice.controller;
 
-import com.caffeinedoctor.userservice.dto.response.FollowResponseDto;
-import com.caffeinedoctor.userservice.entitiy.Follow;
+import com.caffeinedoctor.userservice.dto.response.FollowDto;
 import com.caffeinedoctor.userservice.service.FollowServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -38,7 +37,7 @@ public class FollowController {
                     description = "팔로우에 성공하였습니다.",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = FollowResponseDto.class) // FollowResponseDto가 API 응답에 사용됨
+                            schema = @Schema(implementation = FollowDto.class) // FollowResponseDto가 API 응답에 사용됨
                     )
             ),
             @ApiResponse(
@@ -77,7 +76,7 @@ public class FollowController {
     ) {
         try {
             // followerId는 팔로우하는 사용자의 ID이고, followingId는 팔로우되는 사용자의 ID
-            FollowResponseDto followDto = followService.createFollow(followerId, followingId);
+            FollowDto followDto = followService.createFollow(followerId, followingId);
             return ResponseEntity.ok(followDto);
         } catch (EntityNotFoundException ex) {
             // EntityNotFoundException의 경우, 존재하지 않는 엔티티 참조를 알려주는 404 상태 코드 반환

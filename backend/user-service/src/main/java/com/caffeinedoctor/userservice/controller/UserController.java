@@ -1,6 +1,7 @@
 package com.caffeinedoctor.userservice.controller;
 
 import com.caffeinedoctor.userservice.dto.request.user.UserInfoRequestDto;
+import com.caffeinedoctor.userservice.dto.response.user.SearchUserInfoDto;
 import com.caffeinedoctor.userservice.security.oauth2.dto.CustomOAuth2User;
 import com.caffeinedoctor.userservice.dto.response.user.UserDetailsDto;
 import com.caffeinedoctor.userservice.enums.UserStatus;
@@ -126,7 +127,6 @@ public class UserController {
             Long userId = userService.getUserId(username);
             return ResponseEntity.ok(userId);
         } catch (EntityNotFoundException e) {
-            // RuntimeException 발생 시 예외 처리
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
@@ -199,10 +199,48 @@ public class UserController {
             UserDetailsDto userDetailsDto = userService.getUserDetailsById(userId);
             return ResponseEntity.ok(userDetailsDto);
         } catch (EntityNotFoundException e) {
-            // RuntimeException 발생 시 예외 처리
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
 
+    }
+
+    @Operation(
+            summary = "회원 검색",
+            description = "팔로우를 위해 특정 회원을 검색합니다. 회원 닉네임을 입력하여 해당 회원을 검색하세요."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "사용자가 성공적으로 검색되었습니다.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SearchUserInfoDto.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "사용자 인증에 실패하였습니다. 로그인이 필요합니다.",
+                    content = @Content(
+                            schema = @Schema(implementation = String.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description =  "해당 사용자를 찾을 수 없습니다.",
+                    content = @Content(
+                            schema = @Schema(implementation = String.class)
+                    )
+            )
+    })
+    @GetMapping("/search")
+    public ResponseEntity<?> searchUsers(@PathVariable String nickname) {
+
+        try {
+            SearchUserInfoDto userInfoDto = userService.searchUserByNickname(nickname);
+            return ResponseEntity.ok(userInfoDto);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     /** 회원 정보 수정 **/
