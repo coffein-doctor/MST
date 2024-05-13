@@ -65,9 +65,9 @@ public class TokenServiceImpl implements TokenService {
     // 토큰 만료 메서드
     private void expireTokenCookies(HttpServletResponse response) {
         log.info("토큰 만료");
-        log.info("Access 토큰과 Refresh 토큰 쿠키 만료 처리");
+        log.info("Refresh 토큰 쿠키 만료 처리");
         //Access 토큰 Cookie 쿠키 삭제
-        CookieUtil.expireCookie(response, "access");
+//        CookieUtil.expireCookie(response, "access");
         //Refresh 토큰 Cookie 쿠키 삭제
         CookieUtil.expireCookie(response, "refresh");
     }
