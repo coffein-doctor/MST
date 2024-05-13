@@ -11,6 +11,8 @@ import lombok.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -57,6 +59,14 @@ public class User {
 
     @Column(name = "login_date")
     private LocalDateTime loginDate;
+
+    // 이 사용자가 팔로우하고 있는 사람들의 목록
+    @OneToMany(mappedBy = "follower", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Follow> followings = new ArrayList<>();
+
+    // 이 사용자를 팔로우하고 있는 사람들의 목록
+    @OneToMany(mappedBy = "following", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Follow> followers = new ArrayList<>();
 
     // 생성자
     @Builder
