@@ -180,7 +180,8 @@ public class UserServiceImpl implements UserService {
 
 
     // 회원 조회
-    private User findUserById(Long userId) {
+    @Override
+    public User findUserById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 ID에 대한 사용자를 찾을 수 없습니다."));
     }
@@ -205,6 +206,12 @@ public class UserServiceImpl implements UserService {
         return userRepository.existsByUsername(username);
     }
 
+    @Override
+    public boolean isNicknameExists(String nickname){
+        // 닉네임 유효성 검사
+        return userRepository.existsByNickname(nickname);
+    }
+
     private void validateDuplicateUser(String email) {
         // 이메일 유효성 검사
         Optional<User> user = userRepository.findByEmail(email);
@@ -212,40 +219,6 @@ public class UserServiceImpl implements UserService {
             throw new IllegalStateException("이미 존재하는 회원 이메일입니다.");
         }
     }
-
-    private void validateDuplicateNickname(String nickname){
-        // 닉네임 유효성 검사
-        Optional<User> user = userRepository.findByNickname(nickname);
-        if (user.isPresent()) {
-            throw new IllegalStateException("이미 존재하는 회원 닉네임입니다.");
-        }
-    }
-
-//    /**
-//     * 김부경
-//     * explain : 이메일 중복 검사
-//     * @param email : 이메일
-//     */
-//    @Override
-//    @Transactional
-//    public void checkEmail(String email) {
-//        if (userRepository.existsByEmail(email)) {
-//            throw new ApiException(ExceptionEnum.EMAIL_EXIST_EXCEPTION);
-//        }
-//    }
-//
-//    /**
-//     * 김부경
-//     * explain : 닉네임 중복 검사
-//     * @param nickname : 닉네임
-//     */
-//    @Override
-//    @Transactional
-//    public void checkNickname(String nickname) {
-//        if (memberRepository.existsByNickname(nickname)) {
-//            throw new ApiException(ExceptionEnum.NICKNAME_EXIST_EXCEPTION);
-//        }
-//    }
 
 
 }

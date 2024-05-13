@@ -19,6 +19,7 @@ public class Follow {
     @Column(name = "follow_id")
     private Long id;
 
+    // followerId는 팔로우하는 사용자 ID, followingId는 팔로우되는 사용자 ID
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "follower_id")
     private User follower; // 팔로워 (이 사람이 누군가를 팔로우함)
@@ -34,5 +35,5 @@ public class Follow {
     public Follow(User follower, User following) {
         this.follower = follower;
         this.following = following;
-        }
+    }
 }

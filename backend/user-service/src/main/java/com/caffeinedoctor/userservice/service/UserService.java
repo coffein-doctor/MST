@@ -27,12 +27,17 @@ public interface UserService {
     /** 회원 조회 **/
     UserDetailsDto getUserDetailsById(Long userId);
     User findUserByUsername(String username);
+    User findUserById(Long userId);
+
     /** 회원 Id 조회 **/
     Long getUserId(String username);
 
     /** 회원 찾기 **/
     boolean isUserExistsByEmail(String email);
     boolean isUserExistsByUsername(String username);
+
+    /** 닉네임 찾기 **/
+    boolean isNicknameExists(String nickname);
 
     /** 회원 가입 상태 **/
     UserStatus getUserStatusByUsername(String username);

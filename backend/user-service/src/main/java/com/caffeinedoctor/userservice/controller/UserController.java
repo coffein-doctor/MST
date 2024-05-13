@@ -315,4 +315,31 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+
+    @Operation(
+            summary = "닉네임 중복 검사",
+            description = "입력된 닉네임이 이미 사용 중인지 여부를 확인합니다. 닉네임을 입력하여 사용 가능 여부를 확인하세요. 사용가능한 닉네임이면 true를 반환합니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "닉네임 사용 가능 여부가 성공적으로 조회되었습니다.",
+                    content = @Content(
+                            schema = @Schema(implementation = Boolean.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "잘못된 요청입니다. 닉네임 파라미터가 누락되었거나 유효하지 않습니다.",
+                    content = @Content(
+                            schema = @Schema(implementation = String.class)
+                    )
+            )
+    })
+    @GetMapping("/check-nickname")
+    public ResponseEntity<Boolean> checkNickname(@RequestParam String nickname) {
+        // 닉네임 중복 검사
+        boolean isNicknameAvailable  = !userService.isNicknameExists(nickname);
+        return ResponseEntity.ok(isNicknameAvailable);
+    }
 }
