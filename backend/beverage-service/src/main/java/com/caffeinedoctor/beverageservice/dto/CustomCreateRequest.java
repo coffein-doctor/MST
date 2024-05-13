@@ -10,4 +10,6 @@ public class CustomCreateRequest {
     private Long caffeine;
     private Long sugar;
     private Long volume;
+    private Long rating;
+    private String content;
 }

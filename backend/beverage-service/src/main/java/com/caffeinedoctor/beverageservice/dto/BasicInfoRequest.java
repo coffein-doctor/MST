@@ -4,6 +4,5 @@ import lombok.Data;
 
 @Data
 public class BasicInfoRequest {
-    private String company;
-    private String name;
+    private String word;
 }
