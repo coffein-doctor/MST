@@ -27,6 +27,7 @@ public class FollowController {
 
     private final FollowServiceImpl followService;
 
+    /** 팔로우 관계 생성 **/
     @Operation(
             summary = "사용자 팔로우",
             description = "특정 사용자를 팔로우합니다. 팔로워 ID와 팔로잉 ID를 입력해주세요. followerId는 팔로우하는 사용자의 ID이고, followingId는 팔로우되는 사용자의 ID입니다."

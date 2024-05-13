@@ -204,6 +204,7 @@ public class UserController {
 
     }
 
+    /** 회원 검색 **/
     @Operation(
             summary = "회원 검색",
             description = "팔로우를 위해 특정 회원을 검색합니다. 회원 닉네임을 입력하여 해당 회원을 검색하세요."
@@ -233,7 +234,7 @@ public class UserController {
             )
     })
     @GetMapping("/search")
-    public ResponseEntity<?> searchUsers(@PathVariable String nickname) {
+    public ResponseEntity<?> searchUsers(@RequestParam String nickname) {
 
         try {
             SearchUserInfoDto userInfoDto = userService.searchUserByNickname(nickname);
