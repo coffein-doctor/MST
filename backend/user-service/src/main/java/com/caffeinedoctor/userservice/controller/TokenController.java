@@ -26,7 +26,7 @@ public class TokenController {
     /** Refresh로 Access 토큰 재발급 **/
     @Operation(
             summary = "Access 토큰 재발급",
-            description = "Access 토큰이 만료되었을 때, Refresh 토큰을 사용하여 새로운 Access 토큰을 발급받습니다."
+            description = "Access 토큰이 만료되었을 때, Refresh 토큰을 사용하여 새로운 Access 토큰을 Header로 발급받습니다."
     )
     @ApiResponses(value = {
             @ApiResponse(

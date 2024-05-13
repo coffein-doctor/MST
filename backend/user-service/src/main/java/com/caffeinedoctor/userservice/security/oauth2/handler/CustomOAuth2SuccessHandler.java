@@ -33,6 +33,8 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
     private final JWTUtil jwtUtil;
     private final TokenService tokenService;
+    private final UserService userService;
+
 
     @Value("${FRONT_URL}")
     private String redirectFrontURL;
@@ -80,11 +82,11 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         tokenService.addRefreshEntity(username, refresh, refreshTokenExpireLength);
 
         //응답 설정
-        // <access 토큰 설정> ///////////////////////////// 프론트 서버 올리면 토큰으로 변경
+        // <access 토큰 설정> ///////////////////////////// 프론트 서버 올리면 헤더 저장으로 변경 후 API 요청으로 가져옴
         //1.헤더에 넣기
         response.setHeader("access", access);
         //2.쿠키에 넣기
-        response.addCookie(CookieUtil.createAccessCookie("access", access, accessCookieExpireLength));
+        //response.addCookie(CookieUtil.createAccessCookie("access", access, accessCookieExpireLength));
 
         // <refresh 토큰 설정>
         //쿠키에 넣기
@@ -93,24 +95,17 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         response.setStatus(HttpStatus.OK.value());
 
         // Check user status - 회원 여부에 따라 적절한 프론트 주소로 Redirect 시키기
-//        UserStatus userStatus = userService.getUserStatusByUsername(username);
-//        if (userStatus == UserStatus.NEW_USER) {
-//
-//            // accessToken을 쿼리스트링에 담는 url을 만들어준다.
-//            String targetUrl = UriComponentsBuilder.fromUriString(redirectFrontURL)
-//                    .queryParam("access", access)
-//                    .build()
-//                    .encode(StandardCharsets.UTF_8)
-//                    .toUriString();
-//
-//            // Redirect to signup page for new users
-//            response.sendRedirect(redirectFrontURL+"/signup");
-////            getRedirectStrategy().sendRedirect(request, response, redirectFrontURL+"/signup");
-//        } else {
-//            // Redirect to home page for existing users
-//            response.sendRedirect(redirectFrontURL+"/home");
-////            getRedirectStrategy().sendRedirect(request, response,redirectFrontURL+"/home");
-//        }
+        UserStatus userStatus = userService.getUserStatusByUsername(username);
+        if (userStatus == UserStatus.NEW_USER) {
+
+            // Redirect to signup page for new users
+            response.sendRedirect(redirectFrontURL+"/signup");
+//            getRedirectStrategy().sendRedirect(request, response, redirectFrontURL+"/signup");
+        } else {
+            // Redirect to home page for existing users
+            response.sendRedirect(redirectFrontURL+"/home");
+//            getRedirectStrategy().sendRedirect(request, response,redirectFrontURL+"/home");
+        }
 
 
         // <access 토큰 설정>
@@ -122,7 +117,7 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
 //                .toUriString();
         // 로그인 확인 페이지로 리다이렉트
 //        getRedirectStrategy().sendRedirect(request, response, targetUrl);
-//        log.info(targetUrl + " 로 토큰 리다이렉트 성공!");
+        log.info("회원 상태에 따른 리다이렉트 성공!");
 
     }
 

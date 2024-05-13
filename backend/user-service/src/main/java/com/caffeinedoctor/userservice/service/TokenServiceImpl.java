@@ -140,10 +140,8 @@ public class TokenServiceImpl implements TokenService {
         addRefreshEntity(username, newRefresh, refreshTokenExpireLength);
 
         //response
-        //1. Set the new access token in response header
-//        response.setHeader("access", newAccess);
-        //2. Set the new access token in response Cookie
-        response.addCookie(CookieUtil.createAccessCookie("access", newAccess, accessCookieExpireLength));
+        //header로 응답
+        response.setHeader("access", newAccess);
         //쿠키로 응답
         response.addCookie(CookieUtil.createRefreshCookie("refresh", newRefresh, refreshCookieExpireLength));
         //상태 코드: 200 응답 보내기
