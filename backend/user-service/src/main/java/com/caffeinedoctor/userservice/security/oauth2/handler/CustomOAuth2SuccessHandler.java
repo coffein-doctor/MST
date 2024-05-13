@@ -95,17 +95,17 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         response.setStatus(HttpStatus.OK.value());
 
         // Check user status - 회원 여부에 따라 적절한 프론트 주소로 Redirect 시키기
-        UserStatus userStatus = userService.getUserStatusByUsername(username);
-        if (userStatus == UserStatus.NEW_USER) {
-
-            // Redirect to signup page for new users
-            response.sendRedirect(redirectFrontURL+"/signup");
-//            getRedirectStrategy().sendRedirect(request, response, redirectFrontURL+"/signup");
-        } else {
-            // Redirect to home page for existing users
-            response.sendRedirect(redirectFrontURL+"/home");
-//            getRedirectStrategy().sendRedirect(request, response,redirectFrontURL+"/home");
-        }
+//        UserStatus userStatus = userService.getUserStatusByUsername(username);
+//        if (userStatus == UserStatus.NEW_USER) {
+//
+//            // Redirect to signup page for new users
+//            response.sendRedirect(redirectFrontURL+"/signup");
+////            getRedirectStrategy().sendRedirect(request, response, redirectFrontURL+"/signup");
+//        } else {
+//            // Redirect to home page for existing users
+//            response.sendRedirect(redirectFrontURL+"/home");
+////            getRedirectStrategy().sendRedirect(request, response,redirectFrontURL+"/home");
+//        }
 
 
         // <access 토큰 설정>
