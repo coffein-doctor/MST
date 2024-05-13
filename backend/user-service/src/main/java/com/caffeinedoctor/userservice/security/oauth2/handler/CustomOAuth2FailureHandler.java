@@ -3,6 +3,7 @@ package com.caffeinedoctor.userservice.security.oauth2.handler;
 import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,9 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Slf4j
 public class CustomOAuth2FailureHandler extends SimpleUrlAuthenticationFailureHandler {
+
+    @Value("${FRONT_URL}")
+    private String redirectFrontURL;
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
@@ -35,19 +39,21 @@ public class CustomOAuth2FailureHandler extends SimpleUrlAuthenticationFailureHa
             log.info("쿠키 만료 시간: " + authCookie.getMaxAge());
         }
 
+        response.sendRedirect(redirectFrontURL);
+
         // 인증 실패에 대한 상세한 메시지 생성
 //        String errorMessage = "소셜 로그인에 실패했습니다. 원인: " + exception.getLocalizedMessage();
         String errorMessage = "error: " + exception.getLocalizedMessage();
 
         // 실패 메시지와 함께 리다이렉션할 URI 생성
-        String redirectUri = UriComponentsBuilder.fromUriString("http://localhost:3000/")
-                .queryParam("error", errorMessage)
-                .build().toUriString();
+//        String redirectUri = UriComponentsBuilder.fromUriString(redirectFrontURL+"/")
+//                .queryParam("error", errorMessage)
+//                .build().toUriString();
 
         // 인증 실패에 대한 상세한 로그 생성
         log.error("인증 실패: " + errorMessage);
 
         // 클라이언트를 리다이렉션합니다.
-        getRedirectStrategy().sendRedirect(request, response, redirectUri);
+//        getRedirectStrategy().sendRedirect(request, response, redirectUri);
     }
 }
