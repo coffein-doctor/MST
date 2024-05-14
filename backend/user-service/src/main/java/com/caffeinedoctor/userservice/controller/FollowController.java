@@ -71,7 +71,7 @@ public class FollowController {
             ),
             @ApiResponse(
                     responseCode = "422",
-                    description =  "아직 회원가입을 완료하지 않은 사용자입니다.",
+                    description = "회원가입 절차를 완료하지 않은 사용자입니다.",
                     content = @Content(
                             schema = @Schema(implementation = String.class)
                     )
