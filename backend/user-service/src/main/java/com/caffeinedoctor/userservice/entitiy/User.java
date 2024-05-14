@@ -12,7 +12,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -60,14 +62,13 @@ public class User {
     @Column(name = "login_date")
     private LocalDateTime loginDate;
 
-    // 이 사용자가 팔로우하고 있는 사람들의 목록
-    @OneToMany(mappedBy = "follower", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Follow> followings = new ArrayList<>();
+    // 이 사용자가 팔로우하는 다른 사용자들
+    @OneToMany(mappedBy = "fromUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Follow> followings = new HashSet<>();
 
-    // 이 사용자를 팔로우하고 있는 사람들의 목록
-    @OneToMany(mappedBy = "following", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Follow> followers = new ArrayList<>();
-
+    // 이 사용자를 팔로우하는 다른 사용자들
+    @OneToMany(mappedBy = "toUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Follow> followers = new HashSet<>();
     // 생성자
     @Builder
     public User(String username, String email, String profileImageUrl) {

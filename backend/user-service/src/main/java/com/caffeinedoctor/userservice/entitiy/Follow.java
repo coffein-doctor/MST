@@ -21,19 +21,19 @@ public class Follow {
 
     // followerId는 팔로우하는 사용자 ID, followingId는 팔로우되는 사용자 ID
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "follower_id")
-    private User follower; // 팔로워 (이 사람이 누군가를 팔로우함)
+    @JoinColumn(name = "from_user_id")
+    private User fromUser; // 팔로우하는 사람
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "following_id")
-    private User following; // 팔로잉 (이 사람이 누군가에게 팔로우 받음)
+    @JoinColumn(name = "to_user_id")
+    private User toUser; // 팔로우 받는 사람
 
     @CreatedDate
     private LocalDateTime createdAt;
 
     @Builder
-    public Follow(User follower, User following) {
-        this.follower = follower;
-        this.following = following;
+    public Follow(User fromUser, User toUser) {
+        this.fromUser = fromUser;
+        this.toUser = toUser;
     }
 }
