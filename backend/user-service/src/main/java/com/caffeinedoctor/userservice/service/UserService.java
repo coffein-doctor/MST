@@ -9,6 +9,7 @@ import com.caffeinedoctor.userservice.enums.UserStatus;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
@@ -32,6 +33,9 @@ public interface UserService {
 
     /** 회원 검색 **/
     SearchUserInfoDto searchUserByNickname(String nickname);
+
+    /** 팔로우하는 회원 목록 **/
+    List<SearchUserInfoDto> getFollowingUsers(Long userId);
 
     /** 회원 Id 조회 **/
     Long getUserId(String username);

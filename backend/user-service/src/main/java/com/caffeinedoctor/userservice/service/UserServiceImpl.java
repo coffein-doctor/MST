@@ -5,8 +5,10 @@ import com.caffeinedoctor.userservice.dto.response.user.SearchUserInfoDto;
 import com.caffeinedoctor.userservice.dto.response.user.UserDetailsDto;
 import com.caffeinedoctor.userservice.dto.socialLoginDto;
 import com.caffeinedoctor.userservice.dto.request.user.UserInfoRequestDto;
+import com.caffeinedoctor.userservice.entitiy.Follow;
 import com.caffeinedoctor.userservice.entitiy.User;
 import com.caffeinedoctor.userservice.enums.UserStatus;
+import com.caffeinedoctor.userservice.repository.FollowRepository;
 import com.caffeinedoctor.userservice.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,7 +21,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true) // (성능 최적화 - 읽기 전용에만 사용)
@@ -28,6 +31,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final FollowRepository followRepository;
     private final TokenService tokenService;
 
 //    @Autowired // 생성자 주입
@@ -170,6 +174,26 @@ public class UserServiceImpl implements UserService {
                 .profileImageUrl(user.getProfileImageUrl())
                 .introduction(user.getIntroduction())
                 .build();
+    }
+
+    @Override
+    public List<SearchUserInfoDto> getFollowingUsers(Long userId) {
+        List<Follow> follows = followRepository.findAllByFollowingId(userId);
+        List<SearchUserInfoDto> followingUsers = new ArrayList<>();
+
+        for (Follow follow : follows) {
+            User user = follow.getFollower();
+            SearchUserInfoDto following = SearchUserInfoDto.builder()
+                    .userId(user.getId())
+                    .nickname(user.getNickname())
+                    .profileImageUrl(user.getProfileImageUrl())
+                    .introduction(user.getIntroduction())
+                    .build();
+
+            followingUsers.add(following);
+        }
+
+        return followingUsers;
     }
 
     /** 회원 Id 조회 **/

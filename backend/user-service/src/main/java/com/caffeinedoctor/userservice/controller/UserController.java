@@ -1,6 +1,7 @@
 package com.caffeinedoctor.userservice.controller;
 
 import com.caffeinedoctor.userservice.dto.request.user.UserInfoRequestDto;
+import com.caffeinedoctor.userservice.dto.response.FollowDto;
 import com.caffeinedoctor.userservice.dto.response.user.SearchUserInfoDto;
 import com.caffeinedoctor.userservice.security.oauth2.dto.CustomOAuth2User;
 import com.caffeinedoctor.userservice.dto.response.user.UserDetailsDto;
@@ -24,6 +25,8 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "User", description = "User 관리 API")
 @RestController
@@ -397,4 +400,12 @@ public class UserController {
 
 //     /api/users/{userId}/followings
 //     /api/users/{userId}/followers
+    /** 사용자가 팔로우하고 있는 사람들의 목록 **/
+    // 팔로잉 목록을 가져오는 API
+    @GetMapping("/{userId}/followings")
+    public ResponseEntity<?> getFollowingUsers(@PathVariable Long userId) {
+        List<SearchUserInfoDto> followingUsers = userService.getFollowingUsers(userId);
+        return ResponseEntity.ok(followingUsers);
+    }
+
 }
