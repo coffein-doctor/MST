@@ -178,19 +178,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<SearchUserInfoDto> getFollowingUsers(Long userId) {
-        List<Follow> follows = followRepository.findAllByFollowingId(userId);
+        // 내가 팔로우하는 팔로우 엔티티 목록 가져오기
+        List<Follow> follows = followRepository.findAllByFromUserId(userId);
         List<SearchUserInfoDto> followingUsers = new ArrayList<>();
 
         for (Follow follow : follows) {
-            User user = follow.getFollower();
-            SearchUserInfoDto following = SearchUserInfoDto.builder()
+            User user = follow.getToUser();
+            SearchUserInfoDto followingUser = SearchUserInfoDto.builder()
                     .userId(user.getId())
                     .nickname(user.getNickname())
                     .profileImageUrl(user.getProfileImageUrl())
                     .introduction(user.getIntroduction())
                     .build();
 
-            followingUsers.add(following);
+            followingUsers.add(followingUser);
         }
 
         return followingUsers;

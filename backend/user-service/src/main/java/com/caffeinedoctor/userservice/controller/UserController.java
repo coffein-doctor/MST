@@ -1,7 +1,6 @@
 package com.caffeinedoctor.userservice.controller;
 
 import com.caffeinedoctor.userservice.dto.request.user.UserInfoRequestDto;
-import com.caffeinedoctor.userservice.dto.response.FollowDto;
 import com.caffeinedoctor.userservice.dto.response.user.SearchUserInfoDto;
 import com.caffeinedoctor.userservice.security.oauth2.dto.CustomOAuth2User;
 import com.caffeinedoctor.userservice.dto.response.user.UserDetailsDto;

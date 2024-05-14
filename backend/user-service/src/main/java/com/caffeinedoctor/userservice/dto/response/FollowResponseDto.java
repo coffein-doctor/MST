@@ -7,17 +7,17 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 @Getter
-public class FollowDto {
+public class FollowResponseDto {
     private Long followId;
-    private Long followerId;
-    private Long followingId;
+    private Long fromUserId;
+    private Long toUserId;
     private LocalDateTime createdAt;
 
     @Builder
-    public FollowDto(Long followId, Long followerId, Long followingId) {
+    public FollowResponseDto(Long followId, Long fromUserId, Long toUserId) {
         this.followId = followId;
-        this.followerId = followerId;
-        this.followingId = followingId;
+        this.fromUserId = fromUserId;
+        this.toUserId = toUserId;
         this.createdAt = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
     }
 }

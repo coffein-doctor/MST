@@ -1,12 +1,12 @@
 package com.caffeinedoctor.userservice.service;
 
-import com.caffeinedoctor.userservice.dto.response.FollowDto;
+import com.caffeinedoctor.userservice.dto.request.follow.FollowRequestDto;
+import com.caffeinedoctor.userservice.dto.response.FollowResponseDto;
 import com.caffeinedoctor.userservice.entitiy.Follow;
 import com.caffeinedoctor.userservice.entitiy.User;
 import com.caffeinedoctor.userservice.enums.UserStatus;
 import com.caffeinedoctor.userservice.repository.FollowRepository;
 import com.caffeinedoctor.userservice.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,43 +23,43 @@ public class FollowServiceImpl implements FollowService {
 
     @Transactional
     @Override
-    public FollowDto createFollow(Long followerId, Long followingId) {
-        // followerId는 팔로우하는 사용자의 ID, followingId는 팔로우되는 사용자의 ID
-        // 팔로워 사용자를 찾음
-        User follower = userRepository.findById(followerId)
-                .orElseThrow(() -> new EntityNotFoundException("Follower not found"));
+    public FollowResponseDto createFollow(FollowRequestDto requestDto) {
 
-        if (follower.getStatus() == UserStatus.NEW_USER) {
-            throw new IllegalArgumentException(follower.getNickname() + " has not yet completed the registration.");
+        // 팔로우 하는 유저
+        User fromUser = userRepository.findById(requestDto.getFromUserId())
+                .orElseThrow(() -> new IllegalArgumentException("FromUser not found. id=" + requestDto.getFromUserId()));
+
+        if (fromUser.getStatus() == UserStatus.NEW_USER) {
+            throw new IllegalArgumentException(fromUser.getNickname() + " has not yet completed the registration.");
         }
 
-        // 팔로잉 사용자를 찾음
-        User following = userRepository.findById(followingId)
-                .orElseThrow(() -> new EntityNotFoundException("Following not found"));
+        // 팔로우 받는 유저
+        User toUser = userRepository.findById(requestDto.getToUserId())
+                .orElseThrow(() -> new IllegalArgumentException("ToUser not found. id=" + requestDto.getToUserId()));
 
-        if (following.getStatus() == UserStatus.NEW_USER) {
-            throw new IllegalStateException(following.getNickname() + " has not yet completed the registration.");
+        if (toUser.getStatus() == UserStatus.NEW_USER) {
+            throw new IllegalStateException(toUser.getNickname() + " has not yet completed the registration.");
         }
 
         // 중복 체크: 이미 팔로우 관계가 존재하는지 확인
-        boolean exists = followRepository.existsByFollowerAndFollowing(follower, following);
+        boolean exists = followRepository.existsByFromUserAndToUser(fromUser, toUser);
         if (exists) {
             throw new IllegalStateException("Follow relationship already exists.");
         }
 
         // 팔로우 엔티티 생성
         Follow follow = Follow.builder()
-                .follower(follower)
-                .following(following)
+                .fromUser(fromUser)
+                .toUser(toUser)
                 .build();
 
         followRepository.save(follow);
 
         // 팔로우 관계 저장
-        return FollowDto.builder()
+        return FollowResponseDto.builder()
                 .followId(follow.getId())
-                .followerId(followerId)
-                .followingId(followingId)
+                .fromUserId(fromUser.getId())
+                .toUserId(toUser.getId())
                 .build();
     }
 

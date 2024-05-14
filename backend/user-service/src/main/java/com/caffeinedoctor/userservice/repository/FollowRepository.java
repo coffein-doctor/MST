@@ -11,11 +11,11 @@ import java.util.Optional;
 @Repository
 public interface FollowRepository extends JpaRepository<Follow, Long> {
 
-    boolean existsByFollowerAndFollowing(User follower, User following);
+    boolean existsByFromUserAndToUser(User fromUser, User toUser);
 
     // 내가 팔로우하는 사용자 목록
-    List<Follow> findAllByFollowingId(Long userId);
+    List<Follow> findAllByFromUserId(Long userId);
 
     // 나를 팔로우하는 사용자 목록
-    List<Follow> findAllByFollowerId(Long userId);;
+    List<Follow> findAllByToUserId(Long userId);;
 }

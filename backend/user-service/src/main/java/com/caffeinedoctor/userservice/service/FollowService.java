@@ -1,8 +1,11 @@
 package com.caffeinedoctor.userservice.service;
 
-import com.caffeinedoctor.userservice.dto.response.FollowDto;
+import com.caffeinedoctor.userservice.dto.request.follow.FollowRequestDto;
+import com.caffeinedoctor.userservice.dto.response.FollowResponseDto;
+import org.springframework.transaction.annotation.Transactional;
 
 public interface FollowService {
     // 팔로우 관계 생성
-    FollowDto createFollow(Long followingId, Long followerId);
+    @Transactional
+    FollowResponseDto createFollow(FollowRequestDto requestDto);
 }
