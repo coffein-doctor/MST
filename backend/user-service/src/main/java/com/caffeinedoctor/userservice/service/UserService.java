@@ -34,8 +34,11 @@ public interface UserService {
     /** 회원 검색 **/
     SearchUserInfoDto searchUserByNickname(String nickname);
 
-    /** 팔로우하는 회원 목록 **/
+    /** 내가 팔로우하는 회원 목록 **/
     List<SearchUserInfoDto> getFollowingUsers(Long userId);
+
+    /** 나를 팔로우하는 회원 목록 **/
+    List<SearchUserInfoDto> getFollowerUsers(Long userId);
 
     /** 회원 Id 조회 **/
     Long getUserId(String username);

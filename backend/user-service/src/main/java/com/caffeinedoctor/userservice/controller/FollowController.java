@@ -27,13 +27,13 @@ public class FollowController {
 
     /** 팔로우 관계 생성 **/
     @Operation(
-            summary = "사용자 팔로우",
-            description = "특정 사용자를 팔로우합니다. 팔로워 ID와 팔로잉 ID를 입력해주세요. followerId는 팔로우하는 사용자의 ID이고, followingId는 팔로우되는 사용자의 ID입니다."
+            summary = "팔로우 관계 등록",
+            description = "특정 사용자를 팔로우합니다."
     )
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "팔로우에 성공하였습니다.",
+                    description = "성공적으로 팔로우 되었습니다.",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = FollowResponseDto.class) // FollowResponseDto가 API 응답에 사용됨

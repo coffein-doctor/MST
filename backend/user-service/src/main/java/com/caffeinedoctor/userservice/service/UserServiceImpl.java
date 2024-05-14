@@ -197,6 +197,28 @@ public class UserServiceImpl implements UserService {
         return followingUsers;
     }
 
+    public List<SearchUserInfoDto> getFollowerUsers(Long userId) {
+        // 나를 팔로우하는 follow 목록 가져오기
+        List<Follow> follows = followRepository.findAllByToUserId(userId);
+        List<SearchUserInfoDto> followerUsers = new ArrayList<>();
+
+        for (Follow follow : follows) {
+            User user = follow.getFromUser();
+            SearchUserInfoDto followerUser = SearchUserInfoDto.builder()
+                    .userId(user.getId())
+                    .nickname(user.getNickname())
+                    .profileImageUrl(user.getProfileImageUrl())
+                    .introduction(user.getIntroduction())
+                    .build();
+
+            followerUsers.add(followerUser);
+        }
+        return followerUsers;
+    }
+
+
+
+
     /** 회원 Id 조회 **/
     @Override
     public Long getUserId(String username){
