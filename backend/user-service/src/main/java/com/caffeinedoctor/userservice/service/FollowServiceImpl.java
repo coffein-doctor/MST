@@ -3,6 +3,7 @@ package com.caffeinedoctor.userservice.service;
 import com.caffeinedoctor.userservice.dto.response.FollowDto;
 import com.caffeinedoctor.userservice.entitiy.Follow;
 import com.caffeinedoctor.userservice.entitiy.User;
+import com.caffeinedoctor.userservice.enums.UserStatus;
 import com.caffeinedoctor.userservice.repository.FollowRepository;
 import com.caffeinedoctor.userservice.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -28,9 +29,17 @@ public class FollowServiceImpl implements FollowService {
         User follower = userRepository.findById(followerId)
                 .orElseThrow(() -> new EntityNotFoundException("Follower not found"));
 
+        if (follower.getStatus() == UserStatus.NEW_USER) {
+            throw new IllegalArgumentException(follower.getNickname() + " has not yet completed the registration.");
+        }
+
         // 팔로잉 사용자를 찾음
         User following = userRepository.findById(followingId)
                 .orElseThrow(() -> new EntityNotFoundException("Following not found"));
+
+        if (following.getStatus() == UserStatus.NEW_USER) {
+            throw new IllegalStateException(following.getNickname() + " has not yet completed the registration.");
+        }
 
         // 중복 체크: 이미 팔로우 관계가 존재하는지 확인
         boolean exists = followRepository.existsByFollowerAndFollowing(follower, following);

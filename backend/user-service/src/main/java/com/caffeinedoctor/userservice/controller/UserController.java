@@ -204,45 +204,6 @@ public class UserController {
 
     }
 
-    /** 회원 검색 **/
-    @Operation(
-            summary = "회원 검색",
-            description = "팔로우를 위해 특정 회원을 검색합니다. 회원 닉네임을 입력하여 해당 회원을 검색하세요."
-    )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "사용자가 성공적으로 검색되었습니다.",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = SearchUserInfoDto.class)
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "401",
-                    description = "사용자 인증에 실패하였습니다. 로그인이 필요합니다.",
-                    content = @Content(
-                            schema = @Schema(implementation = String.class)
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description =  "해당 사용자를 찾을 수 없습니다.",
-                    content = @Content(
-                            schema = @Schema(implementation = String.class)
-                    )
-            )
-    })
-    @GetMapping("/search")
-    public ResponseEntity<?> searchUsers(@RequestParam String nickname) {
-
-        try {
-            SearchUserInfoDto userInfoDto = userService.searchUserByNickname(nickname);
-            return ResponseEntity.ok(userInfoDto);
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
 
     /** 회원 정보 수정 **/
     @Operation(
@@ -355,6 +316,7 @@ public class UserController {
         }
     }
 
+    /** 닉네임 중복 검사 **/
     @Operation(
             summary = "닉네임 중복 검사",
             description = "입력된 닉네임이 이미 사용 중인지 여부를 확인합니다. 닉네임을 입력하여 사용 가능 여부를 확인하세요. 사용가능한 닉네임이면 true를 반환합니다."
@@ -381,4 +343,58 @@ public class UserController {
         boolean isNicknameAvailable  = !userService.isNicknameExists(nickname);
         return ResponseEntity.ok(isNicknameAvailable);
     }
+
+    /** 팔로우 관련 기능 **/
+    /** 회원 검색 **/
+    @Operation(
+            summary = "회원 검색",
+            description = "팔로우를 위해 특정 회원을 검색합니다. 회원 닉네임을 입력하여 해당 회원을 검색하세요."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "사용자가 성공적으로 검색되었습니다.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SearchUserInfoDto.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "사용자 인증에 실패하였습니다. 로그인이 필요합니다.",
+                    content = @Content(
+                            schema = @Schema(implementation = String.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description =  "해당 사용자를 찾을 수 없습니다.",
+                    content = @Content(
+                            schema = @Schema(implementation = String.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "422",
+                    description = "아직 회원가입을 완료하지 않은 사용자입니다.",
+                    content = @Content(
+                            schema = @Schema(implementation = String.class)
+                    )
+            )
+    })
+    @GetMapping("/search")
+    public ResponseEntity<?> searchUsers(@RequestParam String nickname) {
+
+        try {
+            SearchUserInfoDto userInfoDto = userService.searchUserByNickname(nickname);
+            return ResponseEntity.ok(userInfoDto);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (IllegalStateException e) {
+            // 사용자가 회원가입 절차를 완료하지 않았을 때 422 Unprocessable Entity 반환
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(e.getMessage());
+        }
+    }
+
+//     /api/users/{userId}/followings
+//     /api/users/{userId}/followers
 }

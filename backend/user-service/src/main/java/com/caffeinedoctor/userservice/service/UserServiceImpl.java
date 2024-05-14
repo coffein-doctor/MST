@@ -160,6 +160,10 @@ public class UserServiceImpl implements UserService {
     public SearchUserInfoDto searchUserByNickname(String nickname) {
         User user = findUserByNickname(nickname);
 
+        if (user.getStatus() == UserStatus.NEW_USER) {
+            throw new IllegalStateException(nickname + " has not yet completed the registration.");
+        }
+
         return SearchUserInfoDto.builder()
                 .userId(user.getId())
                 .nickname(user.getNickname())

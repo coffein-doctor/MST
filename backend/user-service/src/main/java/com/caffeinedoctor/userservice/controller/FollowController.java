@@ -68,6 +68,13 @@ public class FollowController {
                     content = @Content(
                             schema = @Schema(implementation = String.class)
                     )
+            ),
+            @ApiResponse(
+                    responseCode = "422",
+                    description =  "아직 회원가입을 완료하지 않은 사용자입니다.",
+                    content = @Content(
+                            schema = @Schema(implementation = String.class)
+                    )
             )
     })
     @PostMapping("/{followerId}/{followingId}")
@@ -83,8 +90,13 @@ public class FollowController {
             // EntityNotFoundException의 경우, 존재하지 않는 엔티티 참조를 알려주는 404 상태 코드 반환
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         } catch (IllegalStateException ex) {
-            // 팔로우 관계가 이미 존재하는 경우, 409 상태 코드 반환
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+            if (ex.getMessage().contains("Follow relationship already exists.")) {
+                // 이미 존재하는 팔로우 관계를 나타내는 예외이므로, 409 Conflict 반환
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+            } else {
+                // 회원가입 절차를 완료하지 않은 사용자를 나타내는 예외이므로, 422 Unprocessable Entity 반환
+                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ex.getMessage());
+            }
         }
     }
 }
