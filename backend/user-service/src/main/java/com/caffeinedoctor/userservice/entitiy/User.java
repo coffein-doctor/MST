@@ -1,7 +1,6 @@
 package com.caffeinedoctor.userservice.entitiy;
 
 
-
 import com.caffeinedoctor.userservice.enums.ActivityLevel;
 import com.caffeinedoctor.userservice.enums.Gender;
 import com.caffeinedoctor.userservice.enums.UserStatus;
@@ -43,9 +42,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    private int height;
+    private double height;
 
-    private int weight;
+    private double weight;
 
     // 활동량 필드 추가
     @Enumerated(EnumType.STRING)
@@ -69,6 +68,7 @@ public class User {
     // 이 사용자를 팔로우하는 다른 사용자들
     @OneToMany(mappedBy = "toUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Follow> followers = new HashSet<>();
+
     // 생성자
     @Builder
     public User(String username, String email, String profileImageUrl) {
@@ -103,11 +103,11 @@ public class User {
         this.gender = gender;
     }
 
-    public void updateHeight(int height) {
+    public void updateHeight(double height) {
         this.height = height;
     }
 
-    public void updateWeight(int weight) {
+    public void updateWeight(double weight) {
         this.weight = weight;
     }
 

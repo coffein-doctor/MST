@@ -1,6 +1,8 @@
 package com.caffeinedoctor.userservice.service;
 
+import com.caffeinedoctor.userservice.common.util.HealthProfileUtil;
 import com.caffeinedoctor.userservice.dto.response.TokenStatusDto;
+import com.caffeinedoctor.userservice.dto.response.user.MypageDto;
 import com.caffeinedoctor.userservice.dto.response.user.SearchUserInfoDto;
 import com.caffeinedoctor.userservice.dto.response.user.UserDetailsDto;
 import com.caffeinedoctor.userservice.dto.socialLoginDto;
@@ -160,6 +162,27 @@ public class UserServiceImpl implements UserService {
         return createUserDetailsDto(user);
     }
 
+    /////////////////////////////////** 마이페이지 관련 **///////////////////////////
+    /** 마이페이지 정보 조회 **/
+    public MypageDto getUserMypageInfo(Long userId){
+       User user = findUserById(userId);
+        double recommendedSugarIntake = HealthProfileUtil
+                .calculateRecommendedSugarIntake(user.getHeight(), user.getGender(), user.getActivityLevel());
+        long followingCount = followRepository.countAllByFromUserId(userId);
+        long followerCount = followRepository.countAllByToUserId(userId);
+
+        return MypageDto.builder()
+                .userId(user.getId())
+                .nickname(user.getNickname())
+                .profilePictureUrl(user.getProfileImageUrl())
+                .introduction(user.getIntroduction())
+                .followingCount(followingCount)
+                .followerCount(followerCount)
+                .recommendedDailySugarIntake(recommendedSugarIntake)
+                .build();
+    }
+
+    /////////////////////////////////** 팔로우 관련 **///////////////////////////
     /** 회원 검색 **/
     public SearchUserInfoDto searchUserByNickname(String nickname) {
         User user = findUserByNickname(nickname);
@@ -176,6 +199,7 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
+    /** 회원 팔로잉 목록 조회 **/
     @Override
     public List<SearchUserInfoDto> getFollowingUsers(Long userId) {
         // 내가 팔로우하는 팔로우 엔티티 목록 가져오기
@@ -197,6 +221,7 @@ public class UserServiceImpl implements UserService {
         return followingUsers;
     }
 
+    /** 회원 팔로워 목록 조회 **/
     public List<SearchUserInfoDto> getFollowerUsers(Long userId) {
         // 나를 팔로우하는 follow 목록 가져오기
         List<Follow> follows = followRepository.findAllByToUserId(userId);
@@ -216,9 +241,6 @@ public class UserServiceImpl implements UserService {
         return followerUsers;
     }
 
-
-
-
     /** 회원 Id 조회 **/
     @Override
     public Long getUserId(String username){
@@ -235,19 +257,15 @@ public class UserServiceImpl implements UserService {
         return user.getStatus();
     }
 
-    // 아이디(username)로 사용자를 찾습니다.
+    /** 회원 찾기 **/
+    // 로그인 아이디(username)로 사용자를 찾습니다.
     @Override
     public User findUserByUsername(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("해당 사용자를 찾을 수 없습니다."));
     }
 
-    private User findUserByNickname(String nickname) {
-        return userRepository.findByNickname(nickname)
-                .orElseThrow(() -> new EntityNotFoundException("User with nickname " + nickname + " not found"));
-    }
-
-    // 회원 조회
+    // 회원 아이디로 회원 찾기
     @Override
     public User findUserById(Long userId) {
         return userRepository.findById(userId)
@@ -255,6 +273,13 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    // 닉네임으로 회원 찾기
+    private User findUserByNickname(String nickname) {
+        return userRepository.findByNickname(nickname)
+                .orElseThrow(() -> new EntityNotFoundException("User with nickname " + nickname + " not found"));
+    }
+
+    /** 검증 및 유효성 검사 **/
     // 변경하려고 전달해준 유저의 Id와 값을 보낸 유저가 같은 유저인지 검증
     private void verifyUserAuthentication(User user, Long UserId) throws AccessDeniedException {
         // 찾은 사용자의 userId와 입력받은 userId가 일치하는지 확인합니다.
@@ -263,18 +288,20 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /** 존재 여부 확인 **/
+    // 이메일로 사용자 존재 여부 확인
     @Override
-    // 이메일로 사용자가 존재하는지 확인
     public boolean isUserExistsByEmail(String email) {
         return userRepository.existsByEmail(email);
     }
 
+    // 아이디로 사용자 존재 여부 확인
     @Override
-    // 이메일로 사용자가 존재하는지 확인
     public boolean isUserExistsByUsername(String username) {
         return userRepository.existsByUsername(username);
     }
 
+    // 같은 닉네임 존재 여부 확인
     @Override
     public boolean isNicknameExists(String nickname){
         // 닉네임 유효성 검사

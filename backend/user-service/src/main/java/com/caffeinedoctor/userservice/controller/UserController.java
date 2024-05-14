@@ -1,7 +1,7 @@
 package com.caffeinedoctor.userservice.controller;
 
 import com.caffeinedoctor.userservice.dto.request.user.UserInfoRequestDto;
-import com.caffeinedoctor.userservice.dto.response.FollowResponseDto;
+import com.caffeinedoctor.userservice.dto.response.user.MypageDto;
 import com.caffeinedoctor.userservice.dto.response.user.SearchUserInfoDto;
 import com.caffeinedoctor.userservice.security.oauth2.dto.CustomOAuth2User;
 import com.caffeinedoctor.userservice.dto.response.user.UserDetailsDto;
@@ -348,7 +348,7 @@ public class UserController {
         return ResponseEntity.ok(isNicknameAvailable);
     }
 
-    /** 팔로우 관련 기능 **/
+    ///////////////////////////////////////////** 팔로우 관련 기능 **////////////////////////////////////////
     /** 회원 검색 **/
     @Operation(
             summary = "회원 검색",
@@ -475,6 +475,53 @@ public class UserController {
     public ResponseEntity<?> getFollowerUsers(@PathVariable Long userId) {
         List<SearchUserInfoDto> followerUsers = userService.getFollowerUsers(userId);
         return ResponseEntity.ok(followerUsers);
+    }
+
+    ///////////////////////////////////////////** 마이페이지 **///////////////////////////////////////
+
+    @Operation(summary = "마이페이지 정보 조회", description = "특정 사용자의 마이페이지 정보를 조회합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "마이페이지 정보가 성공적으로 조회되었습니다.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = MypageDto.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "잘못된 요청입니다. 입력 값을 확인해주세요.",
+                    content = @Content(
+                            schema = @Schema(implementation = String.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "사용자 인증에 실패하였습니다. 로그인이 필요합니다.",
+                    content = @Content(
+                            schema = @Schema(implementation = String.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "해당 사용자를 찾을 수 없습니다.",
+                    content = @Content(
+                            schema = @Schema(implementation = String.class)
+                    )
+            )
+    })
+    @GetMapping("/{userId}/mypage")
+    public ResponseEntity<?> getUserMypage(@PathVariable Long userId) {
+        try {
+            MypageDto mypageDto = userService.getUserMypageInfo(userId);
+            return ResponseEntity.ok(mypageDto);
+        } catch (EntityNotFoundException e) {
+            // UserNotFoundException은 사용자 정의 예외일 수 있으며, 사용자를 찾을 수 없을 때 발생합니다.
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
 }

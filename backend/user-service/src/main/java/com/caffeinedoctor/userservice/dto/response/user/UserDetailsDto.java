@@ -18,8 +18,8 @@ public class UserDetailsDto {
     public String nickname;
     public LocalDate birth;
     public Gender gender;
-    public int height;
-    public int weight;
+    public double height;
+    public double weight;
     public ActivityLevel activityLevel;
     public String profileImageUrl;
     public String introduction;
@@ -27,7 +27,7 @@ public class UserDetailsDto {
     // 생성자, 게터, 세터 등 필요한 메서드 추가
     @Builder
     public UserDetailsDto(Long userId, String username, String email, UserStatus status, String nickname,
-                          LocalDate birth, Gender gender, int height, int weight, ActivityLevel activityLevel,
+                          LocalDate birth, Gender gender, double height, double weight, ActivityLevel activityLevel,
                           String profileImageUrl, String introduction) {
         this.userId = userId;
         this.username = username;

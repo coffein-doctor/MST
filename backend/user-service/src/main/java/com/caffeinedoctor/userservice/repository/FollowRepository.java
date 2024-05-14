@@ -18,4 +18,11 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
 
     // 나를 팔로우하는 사용자 목록
     List<Follow> findAllByToUserId(Long userId);;
+
+    // 내가 팔로우하는 사용자 수
+    long countAllByFromUserId(Long userId);
+
+    // 나를 팔로우하는 사용자 수
+    long countAllByToUserId(Long userId);
+
 }

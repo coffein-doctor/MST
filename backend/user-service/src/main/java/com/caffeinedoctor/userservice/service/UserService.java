@@ -1,5 +1,6 @@
 package com.caffeinedoctor.userservice.service;
 
+import com.caffeinedoctor.userservice.dto.response.user.MypageDto;
 import com.caffeinedoctor.userservice.dto.response.user.SearchUserInfoDto;
 import com.caffeinedoctor.userservice.dto.response.user.UserDetailsDto;
 import com.caffeinedoctor.userservice.dto.socialLoginDto;
@@ -30,6 +31,9 @@ public interface UserService {
     UserDetailsDto getUserDetailsById(Long userId);
     User findUserByUsername(String username);
     User findUserById(Long userId);
+
+    /** 마이페이지 조회 **/
+    MypageDto getUserMypageInfo(Long userId);
 
     /** 회원 검색 **/
     SearchUserInfoDto searchUserByNickname(String nickname);
