@@ -11,25 +11,25 @@ import java.time.LocalDateTime;
 
 @Getter
 public class UserDetailsDto {
-    public Long id;
+    public Long userId;
     public String username;
     public String email;
     public UserStatus status;
     public String nickname;
     public LocalDate birth;
     public Gender gender;
-    public int height;
-    public int weight;
+    public double height;
+    public double weight;
     public ActivityLevel activityLevel;
     public String profileImageUrl;
     public String introduction;
 
     // 생성자, 게터, 세터 등 필요한 메서드 추가
     @Builder
-    public UserDetailsDto(Long id, String username, String email, UserStatus status, String nickname,
-                          LocalDate birth, Gender gender, int height, int weight, ActivityLevel activityLevel,
+    public UserDetailsDto(Long userId, String username, String email, UserStatus status, String nickname,
+                          LocalDate birth, Gender gender, double height, double weight, ActivityLevel activityLevel,
                           String profileImageUrl, String introduction) {
-        this.id = id;
+        this.userId = userId;
         this.username = username;
         this.email = email;
         this.status = status;

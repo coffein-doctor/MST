@@ -1,5 +1,7 @@
 package com.caffeinedoctor.userservice.service;
 
+import com.caffeinedoctor.userservice.dto.response.user.MypageDto;
+import com.caffeinedoctor.userservice.dto.response.user.SearchUserInfoDto;
 import com.caffeinedoctor.userservice.dto.response.user.UserDetailsDto;
 import com.caffeinedoctor.userservice.dto.socialLoginDto;
 import com.caffeinedoctor.userservice.dto.request.user.UserInfoRequestDto;
@@ -8,6 +10,7 @@ import com.caffeinedoctor.userservice.enums.UserStatus;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
@@ -27,6 +30,20 @@ public interface UserService {
     /** 회원 조회 **/
     UserDetailsDto getUserDetailsById(Long userId);
     User findUserByUsername(String username);
+    User findUserById(Long userId);
+
+    /** 마이페이지 조회 **/
+    MypageDto getUserMypageInfo(Long userId);
+
+    /** 회원 검색 **/
+    SearchUserInfoDto searchUserByNickname(String nickname);
+
+    /** 내가 팔로우하는 회원 목록 **/
+    List<SearchUserInfoDto> getFollowingUsers(Long userId);
+
+    /** 나를 팔로우하는 회원 목록 **/
+    List<SearchUserInfoDto> getFollowerUsers(Long userId);
+
     /** 회원 Id 조회 **/
     Long getUserId(String username);
 
@@ -34,6 +51,10 @@ public interface UserService {
     boolean isUserExistsByEmail(String email);
     boolean isUserExistsByUsername(String username);
 
+    /** 닉네임 찾기 **/
+    boolean isNicknameExists(String nickname);
+
     /** 회원 가입 상태 **/
     UserStatus getUserStatusByUsername(String username);
+
 }

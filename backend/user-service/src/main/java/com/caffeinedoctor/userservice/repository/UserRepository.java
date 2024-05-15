@@ -30,4 +30,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // 사용자 이이디로 사용자 유무 찾기
     // username으로 존재하는지 여부를 확인하는 함수
     boolean existsByUsername(String username);
+
+    // nickname 존재 여부를 확인하는 함수
+    boolean existsByNickname(String nickname);
 }

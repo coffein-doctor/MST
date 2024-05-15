@@ -30,16 +30,16 @@ public class UserInfoRequestDto {
 
     @NotNull(message = "Height must not be null")
     @Min(value = 1, message = "Height must be greater than 0")
-    private Integer height;
+    private double height;
 
     @NotNull(message = "Weight must not be null")
     @Min(value = 1, message = "Weight must be greater than 0")
-    private Integer weight;
+    private double weight;
 
     private String introduction;
 
     @Builder
-    public UserInfoRequestDto(String nickname, LocalDate birth, Gender gender, ActivityLevel  activityLevel, int height, int weight, String introduction) {
+    public UserInfoRequestDto(String nickname, LocalDate birth, Gender gender, ActivityLevel  activityLevel, double height, double weight, String introduction) {
         this.nickname = nickname;
         this.birth = birth;
         this.gender = gender;

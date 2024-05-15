@@ -1,11 +1,16 @@
 package com.caffeinedoctor.userservice.service;
 
+import com.caffeinedoctor.userservice.common.util.HealthProfileUtil;
 import com.caffeinedoctor.userservice.dto.response.TokenStatusDto;
+import com.caffeinedoctor.userservice.dto.response.user.MypageDto;
+import com.caffeinedoctor.userservice.dto.response.user.SearchUserInfoDto;
 import com.caffeinedoctor.userservice.dto.response.user.UserDetailsDto;
 import com.caffeinedoctor.userservice.dto.socialLoginDto;
 import com.caffeinedoctor.userservice.dto.request.user.UserInfoRequestDto;
+import com.caffeinedoctor.userservice.entitiy.Follow;
 import com.caffeinedoctor.userservice.entitiy.User;
 import com.caffeinedoctor.userservice.enums.UserStatus;
+import com.caffeinedoctor.userservice.repository.FollowRepository;
 import com.caffeinedoctor.userservice.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,7 +23,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true) // (성능 최적화 - 읽기 전용에만 사용)
@@ -27,6 +33,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final FollowRepository followRepository;
     private final TokenService tokenService;
 
 //    @Autowired // 생성자 주입
@@ -95,13 +102,13 @@ public class UserServiceImpl implements UserService {
         // 사용자 정보 업데이트
         updateUserDetails(user, userDto);
         userRepository.save(user);
-        return userDetailsDto(user);
+        return createUserDetailsDto(user);
     }
 
     /** 회원 정보 디테일 dto **/
-    private UserDetailsDto userDetailsDto(User user) {
+    private UserDetailsDto createUserDetailsDto(User user) {
         return UserDetailsDto.builder()
-                .id(user.getId())
+                .userId(user.getId())
                 .username(user.getUsername())
                 .email(user.getEmail())
                 .status(user.getStatus())
@@ -152,7 +159,86 @@ public class UserServiceImpl implements UserService {
     public UserDetailsDto getUserDetailsById(Long userId){
         // 유저 ID를 사용하여 해당 유저를 데이터베이스에서 조회
         User user = findUserById(userId);
-        return userDetailsDto(user);
+        return createUserDetailsDto(user);
+    }
+
+    /////////////////////////////////** 마이페이지 관련 **///////////////////////////
+    /** 마이페이지 정보 조회 **/
+    public MypageDto getUserMypageInfo(Long userId){
+       User user = findUserById(userId);
+        double recommendedSugarIntake = HealthProfileUtil
+                .calculateRecommendedSugarIntake(user.getHeight(), user.getGender(), user.getActivityLevel());
+        long followingCount = followRepository.countAllByFromUserId(userId);
+        long followerCount = followRepository.countAllByToUserId(userId);
+
+        return MypageDto.builder()
+                .userId(user.getId())
+                .nickname(user.getNickname())
+                .profilePictureUrl(user.getProfileImageUrl())
+                .introduction(user.getIntroduction())
+                .followingCount(followingCount)
+                .followerCount(followerCount)
+                .recommendedDailySugarIntake(recommendedSugarIntake)
+                .build();
+    }
+
+    /////////////////////////////////** 팔로우 관련 **///////////////////////////
+    /** 회원 검색 **/
+    public SearchUserInfoDto searchUserByNickname(String nickname) {
+        User user = findUserByNickname(nickname);
+
+        if (user.getStatus() == UserStatus.NEW_USER) {
+            throw new IllegalStateException(nickname + " has not yet completed the registration.");
+        }
+
+        return SearchUserInfoDto.builder()
+                .userId(user.getId())
+                .nickname(user.getNickname())
+                .profileImageUrl(user.getProfileImageUrl())
+                .introduction(user.getIntroduction())
+                .build();
+    }
+
+    /** 회원 팔로잉 목록 조회 **/
+    @Override
+    public List<SearchUserInfoDto> getFollowingUsers(Long userId) {
+        // 내가 팔로우하는 팔로우 엔티티 목록 가져오기
+        List<Follow> follows = followRepository.findAllByFromUserId(userId);
+        List<SearchUserInfoDto> followingUsers = new ArrayList<>();
+
+        for (Follow follow : follows) {
+            User user = follow.getToUser();
+            SearchUserInfoDto followingUser = SearchUserInfoDto.builder()
+                    .userId(user.getId())
+                    .nickname(user.getNickname())
+                    .profileImageUrl(user.getProfileImageUrl())
+                    .introduction(user.getIntroduction())
+                    .build();
+
+            followingUsers.add(followingUser);
+        }
+
+        return followingUsers;
+    }
+
+    /** 회원 팔로워 목록 조회 **/
+    public List<SearchUserInfoDto> getFollowerUsers(Long userId) {
+        // 나를 팔로우하는 follow 목록 가져오기
+        List<Follow> follows = followRepository.findAllByToUserId(userId);
+        List<SearchUserInfoDto> followerUsers = new ArrayList<>();
+
+        for (Follow follow : follows) {
+            User user = follow.getFromUser();
+            SearchUserInfoDto followerUser = SearchUserInfoDto.builder()
+                    .userId(user.getId())
+                    .nickname(user.getNickname())
+                    .profileImageUrl(user.getProfileImageUrl())
+                    .introduction(user.getIntroduction())
+                    .build();
+
+            followerUsers.add(followerUser);
+        }
+        return followerUsers;
     }
 
     /** 회원 Id 조회 **/
@@ -171,20 +257,29 @@ public class UserServiceImpl implements UserService {
         return user.getStatus();
     }
 
-    // 아이디(username)로 사용자를 찾습니다.
+    /** 회원 찾기 **/
+    // 로그인 아이디(username)로 사용자를 찾습니다.
     @Override
     public User findUserByUsername(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("해당 사용자를 찾을 수 없습니다."));
     }
 
-
-    // 회원 조회
-    private User findUserById(Long userId) {
+    // 회원 아이디로 회원 찾기
+    @Override
+    public User findUserById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 ID에 대한 사용자를 찾을 수 없습니다."));
+
     }
 
+    // 닉네임으로 회원 찾기
+    private User findUserByNickname(String nickname) {
+        return userRepository.findByNickname(nickname)
+                .orElseThrow(() -> new EntityNotFoundException("User with nickname " + nickname + " not found"));
+    }
+
+    /** 검증 및 유효성 검사 **/
     // 변경하려고 전달해준 유저의 Id와 값을 보낸 유저가 같은 유저인지 검증
     private void verifyUserAuthentication(User user, Long UserId) throws AccessDeniedException {
         // 찾은 사용자의 userId와 입력받은 userId가 일치하는지 확인합니다.
@@ -193,59 +288,24 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /** 존재 여부 확인 **/
+    // 이메일로 사용자 존재 여부 확인
     @Override
-    // 이메일로 사용자가 존재하는지 확인
     public boolean isUserExistsByEmail(String email) {
         return userRepository.existsByEmail(email);
     }
 
+    // 아이디로 사용자 존재 여부 확인
     @Override
-    // 이메일로 사용자가 존재하는지 확인
     public boolean isUserExistsByUsername(String username) {
         return userRepository.existsByUsername(username);
     }
 
-    private void validateDuplicateUser(String email) {
-        // 이메일 유효성 검사
-        Optional<User> user = userRepository.findByEmail(email);
-        if (user.isPresent()) {
-            throw new IllegalStateException("이미 존재하는 회원 이메일입니다.");
-        }
-    }
-
-    private void validateDuplicateNickname(String nickname){
+    // 같은 닉네임 존재 여부 확인
+    @Override
+    public boolean isNicknameExists(String nickname){
         // 닉네임 유효성 검사
-        Optional<User> user = userRepository.findByNickname(nickname);
-        if (user.isPresent()) {
-            throw new IllegalStateException("이미 존재하는 회원 닉네임입니다.");
-        }
+        return userRepository.existsByNickname(nickname);
     }
-
-//    /**
-//     * 김부경
-//     * explain : 이메일 중복 검사
-//     * @param email : 이메일
-//     */
-//    @Override
-//    @Transactional
-//    public void checkEmail(String email) {
-//        if (userRepository.existsByEmail(email)) {
-//            throw new ApiException(ExceptionEnum.EMAIL_EXIST_EXCEPTION);
-//        }
-//    }
-//
-//    /**
-//     * 김부경
-//     * explain : 닉네임 중복 검사
-//     * @param nickname : 닉네임
-//     */
-//    @Override
-//    @Transactional
-//    public void checkNickname(String nickname) {
-//        if (memberRepository.existsByNickname(nickname)) {
-//            throw new ApiException(ExceptionEnum.NICKNAME_EXIST_EXCEPTION);
-//        }
-//    }
-
 
 }

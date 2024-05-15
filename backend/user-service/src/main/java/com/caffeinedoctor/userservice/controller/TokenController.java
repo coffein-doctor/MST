@@ -3,6 +3,8 @@ package com.caffeinedoctor.userservice.controller;
 import com.caffeinedoctor.userservice.dto.response.TokenStatusDto;
 import com.caffeinedoctor.userservice.service.TokenService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.headers.Header;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,7 +33,10 @@ public class TokenController {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Successfully reissued token"
+                    description = "Successfully reissued token",
+                    headers = {
+                    @Header(name = "access", description = "Newly issued access token", schema = @Schema(type = "string"))
+            }
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -57,7 +62,7 @@ public class TokenController {
     /** 로그아웃으로 refresh, access 토큰 삭제 **/
     @Operation(
             summary = "로그아웃 및 토큰 만료",
-            description = "사용자가 로그아웃할 때, Refresh 토큰과 Access 토큰을 만료시켜 삭제합니다."
+            description = "사용자가 로그아웃할 때, 쿠키의 Refresh 토큰을 만료시켜 삭제합니다."
     )
     @ApiResponses(value = {
             @ApiResponse(
