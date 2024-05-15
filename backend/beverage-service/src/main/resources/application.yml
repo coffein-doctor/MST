@@ -1,0 +1,48 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: beverage-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${DOMAIN}:3307/mst?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+    username: admin
+    password: mst@0117
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQLDialect
+    # 데이터베이스 스키마 자동 업데이트 설정
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+# 유레카 서버 설정
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://admin:mst0117@${DOMAIN}:8761/eureka
+
+greeting:
+  message: Welcome to the MST Project.
+
+DOMAIN: masyeotta.site
+#HOST_IP: 3.39.97.18
+
+springdoc:
+  api-docs:
+    path: /beverage-service/v3/api-docs
+  swagger-ui:
+    path: /beverage-service/swagger-ui.html
+openapi:
+  service:
+    # API Gateway 포트
+    url: https://${DOMAIN}/beverage-service
+#    url: http://localhost:8000/beverage-service
